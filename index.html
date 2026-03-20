@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MuleSoft + Claude Code — Getting Started</title>
+<style>
+  :root {
+    --navy: #00174F;
+    --navy-light: #001A5C;
+    --blue: #00A1DF;
+    --blue-dark: #0078B4;
+    --teal: #00D4AA;
+    --white: #FFFFFF;
+    --gray-100: #F4F6F9;
+    --gray-200: #E1E5EB;
+    --gray-300: #C5CBD6;
+    --gray-400: #8E99AB;
+    --gray-500: #5C6A7F;
+    --gray-600: #3B4A5E;
+    --font-sans: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+    --radius: 8px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.15);
+    --shadow-lg: 0 4px 24px rgba(0,0,0,0.25);
+  }
+
+  @font-face {
+    font-family: 'Salesforce Sans';
+    src: local('Salesforce Sans'), local('SalesforceSans-Regular');
+    font-weight: 400;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--navy);
+    color: var(--gray-100);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, #002366 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span {
+    color: var(--blue);
+  }
+
+  .progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-bar {
+    width: 200px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 13px;
+    color: var(--gray-400);
+    font-family: var(--font-mono);
+    min-width: 36px;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 32px;
+    background: rgba(0,0,0,0.2);
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-400);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { color: var(--gray-200); }
+  .tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  /* ── Content ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    margin: 32px 0 12px;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-200);
+    margin: 24px 0 8px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--gray-400);
+    margin-bottom: 32px;
+  }
+
+  p, li {
+    font-size: 15px;
+    color: var(--gray-300);
+    margin-bottom: 12px;
+  }
+
+  ul, ol {
+    padding-left: 24px;
+  }
+
+  li { margin-bottom: 8px; }
+
+  a {
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  a:hover { border-bottom-color: var(--blue); }
+
+  strong { color: var(--gray-100); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--navy-light);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .capability-card {
+    background: var(--navy-light);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .capability-card:hover {
+    border-color: rgba(0,161,223,0.3);
+    transform: translateY(-2px);
+  }
+
+  .capability-card .icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .capability-card h4 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: var(--white);
+  }
+
+  .capability-card p {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin: 0;
+  }
+
+  /* ── CTA Buttons ── */
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 24px 0;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .cta-primary {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .cta-primary:hover { background: var(--blue-dark); border-bottom-color: transparent; }
+
+  .cta-outline {
+    background: transparent;
+    color: var(--blue);
+    border: 1px solid rgba(0,161,223,0.4);
+  }
+  .cta-outline:hover { background: rgba(0,161,223,0.08); border-bottom-color: transparent; }
+
+  /* ── Code Blocks ── */
+  .code-block {
+    background: #0D1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 12px 0 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #E6EDF3;
+    overflow-x: auto;
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .code-block .comment { color: #8B949E; }
+  .code-block .flag { color: #79C0FF; }
+  .code-block .string { color: #A5D6FF; }
+  .code-block .cmd { color: #D2A8FF; }
+  .code-block .ok { color: #7EE787; }
+
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--gray-400);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.15); color: var(--white); }
+
+  /* ── Step Indicators ── */
+  .step {
+    display: flex;
+    gap: 16px;
+    margin: 24px 0;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    min-width: 32px;
+    height: 32px;
+    background: var(--blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content { flex: 1; }
+  .step-content h4 { margin-top: 4px; }
+
+  /* ── UI Mockup Screenshots ── */
+  .ui-mock {
+    background: #1A1F2E;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .ui-mock-titlebar {
+    background: #12151F;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  .ui-mock-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .ui-mock-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .ui-mock-dots span:nth-child(1) { background: #FF5F56; }
+  .ui-mock-dots span:nth-child(2) { background: #FFBD2E; }
+  .ui-mock-dots span:nth-child(3) { background: #27CA3F; }
+
+  .ui-mock-body {
+    padding: 20px 24px;
+  }
+
+  .ui-mock-sidebar {
+    display: flex;
+    gap: 0;
+  }
+
+  .ui-mock-nav {
+    width: 200px;
+    background: #0F1219;
+    padding: 16px 0;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  .ui-mock-nav-item {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--gray-400);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ui-mock-nav-item.active {
+    color: var(--white);
+    background: rgba(0,161,223,0.1);
+    border-left: 3px solid var(--blue);
+  }
+
+  .ui-mock-main {
+    flex: 1;
+    padding: 20px 24px;
+  }
+
+  .ui-mock-form-field {
+    margin-bottom: 16px;
+  }
+
+  .ui-mock-label {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .ui-mock-input {
+    background: #252A3A;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--white);
+    width: 100%;
+    max-width: 360px;
+    font-family: var(--font-sans);
+  }
+
+  .ui-mock-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  .ui-mock-radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ui-mock-radio-dot.selected {
+    border-color: var(--blue);
+  }
+
+  .ui-mock-radio-dot.selected::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  .ui-mock-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+
+  .ui-mock-btn-primary { background: var(--blue); color: white; }
+  .ui-mock-btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
+
+  .ui-mock-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .ui-mock-badge-blue { background: rgba(0,161,223,0.15); color: var(--blue); }
+  .ui-mock-badge-green { background: rgba(39,202,63,0.15); color: #27CA3F; }
+
+  .ui-mock-secret-row {
+    background: #252A3A;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ui-mock-secret-row .label {
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  .ui-mock-secret-row .value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--teal);
+  }
+
+  .annotation {
+    background: rgba(0,161,223,0.08);
+    border-left: 3px solid var(--blue);
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  .annotation strong { color: var(--blue); }
+
+  .warning {
+    background: rgba(255,189,46,0.08);
+    border-left: 3px solid #FFBD2E;
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  .warning strong { color: #FFBD2E; }
+
+  /* ── Terminal Mockup ── */
+  .terminal {
+    background: #0D1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .terminal-bar {
+    background: #161B22;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .terminal-bar .dots { display: flex; gap: 6px; }
+  .terminal-bar .dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .terminal-bar .dots span:nth-child(1) { background: #FF5F56; }
+  .terminal-bar .dots span:nth-child(2) { background: #FFBD2E; }
+  .terminal-bar .dots span:nth-child(3) { background: #27CA3F; }
+  .terminal-bar .title { font-size: 12px; color: var(--gray-500); margin-left: 8px; }
+
+  .terminal-body {
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.8;
+    color: #E6EDF3;
+  }
+
+  .terminal-body .prompt { color: #7EE787; }
+  .terminal-body .output { color: #8B949E; }
+  .terminal-body .success { color: #7EE787; }
+  .terminal-body .highlight { color: #D2A8FF; }
+
+  /* ── Checklist / Tracker ── */
+  .tracker-section {
+    margin: 24px 0;
+  }
+
+  .tracker-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tracker-count {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--gray-400);
+    font-weight: 400;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .check-item:hover { background: rgba(255,255,255,0.03); }
+
+  .check-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gray-500);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .check-item input[type="checkbox"]:checked {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .check-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .check-item label {
+    font-size: 14px;
+    color: var(--gray-300);
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .check-item.done label {
+    color: var(--gray-500);
+    text-decoration: line-through;
+  }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--gray-400);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: rgba(255,255,255,0.05); color: var(--gray-200); }
+
+  /* ── Table ── */
+  .resource-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+
+  .resource-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-400);
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .resource-table td {
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--gray-300);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .resource-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .tag-learn { background: rgba(0,161,223,0.12); color: var(--blue); }
+  .tag-try { background: rgba(0,212,170,0.12); color: var(--teal); }
+  .tag-build { background: rgba(210,168,255,0.12); color: #D2A8FF; }
+
+  /* ── Accordion ── */
+  .accordion {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .accordion-item:last-child { border-bottom: none; }
+
+  .accordion-header {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--gray-200);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--navy-light);
+    transition: background 0.15s;
+    font-family: var(--font-sans);
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .accordion-header:hover { background: rgba(255,255,255,0.03); }
+
+  .accordion-header .arrow {
+    transition: transform 0.2s;
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  .accordion-item.open .accordion-header .arrow { transform: rotate(90deg); }
+
+  .accordion-body {
+    display: none;
+    padding: 12px 16px 16px;
+    background: rgba(0,0,0,0.15);
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  .accordion-item.open .accordion-body { display: block; }
+
+  /* ── Try-it prompt cards ── */
+  .try-card {
+    background: var(--navy-light);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 12px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .try-num {
+    min-width: 28px;
+    height: 28px;
+    background: rgba(0,161,223,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+
+  .try-card .prompt-text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+
+  .try-card .expect-text {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin: 0;
+  }
+
+  .difficulty {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+
+  .diff-easy { background: rgba(126,231,135,0.12); color: #7EE787; }
+  .diff-med { background: rgba(255,189,46,0.12); color: #FFBD2E; }
+  .diff-adv { background: rgba(210,168,255,0.12); color: #D2A8FF; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header { padding: 16px; }
+    .tabs { padding: 0 16px; }
+    .content { padding: 24px 16px 60px; }
+    h2 { font-size: 22px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .ui-mock-sidebar { flex-direction: column; }
+    .ui-mock-nav { width: 100%; }
+    .cta-row { flex-direction: column; }
+    .progress-bar { width: 120px; }
+  }
+
+  /* ── Divider ── */
+  hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 32px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--gray-500);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark">M</div>
+    <h1>MuleSoft + <span>Claude Code</span></h1>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">0%</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ TABS ═══════════════════ -->
+<div class="tabs" id="tabBar">
+  <button class="tab active" data-tab="welcome">Welcome</button>
+  <button class="tab" data-tab="setup">Setup Guide</button>
+  <button class="tab" data-tab="tryit">First 10 Things to Try</button>
+  <button class="tab" data-tab="resources">Resources</button>
+  <button class="tab" data-tab="practices">Best Practices</button>
+  <button class="tab" data-tab="tracker">Progress Tracker</button>
+</div>
+
+<!-- ═══════════════════ CONTENT ═══════════════════ -->
+<div class="content">
+
+<!-- ──────────── TAB 1: WELCOME ──────────── -->
+<div class="panel active" id="panel-welcome">
+  <h2>Welcome</h2>
+  <p class="subtitle">Connect MuleSoft Anypoint Platform to Claude Code and start building integrations with AI in under 30 minutes.</p>
+
+  <div class="card">
+    <p>This kit walks you through everything: creating credentials, connecting Claude Code to Anypoint, and running your first commands. By the end, you'll be able to search Exchange, create Mule projects, generate flows, deploy to CloudHub, and manage APIs &mdash; all from your terminal.</p>
+  </div>
+
+  <h3>What You'll Be Able to Do</h3>
+  <div class="card-grid">
+    <div class="capability-card">
+      <span class="icon">&#128269;</span>
+      <h4>Search Exchange</h4>
+      <p>Find assets, connectors, templates, and accelerators across the MuleSoft ecosystem</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">&#128736;</span>
+      <h4>Build Mule Projects</h4>
+      <p>Scaffold new integration projects and generate flows with natural language</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">&#128640;</span>
+      <h4>Deploy to CloudHub</h4>
+      <p>Deploy applications to CloudHub 2.0 or Runtime Fabric directly from the CLI</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">&#128196;</span>
+      <h4>Generate API Specs</h4>
+      <p>Create OAS 3.0 or RAML API specifications from natural language descriptions</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">&#128274;</span>
+      <h4>Apply Policies</h4>
+      <p>Manage API instances and apply security, rate-limiting, and custom policies</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">&#129302;</span>
+      <h4>Create MCP Servers</h4>
+      <p>Build MCP servers with the Anypoint MCP Connector for agentic workflows</p>
+    </div>
+  </div>
+
+  <h3>Start Here</h3>
+  <div class="cta-row">
+    <a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank" class="cta cta-primary">Try the Live Healthcare Sandbox &#8599;</a>
+    <a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank" class="cta cta-outline">Request an Agent Fabric Demo &#8599;</a>
+    <a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank" class="cta cta-outline">Read the Technical Overview &#8599;</a>
+  </div>
+
+  <div class="annotation">
+    <strong>Estimated time:</strong> ~30 minutes from start to your first Exchange search. The setup is one-time &mdash; after that, Claude Code connects automatically on every session.
+  </div>
+</div>
+
+<!-- ──────────── TAB 2: SETUP GUIDE ──────────── -->
+<div class="panel" id="panel-setup">
+  <h2>Setup Guide</h2>
+  <p class="subtitle">Four steps to connect Claude Code to your Anypoint Platform organization.</p>
+
+  <!-- Prerequisites -->
+  <div class="card">
+    <h4>Prerequisites</h4>
+    <ul>
+      <li><strong>Node.js 18+</strong> &mdash; <code>brew install node</code> or download from <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+      <li><strong>Claude Code</strong> &mdash; <code>npm install -g @anthropic-ai/claude-code</code></li>
+      <li><strong>Anypoint Platform account</strong> &mdash; with Access Management permissions</li>
+      <li><strong>Java 17 + Maven</strong> (only for building/deploying Mule apps) &mdash; <code>brew install openjdk@17 maven</code></li>
+    </ul>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Log in to Anypoint Platform</h4>
+      <p>Go to <a href="https://anypoint.mulesoft.com" target="_blank">anypoint.mulesoft.com</a> and sign in with your organization credentials.</p>
+
+      <div class="ui-mock">
+        <div class="ui-mock-titlebar">
+          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
+          anypoint.mulesoft.com/login
+        </div>
+        <div class="ui-mock-body" style="background: linear-gradient(135deg, #0070D2, #00A1DF); text-align: center; padding: 40px;">
+          <div style="font-size: 28px; color: white; font-weight: 700; margin-bottom: 4px;">MuleSoft</div>
+          <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 24px;">from Salesforce</div>
+          <div style="background: white; border-radius: 8px; padding: 32px; max-width: 340px; margin: 0 auto; text-align: left;">
+            <div style="font-size: 18px; font-weight: 600; color: #333; text-align: center; margin-bottom: 20px;">Sign in</div>
+            <div class="ui-mock-form-field">
+              <div class="ui-mock-label" style="color: #666;">Username</div>
+              <div class="ui-mock-input" style="background: #fff; border-color: #d0d0d0; color: #333;">your.email@company.com</div>
+            </div>
+            <div class="ui-mock-form-field">
+              <div class="ui-mock-label" style="color: #666;">Password</div>
+              <div class="ui-mock-input" style="background: #fff; border-color: #d0d0d0; color: #999;">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</div>
+            </div>
+            <div class="ui-mock-btn ui-mock-btn-primary" style="width: 100%; text-align: center; margin-top: 12px;">Sign in</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>Create a Connected App</h4>
+      <p>Navigate to <strong>Access Management</strong> in the left sidebar, then click <strong>Connected Apps</strong>.</p>
+
+      <div class="ui-mock">
+        <div class="ui-mock-titlebar">
+          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
+          anypoint.mulesoft.com &rsaquo; Access Management &rsaquo; Connected Apps
+        </div>
+        <div class="ui-mock-sidebar">
+          <div class="ui-mock-nav">
+            <div class="ui-mock-nav-item">&#127968; Home</div>
+            <div class="ui-mock-nav-item">&#128202; API Manager</div>
+            <div class="ui-mock-nav-item">&#128230; Exchange</div>
+            <div class="ui-mock-nav-item" style="margin-top: 16px; font-size: 11px; text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.5px;">Management</div>
+            <div class="ui-mock-nav-item active">&#128100; Access Mgmt</div>
+            <div class="ui-mock-nav-item">&#9881; Runtime Mgr</div>
+          </div>
+          <div class="ui-mock-main">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+              <div>
+                <div style="font-size: 18px; font-weight: 600; color: var(--white);">Connected Apps</div>
+                <div style="font-size: 12px; color: var(--gray-400);">Manage external applications that access your organization</div>
+              </div>
+              <div class="ui-mock-btn ui-mock-btn-primary" style="cursor: default;">+ Create App</div>
+            </div>
+            <div style="border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; padding: 24px; text-align: center; color: var(--gray-500); font-size: 13px;">
+              No connected apps yet. Click <strong style="color: var(--blue);">Create App</strong> to get started.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px;">Click <strong>Create App</strong> and fill in the form:</p>
+
+      <div class="ui-mock">
+        <div class="ui-mock-titlebar">
+          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
+          Create a Connected App
+        </div>
+        <div class="ui-mock-body">
+          <div class="ui-mock-form-field">
+            <div class="ui-mock-label">App Name</div>
+            <div class="ui-mock-input">Claude Code MCP</div>
+          </div>
+          <div class="ui-mock-form-field">
+            <div class="ui-mock-label">Type</div>
+            <div class="ui-mock-radio">
+              <div class="ui-mock-radio-dot"></div>
+              App acts on behalf of a user
+            </div>
+            <div class="ui-mock-radio">
+              <div class="ui-mock-radio-dot selected"></div>
+              <strong style="color: var(--white);">App acts on its own behalf (client credentials)</strong>
+            </div>
+          </div>
+          <div class="annotation" style="margin-top: 16px;">
+            <strong>Important:</strong> You must select "App acts on its own behalf (client credentials)." This allows Claude Code to authenticate without a browser login flow.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Add Scopes</h4>
+      <p>Click <strong>Add Scopes</strong> and grant the following permissions. Select your <strong>Business Group</strong> for each scope.</p>
+
+      <div class="ui-mock">
+        <div class="ui-mock-titlebar">
+          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
+          Scopes &mdash; Claude Code MCP
+        </div>
+        <div class="ui-mock-body">
+          <div style="font-size: 14px; color: var(--white); font-weight: 600; margin-bottom: 12px;">Selected Scopes</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">General</span>
+              <span style="font-size: 13px; color: var(--gray-300);">View organization and environment info</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">Design Center</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Developer &mdash; create and edit API specs</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">Exchange</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Contributor &mdash; search, view, and publish assets</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">Runtime Manager</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Read &amp; Write applications in CloudHub</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">API Manager</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Manage API instances and policies</span>
+            </div>
+          </div>
+          <div class="annotation" style="margin-top: 16px;">
+            <strong>Tip:</strong> If you're unsure which scopes you need, grant all available scopes for your Business Group. You can tighten permissions later.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3b: Copy Credentials -->
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <h4>Copy Your Credentials</h4>
+      <p>After saving, Anypoint shows your <strong>Client ID</strong> and <strong>Client Secret</strong>. Copy both now &mdash; the secret is only shown once.</p>
+
+      <div class="ui-mock">
+        <div class="ui-mock-titlebar">
+          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
+          Connected App Created
+        </div>
+        <div class="ui-mock-body">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <span style="font-size: 16px; font-weight: 600; color: var(--white);">Claude Code MCP</span>
+            <span class="ui-mock-badge ui-mock-badge-green">Active</span>
+          </div>
+          <div class="ui-mock-secret-row">
+            <div>
+              <div class="label">Client ID</div>
+              <div class="value">2bb90318f4304703ba05d43227c10628</div>
+            </div>
+            <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
+          </div>
+          <div class="ui-mock-secret-row">
+            <div>
+              <div class="label">Client Secret</div>
+              <div class="value">EE6E27ADa0074b0F961E62c104c8332a</div>
+            </div>
+            <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
+          </div>
+          <div class="warning" style="margin-top: 16px;">
+            <strong>Save the Client Secret now.</strong> It will not be shown again. If you lose it, you'll need to regenerate credentials.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Terminal -->
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <h4>Connect Claude Code</h4>
+      <p>Open your terminal and run this command, replacing the two placeholder values with your credentials:</p>
+
+      <div class="code-block" id="addCmd">
+        <button class="copy-btn" onclick="copyCode('addCmd')">Copy</button>
+<span class="cmd">claude</span> <span class="flag">mcp add</span> mulesoft \
+  <span class="flag">--scope</span> user \
+  <span class="flag">-e</span> <span class="string">ANYPOINT_CLIENT_ID=paste_your_client_id</span> \
+  <span class="flag">-e</span> <span class="string">ANYPOINT_CLIENT_SECRET=paste_your_client_secret</span> \
+  <span class="flag">-e</span> <span class="string">ANYPOINT_REGION=PROD_US</span> \
+  <span class="flag">--</span> npx <span class="flag">-y</span> @mulesoft/mcp-server start
+      </div>
+
+      <div class="annotation">
+        <strong>Scope options:</strong> Use <code>--scope user</code> to make it available in all your projects. Use <code>--scope local</code> to restrict it to the current project only.<br><br>
+        <strong>EU region?</strong> Change <code>PROD_US</code> to <code>PROD_EU</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Verify -->
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-content">
+      <h4>Verify the Connection</h4>
+      <p>Run this command to confirm Claude Code can reach Anypoint:</p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="title">Terminal</span>
+        </div>
+        <div class="terminal-body">
+<span class="prompt">$</span> claude mcp list
+<br>
+<span class="output">Checking MCP server health...</span>
+<br><br>
+<span class="highlight">mulesoft</span>: npx -y @mulesoft/mcp-server start - <span class="success">&#10003; Connected</span>
+        </div>
+      </div>
+
+      <p>If you see <strong style="color: #7EE787;">&#10003; Connected</strong>, you're ready to go. Head to the <strong>First 10 Things to Try</strong> tab.</p>
+    </div>
+  </div>
+
+  <!-- Common Errors -->
+  <hr>
+  <h3>Common Errors</h3>
+
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#10060; Failed to connect</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        Double-check your Client ID and Client Secret for typos. The most common issue is an extra space or missing character when pasting. Re-run <code>claude mcp remove mulesoft</code> and then re-add with the corrected values.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#128683; 403 Forbidden on operations</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        Your Connected App is missing scopes. Go back to Access Management &gt; Connected Apps, edit the app, and add the missing scope group. You don't need to regenerate credentials &mdash; just add the scope and save.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#9888;&#65039; npx: command not found</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        Node.js is not installed or not on your PATH. Install it with <code>brew install node</code> (macOS) or download from <a href="https://nodejs.org" target="_blank">nodejs.org</a>. After installing, close and reopen your terminal.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#128736; Java/Maven errors when building</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        Building and deploying Mule projects requires Java 17 and Maven. Install with: <code>brew install openjdk@17 maven</code>. Then set JAVA_HOME: <code>export JAVA_HOME=$(/usr/libexec/java_home -v 17)</code>. Add that line to your <code>~/.zshrc</code> to make it persistent.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#127760; EU region &mdash; wrong endpoint</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        If your Anypoint org is in the EU, you must set <code>ANYPOINT_REGION=PROD_EU</code>. Remove and re-add the server: <code>claude mcp remove mulesoft</code> then re-run the add command with <code>PROD_EU</code>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────── TAB 3: FIRST 10 THINGS TO TRY ──────────── -->
+<div class="panel" id="panel-tryit">
+  <h2>First 10 Things to Try</h2>
+  <p class="subtitle">Paste these prompts into Claude Code. Ordered from simple to advanced.</p>
+
+  <div class="try-card">
+    <div class="try-num">1</div>
+    <div>
+      <div class="prompt-text">search Exchange for healthcare assets <span class="difficulty diff-easy">Easy</span></div>
+      <p class="expect-text">Returns assets from the Healthcare Accelerator &mdash; FHIR templates, converters, system APIs.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">2</div>
+    <div>
+      <div class="prompt-text">list applications in Sandbox <span class="difficulty diff-easy">Easy</span></div>
+      <p class="expect-text">Shows all apps deployed to your Sandbox environment (may be empty if this is a new org).</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">3</div>
+    <div>
+      <div class="prompt-text">create a Mule project called patient-lookup <span class="difficulty diff-easy">Easy</span></div>
+      <p class="expect-text">Scaffolds a Mule 4 project directory with pom.xml, mule-artifact.json, and src structure.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">4</div>
+    <div>
+      <div class="prompt-text">generate an OAS 3.0 API spec for a Patient FHIR R4 resource <span class="difficulty diff-med">Medium</span></div>
+      <p class="expect-text">Creates a complete OpenAPI 3.0 specification with FHIR-compliant schemas, endpoints, and examples.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">5</div>
+    <div>
+      <div class="prompt-text">add an HTTP listener and a Set Payload transformer to the patient-lookup flow <span class="difficulty diff-med">Medium</span></div>
+      <p class="expect-text">Modifies the Mule XML to add flow components &mdash; a listener on /api/patients and a JSON payload.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">6</div>
+    <div>
+      <div class="prompt-text">search Exchange for MCP connector <span class="difficulty diff-easy">Easy</span></div>
+      <p class="expect-text">Finds the Anypoint MCP Connector &mdash; the bridge between Mule apps and AI agents.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">7</div>
+    <div>
+      <div class="prompt-text">deploy the patient-lookup project to Sandbox <span class="difficulty diff-adv">Advanced</span></div>
+      <p class="expect-text">Builds with Maven and deploys to CloudHub 2.0 Sandbox. Requires Java 17 + Maven + available vCores.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">8</div>
+    <div>
+      <div class="prompt-text">create an MCP server from the patient-lookup project <span class="difficulty diff-adv">Advanced</span></div>
+      <p class="expect-text">Adds the MCP Connector to expose your Mule app as tools that AI agents can call.</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">9</div>
+    <div>
+      <div class="prompt-text">list API instances in Sandbox and show applied policies <span class="difficulty diff-med">Medium</span></div>
+      <p class="expect-text">Shows all managed APIs and their active policies (rate limiting, OAuth, etc.).</p>
+    </div>
+  </div>
+
+  <div class="try-card">
+    <div class="try-num">10</div>
+    <div>
+      <div class="prompt-text">show me platform insights with call volume and error counts <span class="difficulty diff-med">Medium</span></div>
+      <p class="expect-text">Returns usage metrics, call volumes, and error rates across your org for the last 7 days.</p>
+    </div>
+  </div>
+
+  <div class="annotation" style="margin-top: 24px;">
+    <strong>Pro tip:</strong> You can chain commands naturally. Try: "Create a Mule project called order-api, add an HTTP listener on /api/orders, add a Salesforce query connector that fetches Order records, then deploy it to Sandbox." Claude will execute each step in sequence.
+  </div>
+</div>
+
+<!-- ──────────── TAB 4: RESOURCES ──────────── -->
+<div class="panel" id="panel-resources">
+  <h2>Resources &amp; Reference</h2>
+  <p class="subtitle">Everything you need to learn, try, and build with MuleSoft + Claude Code.</p>
+
+  <table class="resource-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Resource</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-learn">Learn</span></td>
+        <td><a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank">Agent Fabric Technical Overview</a></td>
+        <td>Architecture and capabilities of MuleSoft Agent Fabric</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-learn">Learn</span></td>
+        <td><a href="https://docs.mulesoft.com/general/" target="_blank">MuleSoft Documentation Home</a></td>
+        <td>Official docs for Anypoint Platform, Mule runtime, connectors, and APIs</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-try">Try</span></td>
+        <td><a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank">Agent Fabric Demo</a></td>
+        <td>Request a guided demo of Agent Fabric capabilities</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-try">Try</span></td>
+        <td><a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank">Healthcare Sandbox</a></td>
+        <td>Live interactive demo &mdash; explore immediately, no setup required</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-build">Build</span></td>
+        <td><a href="https://docs.mulesoft.com/release-notes/connector/mcp-connector-release-notes-mule-4" target="_blank">MCP Connector Release Notes</a></td>
+        <td>Latest version, changelog, and compatibility for the Anypoint MCP Connector</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-build">Build</span></td>
+        <td><a href="https://www.mulesoft.com/exchange/org.mule.examples/mulesoft-accelerator-for-healthcare/" target="_blank">Healthcare Accelerator</a></td>
+        <td>50+ pre-built assets: FHIR R4 APIs, US Core Profiles, EHR templates, converters</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Additional Resources</h3>
+  <table class="resource-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Resource</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-learn">Learn</span></td>
+        <td><a href="https://docs.mulesoft.com/mcp-connector/latest/" target="_blank">MCP Connector Documentation</a></td>
+        <td>How to expose Mule apps as tools for AI agents via MCP</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-learn">Learn</span></td>
+        <td><a href="https://docs.mulesoft.com/cloudhub-2/" target="_blank">CloudHub 2.0 Documentation</a></td>
+        <td>Deployment target for Mule applications &mdash; scaling, monitoring, troubleshooting</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-build">Build</span></td>
+        <td><a href="https://anypoint.mulesoft.com/exchange/" target="_blank">Anypoint Exchange</a></td>
+        <td>Search for connectors, templates, APIs, and accelerators</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-build">Build</span></td>
+        <td><a href="https://www.npmjs.com/package/@mulesoft/mcp-server" target="_blank">@mulesoft/mcp-server (npm)</a></td>
+        <td>The MCP server package that powers the Claude Code integration</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ──────────── TAB 5: BEST PRACTICES ──────────── -->
+<div class="panel" id="panel-practices">
+  <h2>Best Practices</h2>
+  <p class="subtitle">Get the most out of MuleSoft + Claude Code with these guidelines.</p>
+
+  <div class="card">
+    <h4>&#128274; Security</h4>
+    <ul>
+      <li><strong>Rotate credentials quarterly.</strong> Delete and re-create the Connected App every 90 days, then update with <code>claude mcp remove mulesoft</code> and re-add.</li>
+      <li><strong>Use minimum scopes for production.</strong> Start with all scopes during exploration, then tighten to only what you need for production workflows.</li>
+      <li><strong>Use <code>--scope local</code> for shared machines.</strong> This restricts the MCP server credentials to the current project directory only.</li>
+      <li><strong>Never commit credentials.</strong> The MCP config is stored in <code>~/.claude/</code>, not in your project repo. Keep it that way.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>&#128230; Exchange-First Development</h4>
+    <ul>
+      <li><strong>Search before you build.</strong> Before writing any integration code, ask Claude to search Exchange. There are thousands of pre-built assets &mdash; connectors, templates, accelerators, and API specs.</li>
+      <li><strong>Start from accelerators.</strong> Industry accelerators (Healthcare, Financial Services, Manufacturing) contain production-grade assets that would take weeks to build from scratch.</li>
+      <li><strong>Publish back to Exchange.</strong> If you build something reusable, publish it to your org's Exchange so your team can find and extend it.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>&#128640; Deployment</h4>
+    <ul>
+      <li><strong>Start in Sandbox, promote to Production.</strong> Always deploy to Sandbox first. Verify it works, then redeploy to Production.</li>
+      <li><strong>Use Micro workers for development.</strong> 0.1 vCore (Micro) workers are sufficient for development and testing. Scale up for production.</li>
+      <li><strong>Version your API specs.</strong> Before publishing to Exchange, make sure your spec has a proper semantic version (1.0.0, 1.1.0, etc.).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>&#129302; Working with Claude Code</h4>
+    <ul>
+      <li><strong>Be specific with prompts.</strong> "Add an HTTP listener on port 8081 with path /api/v1/patients" works better than "add a listener."</li>
+      <li><strong>Chain operations naturally.</strong> Claude understands multi-step requests: "Create a project, add a flow with an HTTP listener and a database connector, then deploy to Sandbox."</li>
+      <li><strong>Ask Claude to explain.</strong> If you're unfamiliar with a concept, ask: "Explain what the MCP Connector does" or "What scopes do I need for API Manager?"</li>
+      <li><strong>Review generated flows.</strong> Always review the generated Mule XML before deploying. Claude is powerful but the output should be verified, especially for production deployments.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>&#128736; Troubleshooting</h4>
+    <ul>
+      <li><strong>Check connection first.</strong> If something isn't working, run <code>claude mcp list</code> to verify the server is connected.</li>
+      <li><strong>Re-add if stuck.</strong> If you hit persistent errors, <code>claude mcp remove mulesoft</code> then re-add. This clears any cached state.</li>
+      <li><strong>Check vCore availability.</strong> Deployments fail silently if your org has no available vCores. Check Runtime Manager &gt; Usage to verify.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ──────────── TAB 6: PROGRESS TRACKER ──────────── -->
+<div class="panel" id="panel-tracker">
+  <h2>Progress Tracker</h2>
+  <p class="subtitle">Track your progress through the setup and first steps. Your progress is saved automatically.</p>
+
+  <div class="tracker-section">
+    <h4>Setup <span class="tracker-count" id="setupCount"></span></h4>
+    <div class="check-item" data-key="setup-1">
+      <input type="checkbox" id="s1"><label for="s1">Node.js 18+ installed</label>
+    </div>
+    <div class="check-item" data-key="setup-2">
+      <input type="checkbox" id="s2"><label for="s2">Claude Code installed and logged in</label>
+    </div>
+    <div class="check-item" data-key="setup-3">
+      <input type="checkbox" id="s3"><label for="s3">Connected App created in Anypoint</label>
+    </div>
+    <div class="check-item" data-key="setup-4">
+      <input type="checkbox" id="s4"><label for="s4">MCP server connected (&#10003; Connected)</label>
+    </div>
+  </div>
+
+  <div class="tracker-section">
+    <h4>First Steps <span class="tracker-count" id="firstCount"></span></h4>
+    <div class="check-item" data-key="first-1">
+      <input type="checkbox" id="f1"><label for="f1">Searched Exchange for assets</label>
+    </div>
+    <div class="check-item" data-key="first-2">
+      <input type="checkbox" id="f2"><label for="f2">Listed applications in an environment</label>
+    </div>
+    <div class="check-item" data-key="first-3">
+      <input type="checkbox" id="f3"><label for="f3">Created a Mule project</label>
+    </div>
+    <div class="check-item" data-key="first-4">
+      <input type="checkbox" id="f4"><label for="f4">Generated an API spec</label>
+    </div>
+    <div class="check-item" data-key="first-5">
+      <input type="checkbox" id="f5"><label for="f5">Added a flow to a Mule project</label>
+    </div>
+  </div>
+
+  <div class="tracker-section">
+    <h4>Advanced <span class="tracker-count" id="advCount"></span></h4>
+    <div class="check-item" data-key="adv-1">
+      <input type="checkbox" id="a1"><label for="a1">Deployed an app to CloudHub 2.0</label>
+    </div>
+    <div class="check-item" data-key="adv-2">
+      <input type="checkbox" id="a2"><label for="a2">Created an MCP server from a Mule app</label>
+    </div>
+    <div class="check-item" data-key="adv-3">
+      <input type="checkbox" id="a3"><label for="a3">Applied a policy to an API instance</label>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetTracker()">Reset All Progress</button>
+</div>
+
+</div><!-- end .content -->
+
+<div class="footer">
+  MuleSoft, a Salesforce company &mdash; Built with Claude Code
+</div>
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+(function() {
+  // ── Beacon ──
+  try {
+    const b = new Image();
+    b.src = 'https://cms-api-hub.vercel.app/api/beacon?page=mulesoft-claude-onboarding&event=pageview&t=' + Date.now();
+  } catch(e) {}
+
+  // ── Tab switching ──
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  function switchTab(tabName) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabName));
+    window.location.hash = tabName;
+    // Beacon per tab
+    try {
+      const b = new Image();
+      b.src = 'https://cms-api-hub.vercel.app/api/beacon?page=mulesoft-claude-onboarding&event=tab_' + tabName + '&t=' + Date.now();
+    } catch(e) {}
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+  // Hash routing
+  const hash = window.location.hash.replace('#', '');
+  if (hash && document.getElementById('panel-' + hash)) {
+    switchTab(hash);
+  }
+
+  // ── Copy to clipboard ──
+  window.copyCode = function(id) {
+    const block = document.getElementById(id);
+    const text = block.innerText.replace('Copy', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = block.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  };
+
+  // ── Accordion ──
+  window.toggleAccordion = function(header) {
+    header.parentElement.classList.toggle('open');
+  };
+
+  // ── Tracker with localStorage ──
+  const STORAGE_KEY = 'mulesoft-claude-onboarding-tracker';
+
+  function getState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function updateProgress() {
+    const state = getState();
+    const items = document.querySelectorAll('.check-item');
+    let total = items.length;
+    let done = 0;
+
+    items.forEach(item => {
+      const key = item.dataset.key;
+      const cb = item.querySelector('input[type="checkbox"]');
+      if (state[key]) {
+        cb.checked = true;
+        item.classList.add('done');
+        done++;
+      } else {
+        cb.checked = false;
+        item.classList.remove('done');
+      }
+    });
+
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '%';
+
+    // Section counts
+    const sections = [
+      { prefix: 'setup-', el: 'setupCount', total: 4 },
+      { prefix: 'first-', el: 'firstCount', total: 5 },
+      { prefix: 'adv-', el: 'advCount', total: 3 }
+    ];
+    sections.forEach(s => {
+      let c = 0;
+      for (let i = 1; i <= s.total; i++) { if (state[s.prefix + i]) c++; }
+      document.getElementById(s.el).textContent = c + '/' + s.total;
+    });
+  }
+
+  document.querySelectorAll('.check-item').forEach(item => {
+    const cb = item.querySelector('input[type="checkbox"]');
+    const key = item.dataset.key;
+
+    item.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return; // let native handle
+      cb.checked = !cb.checked;
+      cb.dispatchEvent(new Event('change'));
+    });
+
+    cb.addEventListener('change', () => {
+      const state = getState();
+      state[key] = cb.checked;
+      saveState(state);
+      updateProgress();
+    });
+  });
+
+  window.resetTracker = function() {
+    if (confirm('Reset all progress? This cannot be undone.')) {
+      localStorage.removeItem(STORAGE_KEY);
+      updateProgress();
+    }
+  };
+
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>
