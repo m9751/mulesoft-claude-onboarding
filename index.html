@@ -1525,6 +1525,7 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
     panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabName));
     window.location.hash = tabName;
+    window.scrollTo(0, 0);
     // Beacon per tab
     try {
       const b = new Image();
@@ -1535,10 +1536,14 @@
   tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 
   // Hash routing
-  const hash = window.location.hash.replace('#', '');
-  if (hash && document.getElementById('panel-' + hash)) {
-    switchTab(hash);
+  function handleHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('panel-' + hash)) {
+      switchTab(hash);
+    }
   }
+  handleHash();
+  window.addEventListener('hashchange', handleHash);
 
   // ── Copy to clipboard ──
   window.copyCode = function(id) {
