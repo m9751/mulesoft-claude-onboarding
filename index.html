@@ -862,6 +862,7 @@
   <button class="tab" data-tab="resources">Resources</button>
   <button class="tab" data-tab="practices">Best Practices</button>
   <button class="tab" data-tab="tracker">Progress Tracker</button>
+  <button class="tab" data-tab="glossary">Glossary</button>
 </div>
 
 <!-- ═══════════════════ CONTENT ═══════════════════ -->
@@ -1054,25 +1055,41 @@
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
               <span class="ui-mock-badge ui-mock-badge-blue">General</span>
-              <span style="font-size: 13px; color: var(--gray-300);">View organization and environment info</span>
+              <span style="font-size: 13px; color: var(--gray-300);">View Organization, View Connected Applications</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Design Center</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Developer &mdash; create and edit API specs</span>
+              <span class="ui-mock-badge ui-mock-badge-blue">Anypoint Code Builder</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Mule Developer Generative AI User</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">Anypoint Monitoring</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Monitoring Viewer</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
               <span class="ui-mock-badge ui-mock-badge-blue">Exchange</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Contributor &mdash; search, view, and publish assets</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Runtime Manager</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Read &amp; Write applications in CloudHub</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Exchange Administrator, Contributor, Creator, Viewer</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
               <span class="ui-mock-badge ui-mock-badge-blue">API Manager</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Manage API instances and policies</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Manage API Configuration, Manage Policies, View APIs Configuration</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
+              <span class="ui-mock-badge ui-mock-badge-blue">Runtime Manager</span>
+              <span style="font-size: 13px; color: var(--gray-300);">Read Applications, Create Applications, Read Runtime Fabrics, CloudHub Network Viewer, Usage Viewer</span>
             </div>
           </div>
+          <table class="resource-table" style="margin-top: 16px;">
+            <thead>
+              <tr><th>Scope</th><th>Enables These Tools</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Generative AI User</td><td>generate_mule_flow, generate_api_spec, create_mcp_server</td></tr>
+              <tr><td>Monitoring Viewer</td><td>get_platform_insights, get_reuse_metrics, list_applications</td></tr>
+              <tr><td>Exchange roles</td><td>search_asset, create_and_manage_assets</td></tr>
+              <tr><td>API Manager</td><td>list_api_instances, manage_api_instance_policy, create_and_manage_api_instances</td></tr>
+              <tr><td>Runtime Manager</td><td>deploy_mule_application, list_applications, update_mule_application</td></tr>
+            </tbody>
+          </table>
           <div class="annotation" style="margin-top: 16px;">
             <strong>Tip:</strong> If you're unsure which scopes you need, grant all available scopes for your Business Group. You can tighten permissions later.
           </div>
@@ -1101,14 +1118,14 @@
           <div class="ui-mock-secret-row">
             <div>
               <div class="label">Client ID</div>
-              <div class="value">2bb90318f4304703ba05d43227c10628</div>
+              <div class="value">a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</div>
             </div>
             <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
           </div>
           <div class="ui-mock-secret-row">
             <div>
               <div class="label">Client Secret</div>
-              <div class="value">EE6E27ADa0074b0F961E62c104c8332a</div>
+              <div class="value">F9e8D7c6B5a4F3e2D1c0B9a8F7e6D5c4</div>
             </div>
             <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
           </div>
@@ -1139,7 +1156,15 @@
 
       <div class="annotation">
         <strong>Scope options:</strong> Use <code>--scope user</code> to make it available in all your projects. Use <code>--scope local</code> to restrict it to the current project only.<br><br>
-        <strong>EU region?</strong> Change <code>PROD_US</code> to <code>PROD_EU</code>.
+        <strong>Region options:</strong>
+        <table class="resource-table" style="margin: 8px 0 0;">
+          <tbody>
+            <tr><td><code>PROD_US</code></td><td>United States (default)</td></tr>
+            <tr><td><code>PROD_EU</code></td><td>Europe</td></tr>
+            <tr><td><code>PROD_CA</code></td><td>Canada</td></tr>
+            <tr><td><code>PROD_JP</code></td><td>Japan</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -1217,6 +1242,107 @@
       </button>
       <div class="accordion-body">
         If your Anypoint org is in the EU, you must set <code>ANYPOINT_REGION=PROD_EU</code>. Remove and re-add the server: <code>claude mcp remove mulesoft</code> then re-run the add command with <code>PROD_EU</code>.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#128275; ANYPOINT_CLIENT_ID must be set</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        The MCP server is connected but has no credentials. Remove and re-add with environment variables: <code>claude mcp remove mulesoft</code> then re-add with <code>-e ANYPOINT_CLIENT_ID=... -e ANYPOINT_CLIENT_SECRET=...</code>. Alternatively, add the env vars directly in <code>~/.claude.json</code> under <code>mcpServers.mulesoft.env</code>.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#128230; Maven deployment fails &mdash; settings.xml missing</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        Maven needs <code>~/.m2/settings.xml</code> with your Anypoint credentials to deploy to CloudHub. See the Maven Setup section above. The file must use the <code>~~~Client~~~</code> username format with <code>CLIENT_ID~?~CLIENT_SECRET</code> as the password.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#9888;&#65039; Deploy fails but MCP tools work</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        The MCP server and Maven use different credential paths. The MCP server reads env vars (<code>ANYPOINT_CLIENT_ID</code>), but Maven reads <code>~/.m2/settings.xml</code>. Both need to be configured. Also check that your Sandbox has available vCores &mdash; go to Runtime Manager &gt; Usage.
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <h3>Maven Setup (Required for Deployment)</h3>
+  <p>To deploy Mule apps to CloudHub, Maven needs your Anypoint credentials. This is a one-time setup.</p>
+
+  <div class="card">
+    <h4>What is Maven?</h4>
+    <p>Maven is the build tool that compiles your Mule project and uploads it to CloudHub. Think of it like a shipping company &mdash; it packages your integration code and delivers it to the cloud. Without Maven credentials, your code builds but can't be delivered.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Store credentials in macOS Keychain</h4>
+      <div class="code-block" id="mavenKeychain">
+        <button class="copy-btn" onclick="copyCode('mavenKeychain')">Copy</button>
+<span class="cmd">security</span> add-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_ID"</span> <span class="flag">-a</span> <span class="string">"$USER"</span> <span class="flag">-w</span> <span class="string">"paste_your_client_id"</span>
+<span class="cmd">security</span> add-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_SECRET"</span> <span class="flag">-a</span> <span class="string">"$USER"</span> <span class="flag">-w</span> <span class="string">"paste_your_client_secret"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>Create the Maven settings file</h4>
+      <p>Run this command to create <code>~/.m2/settings.xml</code> with your Keychain credentials:</p>
+      <div class="code-block" id="mavenSettings">
+        <button class="copy-btn" onclick="copyCode('mavenSettings')">Copy</button>
+<span class="cmd">mkdir</span> <span class="flag">-p</span> ~/.m2 && \
+<span class="cmd">CLIENT_ID</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_ID" -w) && \
+<span class="cmd">CLIENT_SECRET</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_SECRET" -w) && \
+<span class="cmd">cat</span> > ~/.m2/settings.xml &lt;&lt; EOF
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;settings&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;anypoint-exchange-v3&lt;/id&gt;
+      &lt;username&gt;~~~Client~~~&lt;/username&gt;
+      &lt;password&gt;\${CLIENT_ID}~?~\${CLIENT_SECRET}&lt;/password&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;
+EOF
+      </div>
+      <div class="annotation">
+        <strong>What's the ~~~Client~~~ format?</strong> This is Anypoint's way of saying "use Connected App credentials instead of a username/password." The <code>CLIENT_ID~?~CLIENT_SECRET</code> password format is specific to MuleSoft's Maven plugin.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Verify it works</h4>
+      <div class="code-block" id="mavenVerify">
+        <button class="copy-btn" onclick="copyCode('mavenVerify')">Copy</button>
+<span class="cmd">security</span> find-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_ID"</span> <span class="flag">-w</span>
+<span class="comment"># Should print your Client ID</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span>&#128736; Maven cached failure &mdash; *.lastUpdated files</span>
+        <span class="arrow">&#9654;</span>
+      </button>
+      <div class="accordion-body">
+        If Maven tried to download a dependency and failed, it creates <code>.lastUpdated</code> marker files that prevent retries. Fix by deleting them: <code>find ~/.m2/repository -name "*.lastUpdated" -delete</code>. This is safe &mdash; it only removes failure markers, not actual downloaded files.
       </div>
     </div>
   </div>
@@ -1355,6 +1481,11 @@
         <td><span class="tag tag-build">Build</span></td>
         <td><a href="https://www.mulesoft.com/exchange/org.mule.examples/mulesoft-accelerator-for-healthcare/" target="_blank">Healthcare Accelerator</a></td>
         <td>50+ pre-built assets: FHIR R4 APIs, US Core Profiles, EHR templates, converters</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-build">Build</span></td>
+        <td><a href="https://docs.mulesoft.com/mulesoft-mcp-server/getting-started" target="_blank">MuleSoft MCP Server &mdash; Getting Started</a></td>
+        <td>Official setup guide for the MuleSoft MCP Server across all supported IDEs</td>
       </tr>
     </tbody>
   </table>
@@ -1500,6 +1631,62 @@
   </div>
 
   <button class="reset-btn" onclick="resetTracker()">Reset All Progress</button>
+</div>
+
+<!-- ──────────── TAB 7: GLOSSARY ──────────── -->
+<div class="panel" id="panel-glossary">
+  <h2>Glossary</h2>
+  <p class="subtitle">Plain English explanations for terms you'll encounter.</p>
+
+  <div class="card">
+    <h4>Connected App</h4>
+    <p>A username and password for programs (not people) to access Anypoint Platform. Instead of typing your email and password, programs use a Client ID and Client Secret. Think of it like a key card for software.</p>
+  </div>
+
+  <div class="card">
+    <h4>Scopes</h4>
+    <p>Permissions that control what a Connected App can do. Like giving a house key that only opens certain rooms. "Exchange Viewer" lets it browse assets. "Runtime Manager Write" lets it deploy apps. More scopes = more access.</p>
+  </div>
+
+  <div class="card">
+    <h4>Maven</h4>
+    <p>A build tool that compiles your Mule project and uploads it to CloudHub. Think of it as a shipping service &mdash; it packages your code and delivers it to the cloud. You configure it once in <code>~/.m2/settings.xml</code> and forget about it.</p>
+  </div>
+
+  <div class="card">
+    <h4>vCores</h4>
+    <p>Computing power in CloudHub, measured in virtual CPU cores. Each deployed app needs some vCores to run &mdash; like renting server space. A Micro worker (0.1 vCores) is enough for development. If you're out of vCores, deployments will fail.</p>
+  </div>
+
+  <div class="card">
+    <h4>CloudHub 2.0</h4>
+    <p>MuleSoft's cloud hosting service where your Mule apps run. When you "deploy to Sandbox," your app gets uploaded to CloudHub servers and starts running there. Sandbox is for testing; Production is for real traffic.</p>
+  </div>
+
+  <div class="card">
+    <h4>Exchange</h4>
+    <p>MuleSoft's app store for integration assets &mdash; pre-built connectors, API templates, code libraries, and complete accelerators. Always search Exchange before building something from scratch.</p>
+  </div>
+
+  <div class="card">
+    <h4>MCP (Model Context Protocol)</h4>
+    <p>A standard that lets AI assistants (like Claude) use tools. The MuleSoft MCP Server gives Claude the ability to search Exchange, deploy apps, and manage APIs &mdash; all through natural language commands.</p>
+  </div>
+
+  <div class="card">
+    <h4>FHIR R4</h4>
+    <p>A healthcare data standard for exchanging medical records between systems. FHIR (Fast Healthcare Interoperability Resources) defines how patient data, conditions, medications, and lab results are structured. R4 is the current version used by most hospitals.</p>
+  </div>
+
+  <div class="card">
+    <h4>settings.xml</h4>
+    <p>A configuration file that Maven reads to find your credentials. Located at <code>~/.m2/settings.xml</code> on your Mac. It tells Maven "here's the username and password for uploading to CloudHub." You create it once and it works for all projects.</p>
+  </div>
+
+  <div class="card">
+    <h4>Keychain</h4>
+    <p>macOS's built-in password manager. Instead of putting passwords in plain text files, you store them in Keychain and your programs read them from there. The command <code>security add-generic-password</code> adds a password; <code>security find-generic-password -w</code> reads it back.</p>
+  </div>
 </div>
 
 </div><!-- end .content -->
