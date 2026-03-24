@@ -1698,26 +1698,75 @@ EOF
 <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
 <script>
 (function() {
-  // ── Beacon ──
-  try {
-    const b = new Image();
-    b.src = 'https://cms-api-hub.vercel.app/api/beacon?page=mulesoft-claude-onboarding&event=pageview&t=' + Date.now();
-  } catch(e) {}
+  // ── Engagement Tracking (proposal_engagement via track-event) ──
+  const TRACK_URL = 'https://cms-api-hub.vercel.app/api/track-event';
+  const PROPOSAL_ID = 'mulesoft-claude-onboarding';
+
+  // Session ID — persists within a single viewing session
+  let sessionId = sessionStorage.getItem('st_onboard_sid');
+  if (!sessionId) {
+    sessionId = Math.random().toString(36).substring(2,10) + Date.now().toString(36);
+    sessionStorage.setItem('st_onboard_sid', sessionId);
+  }
+
+  // Read ?ref= param for contact attribution
+  const urlParams = new URLSearchParams(window.location.search);
+  const refParam = urlParams.get('ref') || 'direct';
+
+  function trackEvent(slideNum, slideTitle, eventType, duration) {
+    try {
+      fetch(TRACK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proposal_id: PROPOSAL_ID,
+          session_id: sessionId,
+          slide_number: slideNum || 0,
+          slide_title: slideTitle || '',
+          event_type: eventType,
+          duration_seconds: duration || null,
+          referrer: refParam
+        }),
+        keepalive: true
+      }).catch(function(){});
+    } catch(e) {}
+  }
+
+  // Fire page open event
+  trackEvent(0, 'welcome', 'onboarding_opened');
+
+  // Tab time tracking
+  let currentTab = 'welcome';
+  let tabEnterTime = Date.now();
+  const tabIndex = { welcome: 0, setup: 1, try: 2, resources: 3, practices: 4, tracker: 5, glossary: 6 };
+
+  function flushTabTime() {
+    const seconds = Math.round((Date.now() - tabEnterTime) / 1000);
+    if (seconds >= 2) {
+      trackEvent(tabIndex[currentTab] || 0, currentTab, 'time_on_tab', seconds);
+    }
+  }
+
+  // Flush time on page unload
+  window.addEventListener('beforeunload', flushTabTime);
 
   // ── Tab switching ──
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
 
   function switchTab(tabName) {
+    // Flush time on previous tab
+    flushTabTime();
+
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
     panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabName));
     window.location.hash = tabName;
     window.scrollTo(0, 0);
-    // Beacon per tab
-    try {
-      const b = new Image();
-      b.src = 'https://cms-api-hub.vercel.app/api/beacon?page=mulesoft-claude-onboarding&event=tab_' + tabName + '&t=' + Date.now();
-    } catch(e) {}
+
+    // Track tab view
+    currentTab = tabName;
+    tabEnterTime = Date.now();
+    trackEvent(tabIndex[tabName] || 0, tabName, 'tab_viewed');
   }
 
   tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
@@ -1811,6 +1860,10 @@ EOF
       state[key] = cb.checked;
       saveState(state);
       updateProgress();
+      // Track checklist completion
+      if (cb.checked) {
+        trackEvent(tabIndex['tracker'] || 5, 'checklist:' + key, 'checklist_completed');
+      }
     });
   });
 
