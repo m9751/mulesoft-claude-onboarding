@@ -3,105 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MuleSoft + Claude Code — Getting Started</title>
+<title>MuleSoft + Anypoint — AI Editor Onboarding Guide</title>
+<meta name="description" content="Connect Claude Code or Cursor to MuleSoft Anypoint Platform in under 30 minutes using the MCP server.">
 <style>
   :root {
-    --navy: #00174F;
-    --navy-light: #001A5C;
-    --blue: #00A1DF;
-    --blue-dark: #0078B4;
-    --teal: #00D4AA;
-    --white: #FFFFFF;
-    --gray-100: #F4F6F9;
-    --gray-200: #E1E5EB;
-    --gray-300: #C5CBD6;
-    --gray-400: #8E99AB;
-    --gray-500: #5C6A7F;
-    --gray-600: #3B4A5E;
-    --font-sans: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* MuleSoft Brand — Light theme */
+    --bg-page:      #EEF4FF;   /* Blue 95 — page background */
+    --bg-content:   #FFFFFF;   /* white — content areas */
+    --bg-card:      #FFFFFF;   /* white card background */
+    --bg-subtle:    #EAF5FE;   /* Cloud Blue 95 — subtle section tint */
+    --bg-header:    #032D60;   /* Blue 20 — header/nav dark band */
+    --bg-nav:       #032D60;   /* Blue 20 — top nav */
+    --bg-secnav:    #FFFFFF;   /* section nav background */
+
+    --text-primary:   #032D60; /* Blue 20 — headings and strong text */
+    --text-body:      #1B3A5C; /* slightly lighter navy for body */
+    --text-muted:     #5C6A7F; /* muted secondary text */
+    --text-on-dark:   #FFFFFF; /* text on dark backgrounds */
+    --text-on-dark-2: #CFE9FE; /* Cloud Blue 90 — subdued text on dark */
+
+    --blue:      #0176D3;      /* Blue 50 — primary CTA, links */
+    --blue-dark: #032D60;      /* Blue 20 — hover on primary */
+    --blue-hero: #0D9DDA;      /* Cloud Blue 60 — accents */
+    --teal:      #04E1CB;      /* Teal 80 — code highlights */
+    --orange:    #FE9339;      /* Orange 70 — callout accent */
+    --green:     #41B658;      /* Green 65 — success */
+
+    --border:    #CFE9FE;      /* Cloud Blue 90 — card borders */
+    --border-strong: #0B5CAB; /* Blue 40 — prominent borders */
+
+    --font-sans: 'Salesforce Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
     --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
     --radius: 8px;
-    --shadow: 0 2px 8px rgba(0,0,0,0.15);
-    --shadow-lg: 0 4px 24px rgba(0,0,0,0.25);
-  }
-
-  @font-face {
-    font-family: 'Salesforce Sans';
-    src: local('Salesforce Sans'), local('SalesforceSans-Regular');
-    font-weight: 400;
+    --shadow: 0 1px 4px rgba(3,45,96,0.10);
+    --shadow-lg: 0 4px 16px rgba(3,45,96,0.14);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: var(--font-sans);
-    background: var(--navy);
-    color: var(--gray-100);
+    background: var(--bg-page);
+    color: var(--text-body);
     line-height: 1.6;
     min-height: 100vh;
   }
 
   /* ── Header ── */
   .header {
-    background: linear-gradient(135deg, var(--navy) 0%, #002366 100%);
+    background: var(--bg-header);
     border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding: 24px 32px;
+    padding: 16px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(12px);
   }
 
   .header-left {
     display: flex;
     align-items: center;
-    gap: 16px;
-  }
-
-  .logo-mark {
-    width: 40px;
-    height: 40px;
-    background: var(--blue);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--white);
-  }
-
-  .header h1 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--white);
-    letter-spacing: -0.3px;
-  }
-
-  .header h1 span {
-    color: var(--blue);
-  }
-
-  .progress-bar-wrap {
-    display: flex;
-    align-items: center;
     gap: 12px;
   }
+
+  .header-logo { height: 36px; width: auto; }
+
+  .header-tagline {
+    font-size: 13px;
+    color: var(--text-on-dark-2);
+    font-weight: 400;
+  }
+
+  .progress-bar-wrap { display: flex; align-items: center; gap: 12px; }
 
   .progress-bar {
     width: 200px;
     height: 6px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
     border-radius: 3px;
     overflow: hidden;
   }
 
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--teal));
+    background: linear-gradient(90deg, var(--blue-hero), var(--teal));
     border-radius: 3px;
     transition: width 0.4s ease;
     width: 0%;
@@ -109,38 +96,97 @@
 
   .progress-text {
     font-size: 13px;
-    color: var(--gray-400);
+    color: var(--text-on-dark-2);
     font-family: var(--font-mono);
     min-width: 36px;
   }
 
-  /* ── Tabs ── */
-  .tabs {
+  /* ── Top-level editor tabs ── */
+  .editor-tabs {
     display: flex;
-    gap: 2px;
+    gap: 0;
     padding: 0 32px;
-    background: rgba(0,0,0,0.2);
+    background: var(--bg-nav);
+    border-bottom: 3px solid var(--border);
     overflow-x: auto;
   }
 
-  .tab {
-    padding: 12px 20px;
+  .editor-tab {
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-on-dark-2);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+    letter-spacing: 0.2px;
+  }
+
+  .editor-tab:hover { color: #FFFFFF; }
+  .editor-tab.active {
+    color: #FFFFFF;
+    border-bottom-color: var(--orange);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .editor-tab-featured {
+    color: var(--orange) !important;
+    font-weight: 700;
+    border-bottom-color: var(--orange) !important;
+  }
+  .editor-tab-featured.active {
+    background: rgba(254,147,57,0.12) !important;
+    border-bottom-color: var(--orange) !important;
+    color: var(--orange) !important;
+  }
+
+  .editor-tab .badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--orange);
+    color: #FFFFFF;
+    vertical-align: middle;
+  }
+
+  /* ── Section tabs (within each editor) ── */
+  .section-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 32px;
+    background: var(--bg-secnav);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .section-tab {
+    padding: 10px 18px;
     font-size: 13px;
     font-weight: 500;
-    color: var(--gray-400);
+    color: var(--text-muted);
     cursor: pointer;
     border: none;
     background: transparent;
     font-family: var(--font-sans);
     white-space: nowrap;
     border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
     transition: all 0.2s;
   }
 
-  .tab:hover { color: var(--gray-200); }
-  .tab.active {
+  .section-tab:hover { color: var(--text-primary); }
+  .section-tab.active {
     color: var(--blue);
     border-bottom-color: var(--blue);
+    font-weight: 600;
   }
 
   /* ── Content ── */
@@ -150,13 +196,15 @@
     padding: 40px 32px 80px;
   }
 
-  .panel { display: none; }
-  .panel.active { display: block; }
+  .editor-pane { display: none; }
+  .editor-pane.active { display: block; }
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
 
   h2 {
     font-size: 28px;
     font-weight: 700;
-    color: var(--white);
+    color: var(--text-primary);
     margin-bottom: 8px;
     letter-spacing: -0.5px;
   }
@@ -164,33 +212,30 @@
   h3 {
     font-size: 18px;
     font-weight: 600;
-    color: var(--white);
+    color: var(--text-primary);
     margin: 32px 0 12px;
   }
 
   h4 {
     font-size: 15px;
     font-weight: 600;
-    color: var(--gray-200);
+    color: var(--text-primary);
     margin: 24px 0 8px;
   }
 
   .subtitle {
     font-size: 15px;
-    color: var(--gray-400);
+    color: var(--text-muted);
     margin-bottom: 32px;
   }
 
   p, li {
     font-size: 15px;
-    color: var(--gray-300);
+    color: var(--text-body);
     margin-bottom: 12px;
   }
 
-  ul, ol {
-    padding-left: 24px;
-  }
-
+  ul, ol { padding-left: 24px; }
   li { margin-bottom: 8px; }
 
   a {
@@ -201,15 +246,25 @@
   }
   a:hover { border-bottom-color: var(--blue); }
 
-  strong { color: var(--gray-100); }
+  strong { color: var(--text-primary); }
+  code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-subtle);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--blue-dark);
+    border: 1px solid var(--border);
+  }
 
   /* ── Cards ── */
   .card {
-    background: var(--navy-light);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px;
     margin-bottom: 16px;
+    box-shadow: var(--shadow);
   }
 
   .card-grid {
@@ -220,43 +275,26 @@
   }
 
   .capability-card {
-    background: var(--navy-light);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px;
-    transition: border-color 0.2s, transform 0.2s;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow);
   }
 
   .capability-card:hover {
-    border-color: rgba(0,161,223,0.3);
+    border-color: var(--blue);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
   }
 
-  .capability-card .icon {
-    font-size: 24px;
-    margin-bottom: 8px;
-    display: block;
-  }
+  .capability-card .icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .capability-card h4 { margin: 0 0 4px; font-size: 14px; color: var(--text-primary); }
+  .capability-card p { font-size: 13px; color: var(--text-muted); margin: 0; }
 
-  .capability-card h4 {
-    margin: 0 0 4px;
-    font-size: 14px;
-    color: var(--white);
-  }
-
-  .capability-card p {
-    font-size: 13px;
-    color: var(--gray-400);
-    margin: 0;
-  }
-
-  /* ── CTA Buttons ── */
-  .cta-row {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin: 24px 0;
-  }
+  /* ── CTAs ── */
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
 
   .cta {
     display: inline-flex;
@@ -265,7 +303,7 @@
     padding: 10px 20px;
     border-radius: var(--radius);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     font-family: var(--font-sans);
     cursor: pointer;
     border: none;
@@ -273,18 +311,10 @@
     text-decoration: none;
   }
 
-  .cta-primary {
-    background: var(--blue);
-    color: var(--white);
-  }
-  .cta-primary:hover { background: var(--blue-dark); border-bottom-color: transparent; }
-
-  .cta-outline {
-    background: transparent;
-    color: var(--blue);
-    border: 1px solid rgba(0,161,223,0.4);
-  }
-  .cta-outline:hover { background: rgba(0,161,223,0.08); border-bottom-color: transparent; }
+  .cta-primary { background: var(--blue); color: #FFFFFF; }
+  .cta-primary:hover { background: var(--blue-dark); color: #FFFFFF; border-bottom-color: transparent; }
+  .cta-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+  .cta-outline:hover { background: var(--bg-subtle); border-bottom-color: var(--blue); }
 
   /* ── Code Blocks ── */
   .code-block {
@@ -321,15 +351,10 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .copy-btn:hover { background: rgba(255,255,255,0.15); color: var(--white); }
+  .copy-btn:hover { background: rgba(255,255,255,0.25); color: #FFFFFF; }
 
-  /* ── Step Indicators ── */
-  .step {
-    display: flex;
-    gap: 16px;
-    margin: 24px 0;
-    align-items: flex-start;
-  }
+  /* ── Steps ── */
+  .step { display: flex; gap: 16px; margin: 24px 0; align-items: flex-start; }
 
   .step-num {
     min-width: 32px;
@@ -341,7 +366,7 @@
     justify-content: center;
     font-size: 14px;
     font-weight: 700;
-    color: var(--white);
+    color: #FFFFFF;
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -349,7 +374,50 @@
   .step-content { flex: 1; }
   .step-content h4 { margin-top: 4px; }
 
-  /* ── UI Mockup Screenshots ── */
+  /* ── Verification block ── */
+  .verify-block {
+    background: #CDEFC4;
+    border: 1px solid var(--green);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .verify-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+  .verify-block .verify-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1B6B2A;
+    margin-bottom: 4px;
+  }
+
+  .verify-block p { font-size: 13px; color: var(--text-body); margin: 0; }
+
+  /* ── Screenshot ── */
+  .screenshot-wrap {
+    position: relative;
+    margin: 16px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .screenshot-wrap img { width: 100%; display: block; }
+
+  .screenshot-caption {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 8px 12px;
+    background: var(--bg-subtle);
+  }
+
+  /* ── UI Mock ── */
   .ui-mock {
     background: #1A1F2E;
     border: 1px solid rgba(255,255,255,0.08);
@@ -369,28 +437,14 @@
     color: var(--gray-400);
   }
 
-  .ui-mock-dots {
-    display: flex;
-    gap: 6px;
-  }
-
-  .ui-mock-dots span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
+  .ui-mock-dots { display: flex; gap: 6px; }
+  .ui-mock-dots span { width: 10px; height: 10px; border-radius: 50%; }
   .ui-mock-dots span:nth-child(1) { background: #FF5F56; }
   .ui-mock-dots span:nth-child(2) { background: #FFBD2E; }
   .ui-mock-dots span:nth-child(3) { background: #27CA3F; }
+  .ui-mock-body { padding: 20px 24px; }
 
-  .ui-mock-body {
-    padding: 20px 24px;
-  }
-
-  .ui-mock-sidebar {
-    display: flex;
-    gap: 0;
-  }
+  .ui-mock-sidebar { display: flex; gap: 0; }
 
   .ui-mock-nav {
     width: 200px;
@@ -415,21 +469,10 @@
     border-left: 3px solid var(--blue);
   }
 
-  .ui-mock-main {
-    flex: 1;
-    padding: 20px 24px;
-  }
+  .ui-mock-main { flex: 1; padding: 20px 24px; }
+  .ui-mock-form-field { margin-bottom: 16px; }
 
-  .ui-mock-form-field {
-    margin-bottom: 16px;
-  }
-
-  .ui-mock-label {
-    font-size: 12px;
-    color: var(--gray-400);
-    margin-bottom: 4px;
-    display: block;
-  }
+  .ui-mock-label { font-size: 12px; color: var(--gray-400); margin-bottom: 4px; display: block; }
 
   .ui-mock-input {
     background: #252A3A;
@@ -443,14 +486,7 @@
     font-family: var(--font-sans);
   }
 
-  .ui-mock-radio {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 6px 0;
-    font-size: 13px;
-    color: var(--gray-300);
-  }
+  .ui-mock-radio { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; color: var(--gray-300); }
 
   .ui-mock-radio-dot {
     width: 16px;
@@ -462,38 +498,14 @@
     justify-content: center;
   }
 
-  .ui-mock-radio-dot.selected {
-    border-color: var(--blue);
-  }
+  .ui-mock-radio-dot.selected { border-color: var(--blue); }
+  .ui-mock-radio-dot.selected::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
 
-  .ui-mock-radio-dot.selected::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--blue);
-  }
-
-  .ui-mock-btn {
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 8px;
-  }
-
+  .ui-mock-btn { display: inline-block; padding: 8px 20px; border-radius: 4px; font-size: 13px; font-weight: 500; margin-top: 8px; }
   .ui-mock-btn-primary { background: var(--blue); color: white; }
   .ui-mock-btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
 
-  .ui-mock-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-
+  .ui-mock-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
   .ui-mock-badge-blue { background: rgba(0,161,223,0.15); color: var(--blue); }
   .ui-mock-badge-green { background: rgba(39,202,63,0.15); color: #27CA3F; }
 
@@ -508,42 +520,33 @@
     justify-content: space-between;
   }
 
-  .ui-mock-secret-row .label {
-    font-size: 12px;
-    color: var(--gray-400);
-  }
+  .ui-mock-secret-row .label { font-size: 12px; color: var(--gray-400); }
+  .ui-mock-secret-row .value { font-family: var(--font-mono); font-size: 13px; color: var(--teal); }
 
-  .ui-mock-secret-row .value {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--teal);
-  }
-
+  /* ── Annotation / Warning ── */
   .annotation {
-    background: rgba(0,161,223,0.08);
+    background: var(--bg-subtle);
     border-left: 3px solid var(--blue);
     padding: 12px 16px;
     margin: 16px 0;
     border-radius: 0 var(--radius) var(--radius) 0;
     font-size: 13px;
-    color: var(--gray-300);
+    color: var(--text-body);
   }
-
-  .annotation strong { color: var(--blue); }
+  .annotation strong { color: var(--blue-dark); }
 
   .warning {
-    background: rgba(255,189,46,0.08);
-    border-left: 3px solid #FFBD2E;
+    background: #FEDFD0;
+    border-left: 3px solid var(--orange);
     padding: 12px 16px;
     margin: 16px 0;
     border-radius: 0 var(--radius) var(--radius) 0;
     font-size: 13px;
-    color: var(--gray-300);
+    color: var(--text-body);
   }
+  .warning strong { color: #7A3800; }
 
-  .warning strong { color: #FFBD2E; }
-
-  /* ── Terminal Mockup ── */
+  /* ── Terminal ── */
   .terminal {
     background: #0D1117;
     border: 1px solid rgba(255,255,255,0.06);
@@ -581,197 +584,62 @@
   .terminal-body .success { color: #7EE787; }
   .terminal-body .highlight { color: #D2A8FF; }
 
-  /* ── Checklist / Tracker ── */
-  .tracker-section {
-    margin: 24px 0;
-  }
-
-  .tracker-section h4 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .tracker-count {
-    font-size: 11px;
-    font-family: var(--font-mono);
-    color: var(--gray-400);
-    font-weight: 400;
-  }
-
-  .check-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-radius: 6px;
-    transition: background 0.15s;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .check-item:hover { background: rgba(255,255,255,0.03); }
-
-  .check-item input[type="checkbox"] {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--gray-500);
-    border-radius: 4px;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.2s;
-    position: relative;
-  }
-
-  .check-item input[type="checkbox"]:checked {
-    background: var(--blue);
-    border-color: var(--blue);
-  }
-
-  .check-item input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-
-  .check-item label {
-    font-size: 14px;
-    color: var(--gray-300);
-    cursor: pointer;
-    margin: 0;
-  }
-
-  .check-item.done label {
-    color: var(--gray-500);
-    text-decoration: line-through;
-  }
-
-  .reset-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--gray-400);
-    padding: 6px 16px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    margin-top: 16px;
-    transition: all 0.2s;
-  }
-  .reset-btn:hover { background: rgba(255,255,255,0.05); color: var(--gray-200); }
-
-  /* ── Table ── */
-  .resource-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-  }
-
-  .resource-table th {
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--gray-400);
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .resource-table td {
-    padding: 10px 12px;
-    font-size: 14px;
-    color: var(--gray-300);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .resource-table tr:hover td { background: rgba(255,255,255,0.02); }
-
-  .tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-
-  .tag-learn { background: rgba(0,161,223,0.12); color: var(--blue); }
-  .tag-try { background: rgba(0,212,170,0.12); color: var(--teal); }
-  .tag-build { background: rgba(210,168,255,0.12); color: #D2A8FF; }
-
-  /* ── Accordion ── */
-  .accordion {
-    border: 1px solid rgba(255,255,255,0.06);
+  /* ── Accordion (native details/summary) ── */
+  details {
+    border: 1px solid var(--border);
     border-radius: var(--radius);
+    margin: 8px 0;
     overflow: hidden;
-    margin: 16px 0;
+    box-shadow: var(--shadow);
   }
 
-  .accordion-item {
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
+  details + details { margin-top: 4px; }
 
-  .accordion-item:last-child { border-bottom: none; }
-
-  .accordion-header {
+  summary {
     padding: 12px 16px;
     font-size: 14px;
-    color: var(--gray-200);
+    color: var(--text-body);
     cursor: pointer;
+    background: var(--bg-card);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--navy-light);
+    list-style: none;
+    user-select: none;
     transition: background 0.15s;
-    font-family: var(--font-sans);
-    border: none;
-    width: 100%;
-    text-align: left;
+    font-weight: 500;
   }
 
-  .accordion-header:hover { background: rgba(255,255,255,0.03); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '▶'; font-size: 11px; color: var(--text-muted); transition: transform 0.2s; }
+  details[open] summary { background: var(--bg-subtle); }
+  details[open] summary::after { transform: rotate(90deg); }
 
-  .accordion-header .arrow {
-    transition: transform 0.2s;
-    font-size: 12px;
-    color: var(--gray-400);
-  }
-
-  .accordion-item.open .accordion-header .arrow { transform: rotate(90deg); }
-
-  .accordion-body {
-    display: none;
+  .details-body {
     padding: 12px 16px 16px;
-    background: rgba(0,0,0,0.15);
+    background: var(--bg-subtle);
     font-size: 13px;
-    color: var(--gray-300);
+    color: var(--text-body);
+    border-top: 1px solid var(--border);
   }
 
-  .accordion-item.open .accordion-body { display: block; }
-
-  /* ── Try-it prompt cards ── */
+  /* ── Try cards ── */
   .try-card {
-    background: var(--navy-light);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px 20px;
     margin: 12px 0;
     display: flex;
     align-items: flex-start;
     gap: 16px;
+    box-shadow: var(--shadow);
   }
 
   .try-num {
     min-width: 28px;
     height: 28px;
-    background: rgba(0,161,223,0.15);
+    background: var(--bg-subtle);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -780,20 +648,11 @@
     font-weight: 700;
     color: var(--blue);
     flex-shrink: 0;
+    border: 1px solid var(--border-strong);
   }
 
-  .try-card .prompt-text {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--teal);
-    margin-bottom: 4px;
-  }
-
-  .try-card .expect-text {
-    font-size: 12px;
-    color: var(--gray-400);
-    margin: 0;
-  }
+  .try-card .prompt-text { font-family: var(--font-mono); font-size: 13px; color: var(--blue-dark); margin-bottom: 4px; font-weight: 600; }
+  .try-card .expect-text { font-size: 12px; color: var(--text-muted); margin: 0; }
 
   .difficulty {
     display: inline-block;
@@ -810,10 +669,114 @@
   .diff-med { background: rgba(255,189,46,0.12); color: #FFBD2E; }
   .diff-adv { background: rgba(210,168,255,0.12); color: #D2A8FF; }
 
+  /* ── Checklist / Tracker ── */
+  .tracker-section { margin: 24px 0; }
+  .tracker-section h4 { display: flex; align-items: center; gap: 8px; }
+
+  .tracker-count { font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); font-weight: 400; }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .check-item:hover { background: var(--bg-subtle); }
+
+  .check-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--text-muted);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .check-item input[type="checkbox"]:checked { background: var(--blue); border-color: var(--blue); }
+
+  .check-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .check-item label { font-size: 14px; color: var(--text-body); cursor: pointer; margin: 0; }
+  .check-item.done label { color: var(--text-muted); text-decoration: line-through; }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: var(--bg-subtle); color: var(--text-primary); }
+
+  /* ── Table ── */
+  .resource-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+
+  .resource-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg-subtle);
+  }
+
+  .resource-table td {
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .resource-table tr:hover td { background: var(--bg-subtle); }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-learn { background: var(--bg-subtle); color: var(--blue); border: 1px solid var(--border); }
+  .tag-try { background: #ACF3E4; color: #046B5C; }
+  .tag-build { background: #ECE1F9; color: #5A1AB2; }
+
+  /* ── Divider / Footer ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--bg-content);
+  }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
-    .header { padding: 16px; }
-    .tabs { padding: 0 16px; }
+    .header { padding: 12px 16px; }
+    .editor-tabs { padding: 0 16px; }
+    .section-tabs { padding: 0 16px; }
     .content { padding: 24px 16px 60px; }
     h2 { font-size: 22px; }
     .card-grid { grid-template-columns: 1fr; }
@@ -822,198 +785,127 @@
     .cta-row { flex-direction: column; }
     .progress-bar { width: 120px; }
   }
-
-  /* ── Divider ── */
-  hr {
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    margin: 32px 0;
-  }
-
-  /* ── Footer ── */
-  .footer {
-    text-align: center;
-    padding: 24px;
-    font-size: 12px;
-    color: var(--gray-500);
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════════ HEADER ═══════════════════ -->
-<div class="header">
+<header class="header" role="banner">
   <div class="header-left">
-    <div class="logo-mark">M</div>
-    <h1>MuleSoft + <span>Claude Code</span></h1>
+    <img src="mulesoft-logo.png" alt="MuleSoft from Salesforce" class="header-logo">
+    <span class="header-tagline">AI Editor Onboarding Guide</span>
   </div>
-  <div class="progress-bar-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <span class="progress-text" id="progressText">0%</span>
-  </div>
-</div>
+  <span style="font-size:12px;color:var(--text-on-dark-2)">MuleSoft + Anypoint — AI Editor Guide</span>
+</header>
 
-<!-- ═══════════════════ TABS ═══════════════════ -->
-<div class="tabs" id="tabBar">
-  <button class="tab active" data-tab="welcome">Welcome</button>
-  <button class="tab" data-tab="setup">Setup Guide</button>
-  <button class="tab" data-tab="tryit">First 10 Things to Try</button>
-  <button class="tab" data-tab="resources">Resources</button>
-  <button class="tab" data-tab="practices">Best Practices</button>
-  <button class="tab" data-tab="tracker">Progress Tracker</button>
-  <button class="tab" data-tab="glossary">Glossary</button>
-</div>
+<!-- ═══════════════════ EDITOR TABS (top level) ═══════════════════ -->
+<nav role="tablist" aria-label="AI editor" class="editor-tabs" id="editorTabBar">
+  <button role="tab" aria-selected="true"  aria-controls="pane-claude"    class="editor-tab active" data-editor="claude"    id="etab-claude">Claude Code</button>
+  <button role="tab" aria-selected="false" aria-controls="pane-cursor"    class="editor-tab"        data-editor="cursor"   id="etab-cursor">Cursor <span class="badge" style="background:var(--blue);color:#fff">New</span></button>
+  <button role="tab" aria-selected="false" aria-controls="pane-resources"  class="editor-tab"          data-editor="resources"  id="etab-resources">Resources &amp; Tools</button>
+  <button role="tab" aria-selected="false" aria-controls="pane-scriptflow" class="editor-tab"          data-editor="scriptflow" id="etab-scriptflow">Script → Flow</button>
+  <button role="tab" aria-selected="false" aria-controls="pane-salesforce" class="editor-tab editor-tab-featured" data-editor="salesforce" id="etab-salesforce">⚡ Salesforce Agent Architecture</button>
+  <button role="tab" aria-selected="false" aria-controls="pane-usecases"  class="editor-tab"          data-editor="usecases"  id="etab-usecases" style="display:none">Sample Use Cases</button>
+</nav>
 
-<!-- ═══════════════════ CONTENT ═══════════════════ -->
-<div class="content">
+<!-- ═══════════════════ CLAUDE CODE PANE ═══════════════════ -->
+<div role="tabpanel" id="pane-claude" class="editor-pane active" aria-labelledby="etab-claude">
 
-<!-- ──────────── TAB 1: WELCOME ──────────── -->
-<div class="panel active" id="panel-welcome">
+  <!-- Section tabs for Claude Code -->
+  <nav role="tablist" aria-label="Claude Code sections" class="section-tabs" id="claudeSecTabs">
+    <button role="tab" aria-selected="true"  aria-controls="claude-welcome"   class="section-tab active" data-pane="claude" data-section="welcome"   id="cstab-welcome">Welcome</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-setup"     class="section-tab"        data-pane="claude" data-section="setup"     id="cstab-setup">Setup Guide</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-tryit"     class="section-tab"        data-pane="claude" data-section="tryit"     id="cstab-tryit">First 10 Things to Try</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-resources" class="section-tab"        data-pane="claude" data-section="resources" id="cstab-resources">Resources</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-practices" class="section-tab"        data-pane="claude" data-section="practices" id="cstab-practices">Best Practices</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-tracker"   class="section-tab"        data-pane="claude" data-section="tracker"   id="cstab-tracker">Progress Tracker</button>
+    <button role="tab" aria-selected="false" aria-controls="claude-glossary"  class="section-tab"        data-pane="claude" data-section="glossary"  id="cstab-glossary">Glossary</button>
+  </nav>
+
+  <div class="content">
+
+<!-- ── Claude: Welcome ── -->
+<section id="claude-welcome" class="section-panel active" role="tabpanel" aria-labelledby="cstab-welcome" data-slide="claude-welcome" data-slide-title="Welcome">
   <h2>Welcome</h2>
-  <p class="subtitle">Connect MuleSoft Anypoint Platform to Claude Code and start building integrations with AI in under 30 minutes.</p>
+  <p class="subtitle">Connect Claude Code to MuleSoft Anypoint Platform and run your first Exchange search in under 30 minutes. <span style="color:var(--text-muted);font-weight:400">(Maven deployment setup is optional — skip it until you're ready to deploy.)</span></p>
 
   <div class="card">
-    <p>This kit walks you through everything: creating credentials, connecting Claude Code to Anypoint, and running your first commands. By the end, you'll be able to search Exchange, create Mule projects, generate flows, deploy to CloudHub, and manage APIs &mdash; all from your terminal.</p>
+    <p>This guide walks you through everything: creating credentials, connecting Claude Code to Anypoint, and running your first commands. By the end, you'll be able to search Exchange, create Mule projects, generate flows, deploy to CloudHub, and manage APIs — all from your terminal.</p>
+  </div>
+
+  <div class="callout" style="background:var(--bg-card);border:1px solid var(--border-strong);border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;">
+    <span style="font-size:22px;flex-shrink:0">⚡</span>
+    <div style="width:100%">
+      <strong>The three eras of enterprise software</strong>
+      <table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;">
+        <thead><tr style="text-align:left;border-bottom:1px solid var(--border-strong)"><th style="padding:4px 10px 4px 0">Era</th><th style="padding:4px 10px">Period</th><th style="padding:4px 10px">Who Does the Work</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:4px 10px 4px 0">Era 1.0: UI-First</td><td style="padding:4px 10px">1999–2015</td><td style="padding:4px 10px">Humans clicking</td></tr>
+          <tr><td style="padding:4px 10px 4px 0">Era 2.0: API-First</td><td style="padding:4px 10px">2015–2024</td><td style="padding:4px 10px">Developers writing integration code</td></tr>
+          <tr style="color:var(--orange);font-weight:600"><td style="padding:4px 10px 4px 0">Era 3.0: Agent-First</td><td style="padding:4px 10px">2025–Beyond</td><td style="padding:4px 10px">Autonomous AI agents</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:10px 0 0;font-size:13px;color:var(--text-muted)">"Why should you ever log into Salesforce again?" — Parker Harris, Salesforce Co-Founder, TrailblazerDX 2026</p>
+    </div>
+  </div>
+
+  <div class="callout" style="background:var(--bg-card);border:1px solid var(--border-strong);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:14px;">
+    <strong>The most powerful workflows chain both MCP servers</strong> — Salesforce reads your org data, MuleSoft builds the integration that connects it to everything else. One agent session, zero custom code to start.<br>
+    <span style="display:block;margin-top:10px">Got a legacy script syncing data to Salesforce? <a href="#" onclick="document.querySelector('[data-editor=scriptflow]').click();return false;" style="color:var(--blue);font-weight:700;font-size:14px;text-decoration:none;border-bottom:1px solid var(--blue)">→ See Script → Flow</a></span>
   </div>
 
   <h3>What You'll Be Able to Do</h3>
   <div class="card-grid">
-    <div class="capability-card">
-      <span class="icon">&#128269;</span>
-      <h4>Search Exchange</h4>
-      <p>Find assets, connectors, templates, and accelerators across the MuleSoft ecosystem</p>
-    </div>
-    <div class="capability-card">
-      <span class="icon">&#128736;</span>
-      <h4>Build Mule Projects</h4>
-      <p>Scaffold new integration projects and generate flows with natural language</p>
-    </div>
-    <div class="capability-card">
-      <span class="icon">&#128640;</span>
-      <h4>Deploy to CloudHub</h4>
-      <p>Deploy applications to CloudHub 2.0 or Runtime Fabric directly from the CLI</p>
-    </div>
-    <div class="capability-card">
-      <span class="icon">&#128196;</span>
-      <h4>Generate API Specs</h4>
-      <p>Create OAS 3.0 or RAML API specifications from natural language descriptions</p>
-    </div>
-    <div class="capability-card">
-      <span class="icon">&#128274;</span>
-      <h4>Apply Policies</h4>
-      <p>Manage API instances and apply security, rate-limiting, and custom policies</p>
-    </div>
-    <div class="capability-card">
-      <span class="icon">&#129302;</span>
-      <h4>Create MCP Servers</h4>
-      <p>Build MCP servers with the Anypoint MCP Connector for agentic workflows</p>
-    </div>
+    <div class="capability-card"><span class="icon">🔍</span><h4>Search Exchange</h4><p>Find assets, connectors, templates, and accelerators across the MuleSoft ecosystem</p></div>
+    <div class="capability-card"><span class="icon">🔧</span><h4>Build Mule Projects</h4><p>Scaffold new integration projects and generate flows with natural language</p></div>
+    <div class="capability-card"><span class="icon">🚀</span><h4>Deploy to CloudHub</h4><p>Deploy applications to CloudHub 2.0 or Runtime Fabric directly from the CLI</p></div>
+    <div class="capability-card"><span class="icon">📄</span><h4>Generate API Specs</h4><p>Create OAS 3.0 or RAML API specifications from natural language descriptions</p></div>
+    <div class="capability-card"><span class="icon">🔒</span><h4>Apply Policies</h4><p>Manage API instances and apply security, rate-limiting, and custom policies</p></div>
+    <div class="capability-card"><span class="icon">🤖</span><h4>Create MCP Servers</h4><p>Build MCP servers with the Anypoint MCP Connector for agentic workflows</p></div>
   </div>
 
-  <h3>Start Here</h3>
   <div class="cta-row">
-    <a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank" class="cta cta-primary">Try the Live Healthcare Sandbox &#8599;</a>
-    <a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank" class="cta cta-outline">Request an Agent Fabric Demo &#8599;</a>
-    <a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank" class="cta cta-outline">Read the Technical Overview &#8599;</a>
+    <a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank" rel="noopener" class="cta cta-primary" data-cta data-cta-text="Try the Live Healthcare Sandbox">Try the Live Healthcare Sandbox ↗</a>
+    <a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank" rel="noopener" class="cta cta-outline" data-cta data-cta-text="Request Agent Fabric Demo">Request an Agent Fabric Demo ↗</a>
   </div>
 
   <div class="annotation">
-    <strong>Estimated time:</strong> ~30 minutes from start to your first Exchange search. The setup is one-time &mdash; after that, Claude Code connects automatically on every session.
+    <strong>Estimated time:</strong> ~30 minutes from start to your first Exchange search. The setup is one-time — after that, Claude Code connects automatically on every session.
   </div>
-</div>
+</section>
 
-<!-- ──────────── TAB 2: SETUP GUIDE ──────────── -->
-<div class="panel" id="panel-setup">
+<!-- ── Claude: Setup Guide ── -->
+<section id="claude-setup" class="section-panel" role="tabpanel" aria-labelledby="cstab-setup" data-slide="claude-setup" data-slide-title="Setup Guide">
   <h2>Setup Guide</h2>
-  <p class="subtitle">Four steps to connect Claude Code to your Anypoint Platform organization.</p>
+  <p class="subtitle">Six steps to connect Claude Code to your Anypoint Platform organization.</p>
 
-  <!-- Prerequisites -->
   <div class="card">
     <h4>Prerequisites</h4>
     <ul>
-      <li><strong>Node.js 18+</strong> &mdash; <code>brew install node</code> or download from <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
-      <li><strong>Claude Code</strong> &mdash; <code>npm install -g @anthropic-ai/claude-code</code></li>
-      <li><strong>Anypoint Platform account</strong> &mdash; with Access Management permissions</li>
-      <li><strong>Java 17 + Maven</strong> (only for building/deploying Mule apps) &mdash; <code>brew install openjdk@17 maven</code></li>
+      <li><strong>Node.js 18+</strong> — <code>brew install node</code> or download from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
+      <li><strong>Claude Code</strong> — <code>npm install -g @anthropic-ai/claude-code</code></li>
+      <li><strong>Anypoint Platform account</strong> — with Access Management permissions</li>
+      <li><strong>Java 17 + Maven</strong> (only for building/deploying Mule apps) — <code>brew install openjdk@17 maven</code></li>
     </ul>
   </div>
 
   <!-- Step 1 -->
   <div class="step">
-    <div class="step-num">1</div>
+    <div class="step-num" aria-hidden="true">1</div>
     <div class="step-content">
       <h4>Log in to Anypoint Platform</h4>
-      <p>Go to <a href="https://anypoint.mulesoft.com" target="_blank">anypoint.mulesoft.com</a> and sign in with your organization credentials.</p>
-
-      <div class="ui-mock">
-        <div class="ui-mock-titlebar">
-          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
-          anypoint.mulesoft.com/login
-        </div>
-        <div class="ui-mock-body" style="background: linear-gradient(135deg, #0070D2, #00A1DF); text-align: center; padding: 40px;">
-          <div style="font-size: 28px; color: white; font-weight: 700; margin-bottom: 4px;">MuleSoft</div>
-          <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 24px;">from Salesforce</div>
-          <div style="background: white; border-radius: 8px; padding: 32px; max-width: 340px; margin: 0 auto; text-align: left;">
-            <div style="font-size: 18px; font-weight: 600; color: #333; text-align: center; margin-bottom: 20px;">Sign in</div>
-            <div class="ui-mock-form-field">
-              <div class="ui-mock-label" style="color: #666;">Username</div>
-              <div class="ui-mock-input" style="background: #fff; border-color: #d0d0d0; color: #333;">your.email@company.com</div>
-            </div>
-            <div class="ui-mock-form-field">
-              <div class="ui-mock-label" style="color: #666;">Password</div>
-              <div class="ui-mock-input" style="background: #fff; border-color: #d0d0d0; color: #999;">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</div>
-            </div>
-            <div class="ui-mock-btn ui-mock-btn-primary" style="width: 100%; text-align: center; margin-top: 12px;">Sign in</div>
-          </div>
-        </div>
-      </div>
+      <p>Go to <a href="https://anypoint.mulesoft.com" target="_blank" rel="noopener">anypoint.mulesoft.com</a> and sign in with your organization credentials.</p>
     </div>
   </div>
 
   <!-- Step 2 -->
   <div class="step">
-    <div class="step-num">2</div>
+    <div class="step-num" aria-hidden="true">2</div>
     <div class="step-content">
       <h4>Create a Connected App</h4>
-      <p>Navigate to <strong>Access Management</strong> in the left sidebar, then click <strong>Connected Apps</strong>.</p>
-
+      <p>Navigate to <strong>Access Management</strong> in the left sidebar, then click <strong>Connected Apps → Create App</strong>.</p>
       <div class="ui-mock">
-        <div class="ui-mock-titlebar">
-          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
-          anypoint.mulesoft.com &rsaquo; Access Management &rsaquo; Connected Apps
-        </div>
-        <div class="ui-mock-sidebar">
-          <div class="ui-mock-nav">
-            <div class="ui-mock-nav-item">&#127968; Home</div>
-            <div class="ui-mock-nav-item">&#128202; API Manager</div>
-            <div class="ui-mock-nav-item">&#128230; Exchange</div>
-            <div class="ui-mock-nav-item" style="margin-top: 16px; font-size: 11px; text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.5px;">Management</div>
-            <div class="ui-mock-nav-item active">&#128100; Access Mgmt</div>
-            <div class="ui-mock-nav-item">&#9881; Runtime Mgr</div>
-          </div>
-          <div class="ui-mock-main">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-              <div>
-                <div style="font-size: 18px; font-weight: 600; color: var(--white);">Connected Apps</div>
-                <div style="font-size: 12px; color: var(--gray-400);">Manage external applications that access your organization</div>
-              </div>
-              <div class="ui-mock-btn ui-mock-btn-primary" style="cursor: default;">+ Create App</div>
-            </div>
-            <div style="border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; padding: 24px; text-align: center; color: var(--gray-500); font-size: 13px;">
-              No connected apps yet. Click <strong style="color: var(--blue);">Create App</strong> to get started.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p style="margin-top: 16px;">Click <strong>Create App</strong> and fill in the form:</p>
-
-      <div class="ui-mock">
-        <div class="ui-mock-titlebar">
-          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
-          Create a Connected App
-        </div>
+        <div class="ui-mock-titlebar"><div class="ui-mock-dots"><span></span><span></span><span></span></div>Create a Connected App</div>
         <div class="ui-mock-body">
           <div class="ui-mock-form-field">
             <div class="ui-mock-label">App Name</div>
@@ -1021,18 +913,10 @@
           </div>
           <div class="ui-mock-form-field">
             <div class="ui-mock-label">Type</div>
-            <div class="ui-mock-radio">
-              <div class="ui-mock-radio-dot"></div>
-              App acts on behalf of a user
-            </div>
-            <div class="ui-mock-radio">
-              <div class="ui-mock-radio-dot selected"></div>
-              <strong style="color: var(--white);">App acts on its own behalf (client credentials)</strong>
-            </div>
+            <div class="ui-mock-radio"><div class="ui-mock-radio-dot"></div>App acts on behalf of a user</div>
+            <div class="ui-mock-radio"><div class="ui-mock-radio-dot selected"></div><strong style="color:var(--white)">App acts on its own behalf (client credentials)</strong></div>
           </div>
-          <div class="annotation" style="margin-top: 16px;">
-            <strong>Important:</strong> You must select "App acts on its own behalf (client credentials)." This allows Claude Code to authenticate without a browser login flow.
-          </div>
+          <div class="annotation" style="margin-top:16px"><strong>Important:</strong> Select "App acts on its own behalf (client credentials)." This allows Claude Code to authenticate without a browser login flow.</div>
         </div>
       </div>
     </div>
@@ -1040,110 +924,47 @@
 
   <!-- Step 3 -->
   <div class="step">
-    <div class="step-num">3</div>
+    <div class="step-num" aria-hidden="true">3</div>
     <div class="step-content">
       <h4>Add Scopes</h4>
-      <p>Click <strong>Add Scopes</strong> and grant the following permissions. Select your <strong>Business Group</strong> for each scope.</p>
-
-      <div class="ui-mock">
-        <div class="ui-mock-titlebar">
-          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
-          Scopes &mdash; Claude Code MCP
-        </div>
-        <div class="ui-mock-body">
-          <div style="font-size: 14px; color: var(--white); font-weight: 600; margin-bottom: 12px;">Selected Scopes</div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">General</span>
-              <span style="font-size: 13px; color: var(--gray-300);">View Organization, View Connected Applications</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Anypoint Code Builder</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Mule Developer Generative AI User</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Anypoint Monitoring</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Monitoring Viewer</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Exchange</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Exchange Administrator, Contributor, Creator, Viewer</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">API Manager</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Manage API Configuration, Manage Policies, View APIs Configuration</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(0,161,223,0.06); border-radius: 4px;">
-              <span class="ui-mock-badge ui-mock-badge-blue">Runtime Manager</span>
-              <span style="font-size: 13px; color: var(--gray-300);">Read Applications, Create Applications, Read Runtime Fabrics, CloudHub Network Viewer, Usage Viewer</span>
-            </div>
-          </div>
-          <table class="resource-table" style="margin-top: 16px;">
-            <thead>
-              <tr><th>Scope</th><th>Enables These Tools</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Generative AI User</td><td>generate_mule_flow, generate_api_spec, create_mcp_server</td></tr>
-              <tr><td>Monitoring Viewer</td><td>get_platform_insights, get_reuse_metrics, list_applications</td></tr>
-              <tr><td>Exchange roles</td><td>search_asset, create_and_manage_assets</td></tr>
-              <tr><td>API Manager</td><td>list_api_instances, manage_api_instance_policy, create_and_manage_api_instances</td></tr>
-              <tr><td>Runtime Manager</td><td>deploy_mule_application, list_applications, update_mule_application</td></tr>
-            </tbody>
-          </table>
-          <div class="annotation" style="margin-top: 16px;">
-            <strong>Tip:</strong> If you're unsure which scopes you need, grant all available scopes for your Business Group. You can tighten permissions later.
-          </div>
-        </div>
-      </div>
+      <p>Click <strong>Add Scopes</strong> and grant the following permissions. Select your <strong>Business Group</strong> (the top-level organization in your Anypoint account — usually your company name) for each scope.</p>
+      <table class="resource-table">
+        <thead><tr><th>Scope Group</th><th>Enables These Tools</th></tr></thead>
+        <tbody>
+          <tr><td>Generative AI User</td><td>generate_mule_flow, generate_api_spec, create_mcp_server</td></tr>
+          <tr><td>Monitoring Viewer</td><td>get_platform_insights, get_reuse_metrics, list_applications</td></tr>
+          <tr><td>Exchange roles</td><td>search_asset, create_and_manage_assets</td></tr>
+          <tr><td>API Manager</td><td>list_api_instances, manage_api_instance_policy, create_and_manage_api_instances</td></tr>
+          <tr><td>Runtime Manager</td><td>deploy_mule_application, list_applications, update_mule_application</td></tr>
+        </tbody>
+      </table>
+      <div class="annotation"><strong>Tip:</strong> If unsure, grant all available scopes for your Business Group. You can tighten permissions later.</div>
     </div>
   </div>
 
-  <!-- Step 3b: Copy Credentials -->
+  <!-- Step 4 -->
   <div class="step">
-    <div class="step-num">4</div>
+    <div class="step-num" aria-hidden="true">4</div>
     <div class="step-content">
       <h4>Copy Your Credentials</h4>
-      <p>After saving, Anypoint shows your <strong>Client ID</strong> and <strong>Client Secret</strong>. Copy both now &mdash; the secret is only shown once.</p>
-
+      <p>After saving, Anypoint shows your <strong>Client ID</strong> and <strong>Client Secret</strong>. Copy both now — the secret is only shown once.</p>
       <div class="ui-mock">
-        <div class="ui-mock-titlebar">
-          <div class="ui-mock-dots"><span></span><span></span><span></span></div>
-          Connected App Created
-        </div>
+        <div class="ui-mock-titlebar"><div class="ui-mock-dots"><span></span><span></span><span></span></div>Connected App Created</div>
         <div class="ui-mock-body">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-            <span style="font-size: 16px; font-weight: 600; color: var(--white);">Claude Code MCP</span>
-            <span class="ui-mock-badge ui-mock-badge-green">Active</span>
-          </div>
-          <div class="ui-mock-secret-row">
-            <div>
-              <div class="label">Client ID</div>
-              <div class="value">a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</div>
-            </div>
-            <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
-          </div>
-          <div class="ui-mock-secret-row">
-            <div>
-              <div class="label">Client Secret</div>
-              <div class="value">F9e8D7c6B5a4F3e2D1c0B9a8F7e6D5c4</div>
-            </div>
-            <div class="ui-mock-btn ui-mock-btn-outline" style="font-size: 11px; padding: 4px 12px; margin: 0;">Copy</div>
-          </div>
-          <div class="warning" style="margin-top: 16px;">
-            <strong>Save the Client Secret now.</strong> It will not be shown again. If you lose it, you'll need to regenerate credentials.
-          </div>
+          <div class="ui-mock-secret-row"><div><div class="label">Client ID</div><div class="value">a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</div></div><div class="ui-mock-btn ui-mock-btn-outline" style="font-size:11px;padding:4px 12px;margin:0">Copy</div></div>
+          <div class="ui-mock-secret-row"><div><div class="label">Client Secret</div><div class="value">F9e8D7c6B5a4F3e2D1c0B9a8F7e6D5c4</div></div><div class="ui-mock-btn ui-mock-btn-outline" style="font-size:11px;padding:4px 12px;margin:0">Copy</div></div>
+          <div class="warning" style="margin-top:16px"><strong>Save the Client Secret now.</strong> It will not be shown again.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Step 4: Terminal -->
+  <!-- Step 5 -->
   <div class="step">
-    <div class="step-num">5</div>
+    <div class="step-num" aria-hidden="true">5</div>
     <div class="step-content">
       <h4>Connect Claude Code</h4>
-      <p>Open your terminal and run this command, replacing the two placeholder values with your credentials:</p>
-
+      <p>Open your terminal and run this command, replacing the placeholder values with your credentials:</p>
       <div class="code-block" id="addCmd">
         <button class="copy-btn" onclick="copyCode('addCmd')">Copy</button>
 <span class="cmd">claude</span> <span class="flag">mcp add</span> mulesoft \
@@ -1151,160 +972,114 @@
   <span class="flag">-e</span> <span class="string">ANYPOINT_CLIENT_ID=paste_your_client_id</span> \
   <span class="flag">-e</span> <span class="string">ANYPOINT_CLIENT_SECRET=paste_your_client_secret</span> \
   <span class="flag">-e</span> <span class="string">ANYPOINT_REGION=PROD_US</span> \
-  <span class="flag">--</span> npx <span class="flag">-y</span> @mulesoft/mcp-server start
-      </div>
-
+  <span class="flag">--</span> npx <span class="flag">-y</span> @mulesoft/mcp-server@1.2.0 start</div>
       <div class="annotation">
-        <strong>Scope options:</strong> Use <code>--scope user</code> to make it available in all your projects. Use <code>--scope local</code> to restrict it to the current project only.<br><br>
-        <strong>Region options:</strong>
-        <table class="resource-table" style="margin: 8px 0 0;">
-          <tbody>
-            <tr><td><code>PROD_US</code></td><td>United States (default)</td></tr>
-            <tr><td><code>PROD_EU</code></td><td>Europe</td></tr>
-            <tr><td><code>PROD_CA</code></td><td>Canada</td></tr>
-            <tr><td><code>PROD_JP</code></td><td>Japan</td></tr>
-          </tbody>
-        </table>
+        <strong>Scope:</strong> Use <code>--scope user</code> (recommended for most setups). <em>Use <code>--scope local</code> only on shared machines — restricts credentials to the current project directory.</em><br><br>
+        <strong>Region options:</strong> <code>PROD_US</code> (default) | <code>PROD_EU</code> | <code>PROD_CA</code> | <code>PROD_JP</code>
       </div>
     </div>
   </div>
 
-  <!-- Step 5: Verify -->
+  <!-- Step 6 -->
   <div class="step">
-    <div class="step-num">6</div>
+    <div class="step-num" aria-hidden="true">6</div>
     <div class="step-content">
       <h4>Verify the Connection</h4>
       <p>Run this command to confirm Claude Code can reach Anypoint:</p>
-
       <div class="terminal">
-        <div class="terminal-bar">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <span class="title">Terminal</span>
-        </div>
+        <div class="terminal-bar"><div class="dots"><span></span><span></span><span></span></div><span class="title">Terminal</span></div>
         <div class="terminal-body">
-<span class="prompt">$</span> claude mcp list
-<br>
-<span class="output">Checking MCP server health...</span>
-<br><br>
-<span class="highlight">mulesoft</span>: npx -y @mulesoft/mcp-server start - <span class="success">&#10003; Connected</span>
+<span class="prompt">$</span> claude mcp list<br>
+<span class="output">Checking MCP server health...</span><br><br>
+<span class="highlight">mulesoft</span>: npx -y @mulesoft/mcp-server start - <span class="success">✓ Connected</span>
         </div>
       </div>
 
-      <p>If you see <strong style="color: #7EE787;">&#10003; Connected</strong>, you're ready to go. Head to the <strong>First 10 Things to Try</strong> tab.</p>
+      <div class="verify-block">
+        <div class="verify-icon">✅</div>
+        <div>
+          <div class="verify-title">What success looks like</div>
+          <p>You see <strong style="color:#7EE787">✓ Connected</strong> next to "mulesoft" in the list. If you see a red error instead, check the Common Errors section below.</p>
+        </div>
+      </div>
+
+      <div class="annotation" style="margin-top:16px;border-left:3px solid #3fb950;padding-left:12px;">
+        <strong style="color:#3fb950">You're connected.</strong> Steps 1–5 are complete. You can now query Anypoint from your terminal.<br>
+        <span style="display:block;margin-top:6px">Now try your first real prompt: <code>list applications in Sandbox</code> — seeing your own org data is the payoff.</span>
+      </div>
     </div>
   </div>
 
-  <!-- Common Errors -->
   <hr>
   <h3>Common Errors</h3>
 
-  <div class="accordion">
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#10060; Failed to connect</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        Double-check your Client ID and Client Secret for typos. The most common issue is an extra space or missing character when pasting. Re-run <code>claude mcp remove mulesoft</code> and then re-add with the corrected values.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#128683; 403 Forbidden on operations</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        Your Connected App is missing scopes. Go back to Access Management &gt; Connected Apps, edit the app, and add the missing scope group. You don't need to regenerate credentials &mdash; just add the scope and save.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#9888;&#65039; npx: command not found</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        Node.js is not installed or not on your PATH. Install it with <code>brew install node</code> (macOS) or download from <a href="https://nodejs.org" target="_blank">nodejs.org</a>. After installing, close and reopen your terminal.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#128736; Java/Maven errors when building</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        Building and deploying Mule projects requires Java 17 and Maven. Install with: <code>brew install openjdk@17 maven</code>. Then set JAVA_HOME: <code>export JAVA_HOME=$(/usr/libexec/java_home -v 17)</code>. Add that line to your <code>~/.zshrc</code> to make it persistent.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#127760; EU region &mdash; wrong endpoint</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        If your Anypoint org is in the EU, you must set <code>ANYPOINT_REGION=PROD_EU</code>. Remove and re-add the server: <code>claude mcp remove mulesoft</code> then re-run the add command with <code>PROD_EU</code>.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#128275; ANYPOINT_CLIENT_ID must be set</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        The MCP server is connected but has no credentials. Remove and re-add with environment variables: <code>claude mcp remove mulesoft</code> then re-add with <code>-e ANYPOINT_CLIENT_ID=... -e ANYPOINT_CLIENT_SECRET=...</code>. Alternatively, add the env vars directly in <code>~/.claude.json</code> under <code>mcpServers.mulesoft.env</code>.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#128230; Maven deployment fails &mdash; settings.xml missing</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        Maven needs <code>~/.m2/settings.xml</code> with your Anypoint credentials to deploy to CloudHub. See the Maven Setup section above. The file must use the <code>~~~Client~~~</code> username format with <code>CLIENT_ID~?~CLIENT_SECRET</code> as the password.
-      </div>
-    </div>
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#9888;&#65039; Deploy fails but MCP tools work</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        The MCP server and Maven use different credential paths. The MCP server reads env vars (<code>ANYPOINT_CLIENT_ID</code>), but Maven reads <code>~/.m2/settings.xml</code>. Both need to be configured. Also check that your Sandbox has available vCores &mdash; go to Runtime Manager &gt; Usage.
-      </div>
-    </div>
-  </div>
+  <details>
+    <summary>❌ Failed to connect</summary>
+    <div class="details-body">Double-check your Client ID and Client Secret for typos. Re-run <code>claude mcp remove mulesoft</code> then re-add with corrected values.</div>
+  </details>
+  <details>
+    <summary>🚫 403 Forbidden on operations</summary>
+    <div class="details-body">Your Connected App is missing scopes. Go to Access Management → Connected Apps, edit the app, and add the missing scope group. No need to regenerate credentials — just add the scope and save.</div>
+  </details>
+  <details>
+    <summary>⚠️ npx: command not found</summary>
+    <div class="details-body">Node.js is not installed or not on your PATH. Install with <code>brew install node</code> (macOS) or download from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>. After installing, close and reopen your terminal.</div>
+  </details>
+  <details>
+    <summary>🔧 Java/Maven errors when building</summary>
+    <div class="details-body">Building Mule projects requires Java 17 and Maven. Install with: <code>brew install openjdk@17 maven</code>. Then: <code>export JAVA_HOME=$(/usr/libexec/java_home -v 17)</code>. Add that line to your <code>~/.zshrc</code>.</div>
+  </details>
+  <details>
+    <summary>🌐 EU region — wrong endpoint</summary>
+    <div class="details-body">If your Anypoint org is in the EU, set <code>ANYPOINT_REGION=PROD_EU</code>. Remove and re-add: <code>claude mcp remove mulesoft</code> then re-run the add command with <code>PROD_EU</code>.</div>
+  </details>
+  <details>
+    <summary>🔑 ANYPOINT_CLIENT_ID must be set</summary>
+    <div class="details-body">The MCP server is connected but has no credentials. Remove and re-add with env vars: <code>claude mcp remove mulesoft</code> then re-add with <code>-e ANYPOINT_CLIENT_ID=... -e ANYPOINT_CLIENT_SECRET=...</code>.</div>
+  </details>
+  <details>
+    <summary>📦 Maven deployment fails — settings.xml missing</summary>
+    <div class="details-body">Maven needs <code>~/.m2/settings.xml</code> with your Anypoint credentials. See the Maven Setup section below. Use the <code>~~~Client~~~</code> username format with <code>CLIENT_ID~?~CLIENT_SECRET</code> as the password.</div>
+  </details>
+  <details>
+    <summary>⚠️ Deploy fails but MCP tools work</summary>
+    <div class="details-body">The MCP server and Maven use different credential paths. MCP reads env vars; Maven reads <code>~/.m2/settings.xml</code>. Both need to be configured. Also check vCore availability in Runtime Manager → Usage.</div>
+  </details>
 
   <hr>
-  <h3>Maven Setup (Required for Deployment)</h3>
-  <p>To deploy Mule apps to CloudHub, Maven needs your Anypoint credentials. This is a one-time setup.</p>
+  <details style="margin-top:8px">
+    <summary style="cursor:pointer;font-size:15px;font-weight:600;color:var(--text-primary);padding:12px 0;list-style:none;display:flex;align-items:center;gap:8px">
+      <span>📦</span> Maven Setup — only needed for CloudHub deployment <span style="font-weight:400;color:var(--text-muted);font-size:13px">(optional, ~20 min)</span>
+    </summary>
+
+  <p style="margin-top:12px">To deploy Mule apps to CloudHub, Maven needs your Anypoint credentials. One-time setup.</p>
 
   <div class="card">
     <h4>What is Maven?</h4>
-    <p>Maven is the build tool that compiles your Mule project and uploads it to CloudHub. Think of it like a shipping company &mdash; it packages your integration code and delivers it to the cloud. Without Maven credentials, your code builds but can't be delivered.</p>
+    <p>Maven is the build tool that compiles your Mule project and uploads it to CloudHub. Think of it like a shipping company — it packages your integration code and delivers it to the cloud. Without Maven credentials, your code builds but can't be delivered.</p>
   </div>
 
   <div class="step">
-    <div class="step-num">1</div>
+    <div class="step-num" aria-hidden="true">1</div>
     <div class="step-content">
       <h4>Store credentials in macOS Keychain</h4>
       <div class="code-block" id="mavenKeychain">
         <button class="copy-btn" onclick="copyCode('mavenKeychain')">Copy</button>
 <span class="cmd">security</span> add-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_ID"</span> <span class="flag">-a</span> <span class="string">"$USER"</span> <span class="flag">-w</span> <span class="string">"paste_your_client_id"</span>
-<span class="cmd">security</span> add-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_SECRET"</span> <span class="flag">-a</span> <span class="string">"$USER"</span> <span class="flag">-w</span> <span class="string">"paste_your_client_secret"</span>
-      </div>
+<span class="cmd">security</span> add-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_SECRET"</span> <span class="flag">-a</span> <span class="string">"$USER"</span> <span class="flag">-w</span> <span class="string">"paste_your_client_secret"</span></div>
     </div>
   </div>
 
   <div class="step">
-    <div class="step-num">2</div>
+    <div class="step-num" aria-hidden="true">2</div>
     <div class="step-content">
       <h4>Create the Maven settings file</h4>
-      <p>Run this command to create <code>~/.m2/settings.xml</code> with your Keychain credentials:</p>
       <div class="code-block" id="mavenSettings">
         <button class="copy-btn" onclick="copyCode('mavenSettings')">Copy</button>
-<span class="cmd">mkdir</span> <span class="flag">-p</span> ~/.m2 && \
-<span class="cmd">CLIENT_ID</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_ID" -w) && \
-<span class="cmd">CLIENT_SECRET</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_SECRET" -w) && \
-<span class="cmd">cat</span> > ~/.m2/settings.xml &lt;&lt; EOF
+<span class="cmd">mkdir</span> <span class="flag">-p</span> ~/.m2 &amp;&amp; \
+<span class="cmd">CLIENT_ID</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_ID" -w) &amp;&amp; \
+<span class="cmd">CLIENT_SECRET</span>=$(security find-generic-password -s "ANYPOINT_CLIENT_SECRET" -w) &amp;&amp; \
+<span class="cmd">cat</span> &gt; ~/.m2/settings.xml &lt;&lt; EOF
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;settings&gt;
   &lt;servers&gt;
@@ -1315,509 +1090,1150 @@
     &lt;/server&gt;
   &lt;/servers&gt;
 &lt;/settings&gt;
-EOF
-      </div>
-      <div class="annotation">
-        <strong>What's the ~~~Client~~~ format?</strong> This is Anypoint's way of saying "use Connected App credentials instead of a username/password." The <code>CLIENT_ID~?~CLIENT_SECRET</code> password format is specific to MuleSoft's Maven plugin.
-      </div>
+EOF</div>
+      <div class="annotation"><strong>What's ~~~Client~~~?</strong> Anypoint's format for Connected App credentials. The <code>CLIENT_ID~?~CLIENT_SECRET</code> password pattern is specific to MuleSoft's Maven plugin.</div>
     </div>
   </div>
 
   <div class="step">
-    <div class="step-num">3</div>
+    <div class="step-num" aria-hidden="true">3</div>
     <div class="step-content">
       <h4>Verify it works</h4>
       <div class="code-block" id="mavenVerify">
         <button class="copy-btn" onclick="copyCode('mavenVerify')">Copy</button>
 <span class="cmd">security</span> find-generic-password <span class="flag">-s</span> <span class="string">"ANYPOINT_CLIENT_ID"</span> <span class="flag">-w</span>
-<span class="comment"># Should print your Client ID</span>
-      </div>
+<span class="comment"># Should print your Client ID</span></div>
     </div>
   </div>
 
-  <div class="accordion">
-    <div class="accordion-item">
-      <button class="accordion-header" onclick="toggleAccordion(this)">
-        <span>&#128736; Maven cached failure &mdash; *.lastUpdated files</span>
-        <span class="arrow">&#9654;</span>
-      </button>
-      <div class="accordion-body">
-        If Maven tried to download a dependency and failed, it creates <code>.lastUpdated</code> marker files that prevent retries. Fix by deleting them: <code>find ~/.m2/repository -name "*.lastUpdated" -delete</code>. This is safe &mdash; it only removes failure markers, not actual downloaded files.
-      </div>
-    </div>
-  </div>
-</div>
+  <details>
+    <summary>🔧 Maven cached failure — *.lastUpdated files</summary>
+    <div class="details-body">If Maven tried to download a dependency and failed, it creates <code>.lastUpdated</code> marker files. Fix: <code>find ~/.m2/repository -name "*.lastUpdated" -delete</code>. Safe — only removes failure markers.</div>
+  </details>
 
-<!-- ──────────── TAB 3: FIRST 10 THINGS TO TRY ──────────── -->
-<div class="panel" id="panel-tryit">
+  </details><!-- end Maven accordion -->
+</section>
+
+<!-- ── Claude: First 10 Things ── -->
+<section id="claude-tryit" class="section-panel" role="tabpanel" aria-labelledby="cstab-tryit" data-slide="claude-tryit" data-slide-title="First 10 Things to Try">
   <h2>First 10 Things to Try</h2>
   <p class="subtitle">Paste these prompts into Claude Code. Ordered from simple to advanced.</p>
 
-  <div class="try-card">
-    <div class="try-num">1</div>
-    <div>
-      <div class="prompt-text">search Exchange for healthcare assets <span class="difficulty diff-easy">Easy</span></div>
-      <p class="expect-text">Returns assets from the Healthcare Accelerator &mdash; FHIR templates, converters, system APIs.</p>
-    </div>
-  </div>
+  <div class="try-card"><div class="try-num">1</div><div><div class="prompt-text">search Exchange for healthcare assets <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Returns assets from the Healthcare Accelerator — FHIR templates, converters, system APIs.</p></div></div>
+  <div class="try-card"><div class="try-num">2</div><div><div class="prompt-text">list applications in Sandbox <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Shows all apps deployed to your Sandbox environment.</p></div></div>
+  <div class="try-card"><div class="try-num">3</div><div><div class="prompt-text">create a Mule project called patient-lookup <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Scaffolds a Mule 4 project with pom.xml, mule-artifact.json, and src structure.</p></div></div>
+  <div class="try-card"><div class="try-num">4</div><div><div class="prompt-text">generate an OAS 3.0 API spec for a Patient FHIR R4 resource <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Creates a complete OpenAPI 3.0 spec with FHIR-compliant schemas, endpoints, and examples.</p></div></div>
+  <div class="try-card"><div class="try-num">5</div><div><div class="prompt-text">add an HTTP listener and a Set Payload transformer to the patient-lookup flow <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Modifies the Mule XML to add flow components — a listener on /api/patients and a JSON payload.</p></div></div>
+  <div class="try-card"><div class="try-num">6</div><div><div class="prompt-text">search Exchange for MCP connector <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Finds the Anypoint MCP Connector — the bridge between Mule apps and AI agents.</p></div></div>
+  <div class="try-card"><div class="try-num">7</div><div><div class="prompt-text">deploy the patient-lookup project to Sandbox <span class="difficulty diff-adv">Advanced</span></div><p class="expect-text">Builds with Maven and deploys to CloudHub 2.0 Sandbox. Requires Java 17 + Maven + available vCores.</p></div></div>
+  <div class="try-card"><div class="try-num">8</div><div><div class="prompt-text">create an MCP server from the patient-lookup project <span class="difficulty diff-adv">Advanced</span></div><p class="expect-text">Adds the MCP Connector to expose your Mule app as tools that AI agents can call.</p></div></div>
+  <div class="try-card"><div class="try-num">9</div><div><div class="prompt-text">list API instances in Sandbox and show applied policies <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Shows all managed APIs and their active policies (rate limiting, OAuth, etc.).</p></div></div>
+  <div class="try-card"><div class="try-num">10</div><div><div class="prompt-text">show me platform insights with call volume and error counts <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Returns usage metrics, call volumes, and error rates across your org for the last 7 days.</p></div></div>
 
-  <div class="try-card">
-    <div class="try-num">2</div>
-    <div>
-      <div class="prompt-text">list applications in Sandbox <span class="difficulty diff-easy">Easy</span></div>
-      <p class="expect-text">Shows all apps deployed to your Sandbox environment (may be empty if this is a new org).</p>
-    </div>
+  <div class="annotation" style="margin-top:24px">
+    <strong>Pro tip:</strong> You can chain commands naturally. Try: "Create a Mule project called order-api, add an HTTP listener on /api/orders, add a Salesforce query connector, then deploy to Sandbox." Claude executes each step in sequence.
   </div>
+</section>
 
-  <div class="try-card">
-    <div class="try-num">3</div>
-    <div>
-      <div class="prompt-text">create a Mule project called patient-lookup <span class="difficulty diff-easy">Easy</span></div>
-      <p class="expect-text">Scaffolds a Mule 4 project directory with pom.xml, mule-artifact.json, and src structure.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">4</div>
-    <div>
-      <div class="prompt-text">generate an OAS 3.0 API spec for a Patient FHIR R4 resource <span class="difficulty diff-med">Medium</span></div>
-      <p class="expect-text">Creates a complete OpenAPI 3.0 specification with FHIR-compliant schemas, endpoints, and examples.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">5</div>
-    <div>
-      <div class="prompt-text">add an HTTP listener and a Set Payload transformer to the patient-lookup flow <span class="difficulty diff-med">Medium</span></div>
-      <p class="expect-text">Modifies the Mule XML to add flow components &mdash; a listener on /api/patients and a JSON payload.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">6</div>
-    <div>
-      <div class="prompt-text">search Exchange for MCP connector <span class="difficulty diff-easy">Easy</span></div>
-      <p class="expect-text">Finds the Anypoint MCP Connector &mdash; the bridge between Mule apps and AI agents.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">7</div>
-    <div>
-      <div class="prompt-text">deploy the patient-lookup project to Sandbox <span class="difficulty diff-adv">Advanced</span></div>
-      <p class="expect-text">Builds with Maven and deploys to CloudHub 2.0 Sandbox. Requires Java 17 + Maven + available vCores.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">8</div>
-    <div>
-      <div class="prompt-text">create an MCP server from the patient-lookup project <span class="difficulty diff-adv">Advanced</span></div>
-      <p class="expect-text">Adds the MCP Connector to expose your Mule app as tools that AI agents can call.</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">9</div>
-    <div>
-      <div class="prompt-text">list API instances in Sandbox and show applied policies <span class="difficulty diff-med">Medium</span></div>
-      <p class="expect-text">Shows all managed APIs and their active policies (rate limiting, OAuth, etc.).</p>
-    </div>
-  </div>
-
-  <div class="try-card">
-    <div class="try-num">10</div>
-    <div>
-      <div class="prompt-text">show me platform insights with call volume and error counts <span class="difficulty diff-med">Medium</span></div>
-      <p class="expect-text">Returns usage metrics, call volumes, and error rates across your org for the last 7 days.</p>
-    </div>
-  </div>
-
-  <div class="annotation" style="margin-top: 24px;">
-    <strong>Pro tip:</strong> You can chain commands naturally. Try: "Create a Mule project called order-api, add an HTTP listener on /api/orders, add a Salesforce query connector that fetches Order records, then deploy it to Sandbox." Claude will execute each step in sequence.
-  </div>
-</div>
-
-<!-- ──────────── TAB 4: RESOURCES ──────────── -->
-<div class="panel" id="panel-resources">
+<!-- ── Claude: Resources ── -->
+<section id="claude-resources" class="section-panel" role="tabpanel" aria-labelledby="cstab-resources" data-slide="claude-resources" data-slide-title="Resources">
   <h2>Resources &amp; Reference</h2>
   <p class="subtitle">Everything you need to learn, try, and build with MuleSoft + Claude Code.</p>
 
   <table class="resource-table">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Resource</th>
-        <th>Description</th>
-      </tr>
-    </thead>
+    <thead><tr><th>Type</th><th>Resource</th><th>Description</th></tr></thead>
     <tbody>
-      <tr>
-        <td><span class="tag tag-learn">Learn</span></td>
-        <td><a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank">Agent Fabric Technical Overview</a></td>
-        <td>Architecture and capabilities of MuleSoft Agent Fabric</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-learn">Learn</span></td>
-        <td><a href="https://docs.mulesoft.com/general/" target="_blank">MuleSoft Documentation Home</a></td>
-        <td>Official docs for Anypoint Platform, Mule runtime, connectors, and APIs</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-try">Try</span></td>
-        <td><a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank">Agent Fabric Demo</a></td>
-        <td>Request a guided demo of Agent Fabric capabilities</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-try">Try</span></td>
-        <td><a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank">Healthcare Sandbox</a></td>
-        <td>Live interactive demo &mdash; explore immediately, no setup required</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-build">Build</span></td>
-        <td><a href="https://docs.mulesoft.com/release-notes/connector/mcp-connector-release-notes-mule-4" target="_blank">MCP Connector Release Notes</a></td>
-        <td>Latest version, changelog, and compatibility for the Anypoint MCP Connector</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-build">Build</span></td>
-        <td><a href="https://www.mulesoft.com/exchange/org.mule.examples/mulesoft-accelerator-for-healthcare/" target="_blank">Healthcare Accelerator</a></td>
-        <td>50+ pre-built assets: FHIR R4 APIs, US Core Profiles, EHR templates, converters</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-build">Build</span></td>
-        <td><a href="https://docs.mulesoft.com/mulesoft-mcp-server/getting-started" target="_blank">MuleSoft MCP Server &mdash; Getting Started</a></td>
-        <td>Official setup guide for the MuleSoft MCP Server across all supported IDEs</td>
-      </tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank" rel="noopener">Agent Fabric Technical Overview</a></td><td>Architecture and capabilities of MuleSoft Agent Fabric</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/general/" target="_blank" rel="noopener">MuleSoft Documentation Home</a></td><td>Official docs for Anypoint Platform, Mule runtime, connectors, and APIs</td></tr>
+      <tr><td><span class="tag tag-try">Try</span></td><td><a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank" rel="noopener">Agent Fabric Demo</a></td><td>Request a guided demo of Agent Fabric capabilities</td></tr>
+      <tr><td><span class="tag tag-try">Try</span></td><td><a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank" rel="noopener">Healthcare Sandbox</a></td><td>Live interactive demo — no setup required</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://docs.mulesoft.com/release-notes/connector/mcp-connector-release-notes-mule-4" target="_blank" rel="noopener">MCP Connector Release Notes</a></td><td>Latest version, changelog, and compatibility for the Anypoint MCP Connector</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://www.mulesoft.com/exchange/org.mule.examples/mulesoft-accelerator-for-healthcare/" target="_blank" rel="noopener">Healthcare Accelerator</a></td><td>50+ pre-built assets: FHIR R4 APIs, US Core Profiles, EHR templates, converters</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://docs.mulesoft.com/mulesoft-mcp-server/getting-started" target="_blank" rel="noopener">MuleSoft MCP Server — Getting Started</a></td><td>Official setup guide for the MuleSoft MCP Server across all supported IDEs</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/mcp-connector/latest/" target="_blank" rel="noopener">MCP Connector Documentation</a></td><td>How to expose Mule apps as tools for AI agents via MCP</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/cloudhub-2/" target="_blank" rel="noopener">CloudHub 2.0 Documentation</a></td><td>Deployment target for Mule applications — scaling, monitoring, troubleshooting</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://anypoint.mulesoft.com/exchange/" target="_blank" rel="noopener">Anypoint Exchange</a></td><td>Search for connectors, templates, APIs, and accelerators</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://www.npmjs.com/package/@mulesoft/mcp-server" target="_blank" rel="noopener">@mulesoft/mcp-server (npm)</a></td><td>The MCP server package that powers the Claude Code integration</td></tr>
     </tbody>
   </table>
+</section>
 
-  <h3>Additional Resources</h3>
-  <table class="resource-table">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Resource</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="tag tag-learn">Learn</span></td>
-        <td><a href="https://docs.mulesoft.com/mcp-connector/latest/" target="_blank">MCP Connector Documentation</a></td>
-        <td>How to expose Mule apps as tools for AI agents via MCP</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-learn">Learn</span></td>
-        <td><a href="https://docs.mulesoft.com/cloudhub-2/" target="_blank">CloudHub 2.0 Documentation</a></td>
-        <td>Deployment target for Mule applications &mdash; scaling, monitoring, troubleshooting</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-build">Build</span></td>
-        <td><a href="https://anypoint.mulesoft.com/exchange/" target="_blank">Anypoint Exchange</a></td>
-        <td>Search for connectors, templates, APIs, and accelerators</td>
-      </tr>
-      <tr>
-        <td><span class="tag tag-build">Build</span></td>
-        <td><a href="https://www.npmjs.com/package/@mulesoft/mcp-server" target="_blank">@mulesoft/mcp-server (npm)</a></td>
-        <td>The MCP server package that powers the Claude Code integration</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- ──────────── TAB 5: BEST PRACTICES ──────────── -->
-<div class="panel" id="panel-practices">
+<!-- ── Claude: Best Practices ── -->
+<section id="claude-practices" class="section-panel" role="tabpanel" aria-labelledby="cstab-practices" data-slide="claude-practices" data-slide-title="Best Practices">
   <h2>Best Practices</h2>
   <p class="subtitle">Get the most out of MuleSoft + Claude Code with these guidelines.</p>
 
   <div class="card">
-    <h4>&#128274; Security</h4>
+    <h4>🔒 Security</h4>
     <ul>
-      <li><strong>Rotate credentials quarterly.</strong> Delete and re-create the Connected App every 90 days, then update with <code>claude mcp remove mulesoft</code> and re-add.</li>
-      <li><strong>Use minimum scopes for production.</strong> Start with all scopes during exploration, then tighten to only what you need for production workflows.</li>
-      <li><strong>Use <code>--scope local</code> for shared machines.</strong> This restricts the MCP server credentials to the current project directory only.</li>
-      <li><strong>Never commit credentials.</strong> The MCP config is stored in <code>~/.claude/</code>, not in your project repo. Keep it that way.</li>
+      <li><strong>Rotate credentials quarterly.</strong> Delete and re-create the Connected App every 90 days.</li>
+      <li><strong>Use minimum scopes for production.</strong> Start broad during exploration, then tighten to only what you need.</li>
+      <li><strong>Use <code>--scope local</code> for shared machines.</strong> Restricts credentials to the current project directory.</li>
+      <li><strong>Never commit credentials.</strong> The MCP config lives in <code>~/.claude/</code>, not your project repo.</li>
     </ul>
   </div>
 
   <div class="card">
-    <h4>&#128230; Exchange-First Development</h4>
+    <h4>📦 Exchange-First Development</h4>
     <ul>
-      <li><strong>Search before you build.</strong> Before writing any integration code, ask Claude to search Exchange. There are thousands of pre-built assets &mdash; connectors, templates, accelerators, and API specs.</li>
-      <li><strong>Start from accelerators.</strong> Industry accelerators (Healthcare, Financial Services, Manufacturing) contain production-grade assets that would take weeks to build from scratch.</li>
-      <li><strong>Publish back to Exchange.</strong> If you build something reusable, publish it to your org's Exchange so your team can find and extend it.</li>
+      <li><strong>Search before you build.</strong> Ask Claude to search Exchange before writing any integration code. There are thousands of pre-built assets.</li>
+      <li><strong>Start from accelerators.</strong> Industry accelerators contain production-grade assets that would take weeks to build from scratch.</li>
+      <li><strong>Publish back to Exchange.</strong> If you build something reusable, publish it to your org's Exchange.</li>
     </ul>
   </div>
 
   <div class="card">
-    <h4>&#128640; Deployment</h4>
+    <h4>🚀 Deployment</h4>
     <ul>
       <li><strong>Start in Sandbox, promote to Production.</strong> Always deploy to Sandbox first. Verify it works, then redeploy to Production.</li>
-      <li><strong>Use Micro workers for development.</strong> 0.1 vCore (Micro) workers are sufficient for development and testing. Scale up for production.</li>
-      <li><strong>Version your API specs.</strong> Before publishing to Exchange, make sure your spec has a proper semantic version (1.0.0, 1.1.0, etc.).</li>
+      <li><strong>Use Micro workers for development.</strong> 0.1 vCore (Micro) workers are sufficient for development and testing.</li>
+      <li><strong>Version your API specs.</strong> Make sure your spec has a proper semantic version before publishing to Exchange.</li>
     </ul>
   </div>
 
   <div class="card">
-    <h4>&#129302; Working with Claude Code</h4>
+    <h4>🤖 Working with Claude Code</h4>
     <ul>
       <li><strong>Be specific with prompts.</strong> "Add an HTTP listener on port 8081 with path /api/v1/patients" works better than "add a listener."</li>
-      <li><strong>Chain operations naturally.</strong> Claude understands multi-step requests: "Create a project, add a flow with an HTTP listener and a database connector, then deploy to Sandbox."</li>
-      <li><strong>Ask Claude to explain.</strong> If you're unfamiliar with a concept, ask: "Explain what the MCP Connector does" or "What scopes do I need for API Manager?"</li>
-      <li><strong>Review generated flows.</strong> Always review the generated Mule XML before deploying. Claude is powerful but the output should be verified, especially for production deployments.</li>
+      <li><strong>Chain operations naturally.</strong> Claude handles multi-step requests: "Create a project, add a flow, then deploy to Sandbox."</li>
+      <li><strong>Review generated flows.</strong> Always review the generated Mule XML before deploying, especially for production.</li>
     </ul>
   </div>
 
   <div class="card">
-    <h4>&#128736; Troubleshooting</h4>
+    <h4>🔧 Troubleshooting</h4>
     <ul>
-      <li><strong>Check connection first.</strong> If something isn't working, run <code>claude mcp list</code> to verify the server is connected.</li>
-      <li><strong>Re-add if stuck.</strong> If you hit persistent errors, <code>claude mcp remove mulesoft</code> then re-add. This clears any cached state.</li>
-      <li><strong>Check vCore availability.</strong> Deployments fail silently if your org has no available vCores. Check Runtime Manager &gt; Usage to verify.</li>
+      <li><strong>Check connection first.</strong> Run <code>claude mcp list</code> to verify the server is connected.</li>
+      <li><strong>Re-add if stuck.</strong> <code>claude mcp remove mulesoft</code> then re-add clears cached state.</li>
+      <li><strong>Check vCore availability.</strong> Deployments fail if your org has no available vCores. Check Runtime Manager → Usage.</li>
     </ul>
   </div>
-</div>
 
-<!-- ──────────── TAB 6: PROGRESS TRACKER ──────────── -->
-<div class="panel" id="panel-tracker">
+  <div class="card">
+    <h4>🏢 Large Anypoint Orgs — What to Expect</h4>
+    <ul>
+      <li><strong>Business Group scoping matters.</strong> In orgs with multiple Business Groups, Claude only sees assets and applications in the groups covered by your Connected App's scopes. If a search returns nothing, check which group you're scoped to.</li>
+      <li><strong>Exchange search returns top matches, not all results.</strong> Large orgs with hundreds of assets will see curated top hits. Refine with specific terms: "FHIR R4 patient" beats "FHIR."</li>
+      <li><strong>Use <code>--scope local</code> on shared dev machines.</strong> If multiple developers share a machine or a CI environment, <code>--scope local</code> keeps each project's credentials isolated from the others.</li>
+      <li><strong>API Manager policies require the right environment.</strong> Policies on a Production API instance require your Connected App to have Production-scoped permissions — not just Sandbox.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── Claude: Progress Tracker ── -->
+<section id="claude-tracker" class="section-panel" role="tabpanel" aria-labelledby="cstab-tracker" data-slide="claude-tracker" data-slide-title="Progress Tracker">
   <h2>Progress Tracker</h2>
-  <p class="subtitle">Track your progress through the setup and first steps. Your progress is saved automatically.</p>
+  <p class="subtitle">Track your setup progress. Saved automatically in your browser.</p>
 
   <div class="tracker-section">
     <h4>Setup <span class="tracker-count" id="setupCount"></span></h4>
-    <div class="check-item" data-key="setup-1">
-      <input type="checkbox" id="s1"><label for="s1">Node.js 18+ installed</label>
-    </div>
-    <div class="check-item" data-key="setup-2">
-      <input type="checkbox" id="s2"><label for="s2">Claude Code installed and logged in</label>
-    </div>
-    <div class="check-item" data-key="setup-3">
-      <input type="checkbox" id="s3"><label for="s3">Connected App created in Anypoint</label>
-    </div>
-    <div class="check-item" data-key="setup-4">
-      <input type="checkbox" id="s4"><label for="s4">MCP server connected (&#10003; Connected)</label>
-    </div>
+    <div class="check-item" data-key="setup-1"><input type="checkbox" id="s1"><label for="s1">Node.js 18+ installed</label></div>
+    <div class="check-item" data-key="setup-2"><input type="checkbox" id="s2"><label for="s2">Claude Code installed and logged in</label></div>
+    <div class="check-item" data-key="setup-3"><input type="checkbox" id="s3"><label for="s3">Connected App created in Anypoint</label></div>
+    <div class="check-item" data-key="setup-4"><input type="checkbox" id="s4"><label for="s4">MCP server connected (✓ Connected)</label></div>
   </div>
 
   <div class="tracker-section">
     <h4>First Steps <span class="tracker-count" id="firstCount"></span></h4>
-    <div class="check-item" data-key="first-1">
-      <input type="checkbox" id="f1"><label for="f1">Searched Exchange for assets</label>
-    </div>
-    <div class="check-item" data-key="first-2">
-      <input type="checkbox" id="f2"><label for="f2">Listed applications in an environment</label>
-    </div>
-    <div class="check-item" data-key="first-3">
-      <input type="checkbox" id="f3"><label for="f3">Created a Mule project</label>
-    </div>
-    <div class="check-item" data-key="first-4">
-      <input type="checkbox" id="f4"><label for="f4">Generated an API spec</label>
-    </div>
-    <div class="check-item" data-key="first-5">
-      <input type="checkbox" id="f5"><label for="f5">Added a flow to a Mule project</label>
-    </div>
+    <div class="check-item" data-key="first-1"><input type="checkbox" id="f1"><label for="f1">Searched Exchange for assets</label></div>
+    <div class="check-item" data-key="first-2"><input type="checkbox" id="f2"><label for="f2">Listed applications in an environment</label></div>
+    <div class="check-item" data-key="first-3"><input type="checkbox" id="f3"><label for="f3">Created a Mule project</label></div>
+    <div class="check-item" data-key="first-4"><input type="checkbox" id="f4"><label for="f4">Generated an API spec</label></div>
+    <div class="check-item" data-key="first-5"><input type="checkbox" id="f5"><label for="f5">Added a flow to a Mule project</label></div>
   </div>
 
   <div class="tracker-section">
     <h4>Advanced <span class="tracker-count" id="advCount"></span></h4>
-    <div class="check-item" data-key="adv-1">
-      <input type="checkbox" id="a1"><label for="a1">Deployed an app to CloudHub 2.0</label>
-    </div>
-    <div class="check-item" data-key="adv-2">
-      <input type="checkbox" id="a2"><label for="a2">Created an MCP server from a Mule app</label>
-    </div>
-    <div class="check-item" data-key="adv-3">
-      <input type="checkbox" id="a3"><label for="a3">Applied a policy to an API instance</label>
-    </div>
+    <div class="check-item" data-key="adv-1"><input type="checkbox" id="a1"><label for="a1">Deployed an app to CloudHub 2.0</label></div>
+    <div class="check-item" data-key="adv-2"><input type="checkbox" id="a2"><label for="a2">Created an MCP server from a Mule app</label></div>
+    <div class="check-item" data-key="adv-3"><input type="checkbox" id="a3"><label for="a3">Applied a policy to an API instance</label></div>
   </div>
 
   <button class="reset-btn" onclick="resetTracker()">Reset All Progress</button>
-</div>
+</section>
 
-<!-- ──────────── TAB 7: GLOSSARY ──────────── -->
-<div class="panel" id="panel-glossary">
+<!-- ── Claude: Glossary ── -->
+<section id="claude-glossary" class="section-panel" role="tabpanel" aria-labelledby="cstab-glossary" data-slide="claude-glossary" data-slide-title="Glossary">
   <h2>Glossary</h2>
   <p class="subtitle">Plain English explanations for terms you'll encounter.</p>
 
+  <div class="card"><h4>Connected App</h4><p>A username and password for programs (not people) to access Anypoint Platform. Instead of typing your email and password, programs use a Client ID and Client Secret. Think of it like a key card for software.</p></div>
+  <div class="card"><h4>Scopes</h4><p>Permissions that control what a Connected App can do. Like giving a house key that only opens certain rooms. "Exchange Viewer" lets it browse assets. "Runtime Manager Write" lets it deploy apps.</p></div>
+  <div class="card"><h4>Maven</h4><p>A build tool that compiles your Mule project and uploads it to CloudHub. Think of it as a shipping service — it packages your code and delivers it to the cloud. You configure it once in <code>~/.m2/settings.xml</code>.</p></div>
+  <div class="card"><h4>vCores</h4><p>Computing power in CloudHub, measured in virtual CPU cores. A Micro worker (0.1 vCores) is enough for development. If you're out of vCores, deployments will fail.</p></div>
+  <div class="card"><h4>CloudHub 2.0</h4><p>MuleSoft's cloud hosting service where your Mule apps run. Sandbox is for testing; Production is for real traffic.</p></div>
+  <div class="card"><h4>Exchange</h4><p>MuleSoft's app store for integration assets — pre-built connectors, API templates, code libraries, and complete accelerators. Always search Exchange before building from scratch.</p></div>
+  <div class="card"><h4>MCP (Model Context Protocol)</h4><p>A standard that lets AI assistants like Claude use tools. The MuleSoft MCP Server gives Claude the ability to search Exchange, deploy apps, and manage APIs — all through natural language.</p></div>
+  <div class="card"><h4>FHIR R4</h4><p>A healthcare data standard for exchanging medical records. R4 is the current version used by most hospitals and required by US regulations for patient data access.</p></div>
+</section>
+
+  </div><!-- end .content -->
+</div><!-- end #pane-claude -->
+
+<!-- ═══════════════════ CURSOR PANE ═══════════════════ -->
+<div role="tabpanel" id="pane-cursor" class="editor-pane" aria-labelledby="etab-cursor">
+
+  <nav role="tablist" aria-label="Cursor sections" class="section-tabs" id="cursorSecTabs">
+    <button role="tab" aria-selected="true"  aria-controls="cursor-welcome"   class="section-tab active" data-pane="cursor" data-section="welcome"   id="crtab-welcome">Welcome</button>
+    <button role="tab" aria-selected="false" aria-controls="cursor-prereqs"   class="section-tab"        data-pane="cursor" data-section="prereqs"   id="crtab-prereqs">Before You Start</button>
+    <button role="tab" aria-selected="false" aria-controls="cursor-setup"     class="section-tab"        data-pane="cursor" data-section="setup"     id="crtab-setup">Setup Guide</button>
+    <button role="tab" aria-selected="false" aria-controls="cursor-tryit"     class="section-tab"        data-pane="cursor" data-section="tryit"     id="crtab-tryit">First 10 Things to Try</button>
+    <button role="tab" aria-selected="false" aria-controls="cursor-practices" class="section-tab"        data-pane="cursor" data-section="practices" id="crtab-practices">Tips &amp; Gotchas</button>
+  </nav>
+
+  <div class="content">
+
+<!-- ── Cursor: Welcome ── -->
+<section id="cursor-welcome" class="section-panel active" role="tabpanel" aria-labelledby="crtab-welcome" data-slide="cursor-welcome" data-slide-title="Cursor Welcome">
+  <h2>Cursor + Anypoint</h2>
+  <p class="subtitle">Already using Cursor? Connect it to MuleSoft Anypoint Platform and control your integration platform without leaving your editor.</p>
+
   <div class="card">
-    <h4>Connected App</h4>
-    <p>A username and password for programs (not people) to access Anypoint Platform. Instead of typing your email and password, programs use a Client ID and Client Secret. Think of it like a key card for software.</p>
+    <p>Cursor supports the Model Context Protocol (MCP) natively. By adding a single configuration file, you can give Cursor's AI agent access to Anypoint Exchange, API Manager, CloudHub, and more — the same 18 tools available in Claude Code, from inside your existing workflow.</p>
+  </div>
+
+  <h3>What You'll Be Able to Do</h3>
+  <div class="card-grid">
+    <div class="capability-card"><span class="icon">🔍</span><h4>Search Exchange</h4><p>Find connectors, templates, accelerators, and API specs from inside Cursor</p></div>
+    <div class="capability-card"><span class="icon">🔧</span><h4>Scaffold Mule Flows</h4><p>Generate Mule 4 project structure, XML namespaces, and routing blocks via Agent mode</p></div>
+    <div class="capability-card"><span class="icon">✍️</span><h4>Write DataWeave</h4><p>Provide sample input/output JSON — Cursor generates optimized DataWeave transforms</p></div>
+    <div class="capability-card"><span class="icon">🚀</span><h4>Deploy to CloudHub</h4><p>Deploy applications to CloudHub 2.0 or Runtime Fabric directly from Agent mode</p></div>
+    <div class="capability-card"><span class="icon">📄</span><h4>Publish API Specs</h4><p>Draft RAML or OpenAPI specs and publish them to Anypoint Exchange</p></div>
+    <div class="capability-card"><span class="icon">🔒</span><h4>Manage Policies</h4><p>View, create, and modify API policies via the MuleSoft MCP tools</p></div>
+  </div>
+
+  <div class="annotation">
+    <strong>Same tools, different editor.</strong> The MuleSoft MCP server exposes the same 18 Anypoint tools whether you connect from Claude Code or Cursor. The difference is in the setup path — Cursor uses a JSON config file instead of a CLI command.
+  </div>
+</section>
+
+<!-- ── Cursor: Before You Start ── -->
+<section id="cursor-prereqs" class="section-panel" role="tabpanel" aria-labelledby="crtab-prereqs" data-slide="cursor-prereqs" data-slide-title="Before You Start">
+  <h2>Before You Start</h2>
+  <p class="subtitle">You need Anypoint credentials before Cursor can connect. Here's how to get them.</p>
+
+  <div class="card">
+    <h4>Prerequisites</h4>
+    <ul>
+      <li><strong>Cursor</strong> — installed and running (Settings → Tools &amp; MCPs must be accessible)</li>
+      <li><strong>Node.js 18+</strong> — <code>brew install node</code> or download from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
+      <li><strong>Anypoint Platform account</strong> — with Access Management permissions</li>
+    </ul>
+  </div>
+
+  <h3>Get Your Anypoint Credentials</h3>
+  <p>You need a <strong>Client ID</strong> and <strong>Client Secret</strong> from a Connected App in Anypoint. Follow these steps:</p>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">1</div>
+    <div class="step-content">
+      <h4>Log in to Anypoint Platform</h4>
+      <p>Go to <a href="https://anypoint.mulesoft.com" target="_blank" rel="noopener">anypoint.mulesoft.com</a> and sign in.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">2</div>
+    <div class="step-content">
+      <h4>Create a Connected App</h4>
+      <p>Navigate to <strong>Access Management → Connected Apps → Create App</strong>.</p>
+      <ul>
+        <li><strong>App Name:</strong> Cursor MCP (or any name you'll recognize)</li>
+        <li><strong>Type:</strong> Select <strong>"App acts on its own behalf (client credentials)"</strong></li>
+      </ul>
+      <div class="annotation"><strong>Important:</strong> You must select client credentials. This allows Cursor to authenticate without a browser login flow — the OAuth redirect method does not work reliably in Cursor.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">3</div>
+    <div class="step-content">
+      <h4>Add Scopes</h4>
+      <p>Click <strong>Add Scopes</strong>. Add these scope groups for your Business Group:</p>
+      <table class="resource-table">
+        <thead><tr><th>Scope Group</th><th>What It Enables</th></tr></thead>
+        <tbody>
+          <tr><td>Generative AI User</td><td>Flow generation, API spec generation, MCP server creation</td></tr>
+          <tr><td>Exchange roles</td><td>Search and publish assets</td></tr>
+          <tr><td>API Manager</td><td>Manage API instances and policies</td></tr>
+          <tr><td>Runtime Manager</td><td>Deploy and manage applications</td></tr>
+          <tr><td>Monitoring Viewer</td><td>Platform insights and metrics</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">4</div>
+    <div class="step-content">
+      <h4>Copy Your Credentials</h4>
+      <p>After saving, Anypoint shows your <strong>Client ID</strong> and <strong>Client Secret</strong>. Copy both now.</p>
+      <div class="warning"><strong>Save the Client Secret now.</strong> It is only shown once. If you lose it, you'll need to regenerate credentials.</div>
+    </div>
+  </div>
+
+  <div class="verify-block">
+    <div class="verify-icon">✅</div>
+    <div>
+      <div class="verify-title">You're ready when you have both values</div>
+      <p>You need: a Client ID (looks like a 32-character hex string) and a Client Secret. Keep them somewhere safe — you'll paste them into the config file in the next section.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Cursor: Setup Guide ── -->
+<section id="cursor-setup" class="section-panel" role="tabpanel" aria-labelledby="crtab-setup" data-slide="cursor-setup" data-slide-title="Cursor Setup Guide">
+  <h2>Setup Guide</h2>
+  <p class="subtitle">Three steps to connect Cursor to Anypoint Platform.</p>
+
+  <!-- Step 1 -->
+  <div class="step">
+    <div class="step-num" aria-hidden="true">1</div>
+    <div class="step-content">
+      <h4>Create the MCP configuration file</h4>
+      <p>Create the file <code>~/.cursor/mcp.json</code> (global, works in all projects). Paste your credentials into the two placeholder values:</p>
+
+      <div class="code-block" id="cursorMcpJson">
+        <button class="copy-btn" onclick="copyCode('cursorMcpJson')">Copy</button>
+{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"mulesoft"</span>: {
+      <span class="string">"command"</span>: <span class="string">"npx"</span>,
+      <span class="string">"args"</span>: [<span class="string">"@mulesoft/mcp-server@1.2.0"</span>, <span class="string">"start"</span>],
+      <span class="string">"env"</span>: {
+        <span class="string">"ANYPOINT_CLIENT_ID"</span>: <span class="string">"paste_your_client_id"</span>,
+        <span class="string">"ANYPOINT_CLIENT_SECRET"</span>: <span class="string">"paste_your_client_secret"</span>,
+        <span class="string">"ANYPOINT_REGION"</span>: <span class="string">"PROD_US"</span>
+      }
+    }
+  }
+}</div>
+
+      <div class="annotation">
+        <strong>File location:</strong> <code>~/.cursor/mcp.json</code> applies to all your projects globally. To restrict to one project, create <code>.cursor/mcp.json</code> (no tilde) inside that project folder instead.<br><br>
+        <strong>Region options:</strong> <code>PROD_US</code> (default) | <code>PROD_EU</code> | <code>PROD_CA</code> | <code>PROD_JP</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step">
+    <div class="step-num" aria-hidden="true">2</div>
+    <div class="step-content">
+      <h4>Verify in Cursor Settings</h4>
+      <p>Open Cursor and navigate to <strong>Settings → Tools &amp; MCPs</strong>. Under <strong>User MCP Servers</strong>, you should see <strong>mulesoft</strong> with a green dot and "18 tools enabled".</p>
+
+      <div class="screenshot-wrap">
+        <img src="screenshots/cursor-tools-mcps-verified.png" alt="Cursor Settings showing Tools &amp; MCPs with mulesoft server connected — 18 tools enabled" loading="lazy">
+        <div class="screenshot-caption">Settings → Tools &amp; MCPs → mulesoft: green dot, 18 tools enabled</div>
+      </div>
+
+      <div class="verify-block">
+        <div class="verify-icon">✅</div>
+        <div>
+          <div class="verify-title">What success looks like</div>
+          <p>A green dot next to <strong>mulesoft</strong> and the label <strong>"18 tools enabled"</strong>. If you see a red dot or no entry, check the Troubleshooting section below.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step">
+    <div class="step-num" aria-hidden="true">3</div>
+    <div class="step-content">
+      <h4>Run your first prompt in Agent mode</h4>
+      <p>Click <strong>New Agent</strong> (⌘N) to open the agent interface. Type this prompt and press Enter:</p>
+
+      <div class="code-block" id="cursorFirstPrompt">
+        <button class="copy-btn" onclick="copyCode('cursorFirstPrompt')">Copy</button>List all the APIs published in my Anypoint Exchange organization.</div>
+
+      <p>Cursor will ask you to approve the MuleSoft tool call before executing. Click <strong>Allow</strong>. This approval is one-time per tool.</p>
+
+      <div class="screenshot-wrap">
+        <img src="screenshots/cursor-agent-exchange-result.png" alt="Cursor Agent mode showing Anypoint Exchange API results" loading="lazy">
+        <div class="screenshot-caption">Agent mode returning live Exchange data from your Anypoint org</div>
+      </div>
+
+      <div class="verify-block">
+        <div class="verify-icon">✅</div>
+        <div>
+          <div class="verify-title">What success looks like</div>
+          <p>The agent returns a table of APIs from your Anypoint org — names, asset IDs, types, and published dates. If you see this, you're fully connected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <h3>Troubleshooting</h3>
+
+  <details>
+    <summary>🔴 Red dot or server not showing in Tools &amp; MCPs</summary>
+    <div class="details-body">
+      <p>Check that <code>~/.cursor/mcp.json</code> exists and is valid JSON. Common issues:</p>
+      <ul>
+        <li>Missing comma between fields</li>
+        <li>Extra quote or missing quote around credentials</li>
+        <li>File saved in the wrong location (must be <code>~/.cursor/mcp.json</code>, not <code>~/.cursor/mcp.json.txt</code>)</li>
+      </ul>
+      <p>Validate the JSON: <code>cat ~/.cursor/mcp.json | python3 -m json.tool</code> — must print without errors.</p>
+    </div>
+  </details>
+  <details>
+    <summary>⚠️ npx: command not found</summary>
+    <div class="details-body">Node.js is not installed or not on your PATH. Install with <code>brew install node</code> (macOS). After installing, restart Cursor completely.</div>
+  </details>
+  <details>
+    <summary>🚫 403 Forbidden on operations</summary>
+    <div class="details-body">Your Connected App is missing scopes. Go to Anypoint → Access Management → Connected Apps, edit the app, and add the missing scope group. No need to regenerate credentials.</div>
+  </details>
+  <details>
+    <summary>⚠️ OAuth redirect fails (cursor:// protocol error)</summary>
+    <div class="details-body">
+      <p>This is a known bug when using the Anypoint Code Builder VS Code <em>extension</em> inside Cursor. The browser tries to redirect via the <code>cursor://</code> protocol, which fails and times out after 5 minutes.</p>
+      <p><strong>Solution:</strong> Use the MCP server approach (this guide) instead of the OAuth extension approach. The MCP server uses client credentials and does not require a browser redirect. You do not need the Anypoint Code Builder extension.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ── Cursor: First 10 Things ── -->
+<section id="cursor-tryit" class="section-panel" role="tabpanel" aria-labelledby="crtab-tryit" data-slide="cursor-tryit" data-slide-title="Cursor First 10 Things">
+  <h2>First 10 Things to Try</h2>
+  <p class="subtitle">Paste these into the Cursor Agent (⌘N). Ordered from simple to advanced.</p>
+
+  <div class="try-card"><div class="try-num">1</div><div><div class="prompt-text">List all the APIs published in my Anypoint Exchange organization. <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Returns API assets from your org's Exchange — names, asset IDs, types, and publish dates. Best first test.</p></div></div>
+  <div class="try-card"><div class="try-num">2</div><div><div class="prompt-text">search Exchange for healthcare assets <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Returns assets from the Healthcare Accelerator — FHIR templates, converters, system APIs.</p></div></div>
+  <div class="try-card"><div class="try-num">3</div><div><div class="prompt-text">list applications in Sandbox <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Shows all apps deployed to your Sandbox environment.</p></div></div>
+  <div class="try-card"><div class="try-num">4</div><div><div class="prompt-text">scaffold a Mule project for a patient lookup API — include HTTP listener, global.xml, and externalized properties <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Cursor reads your codebase context and generates XML namespace definitions, flow structure, and HTTP listener config.</p></div></div>
+  <div class="try-card"><div class="try-num">5</div><div><div class="prompt-text">generate an OAS 3.0 API spec for a Patient FHIR R4 resource and publish it to Exchange <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Creates a complete OpenAPI 3.0 spec and uses create_and_manage_assets to publish it to your org's Exchange.</p></div></div>
+  <div class="try-card"><div class="try-num">6</div><div><div class="prompt-text">write a DataWeave transform that maps this JSON input to FHIR R4 Patient format [paste your sample JSON] <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Analyzes input/output shapes and generates DataWeave using map, filter, and groupBy — no hardcoded values.</p></div></div>
+  <div class="try-card"><div class="try-num">7</div><div><div class="prompt-text">search Exchange for MCP connector and show me the latest version <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Finds the Anypoint MCP Connector — the bridge between Mule apps and AI agents.</p></div></div>
+  <div class="try-card"><div class="try-num">8</div><div><div class="prompt-text">list API instances in Sandbox and show applied policies <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Shows all managed APIs and their active policies (rate limiting, OAuth, custom).</p></div></div>
+  <div class="try-card"><div class="try-num">9</div><div><div class="prompt-text">deploy the patient-lookup project to Sandbox <span class="difficulty diff-adv">Advanced</span></div><p class="expect-text">Builds with Maven and deploys to CloudHub 2.0 Sandbox. Requires Java 17 + Maven + available vCores.</p></div></div>
+  <div class="try-card"><div class="try-num">10</div><div><div class="prompt-text">show me platform insights with call volume and error counts <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Returns usage metrics, call volumes, and error rates across your org for the last 7 days.</p></div></div>
+
+  <div class="annotation" style="margin-top:24px">
+    <strong>Cursor tip:</strong> Unlike a terminal, Cursor's agent reads your open files and project context. For better DataWeave generation, open your source and target schema files before prompting — the agent will reference them automatically.
+  </div>
+</section>
+
+<!-- ── Cursor: Tips & Gotchas ── -->
+<section id="cursor-practices" class="section-panel" role="tabpanel" aria-labelledby="crtab-practices" data-slide="cursor-practices" data-slide-title="Cursor Tips and Gotchas">
+  <h2>Tips &amp; Gotchas</h2>
+  <p class="subtitle">What experienced developers have learned using Cursor with enterprise integration platforms.</p>
+
+  <div class="card">
+    <h4>🧠 Context Window Management</h4>
+    <ul>
+      <li><strong>Avoid <code>@codebase</code> for complex Mule tasks.</strong> It uses summarization that can miss critical details in large projects. Explicitly reference files with <code>@</code> instead.</li>
+      <li><strong>Keep Mule XML files under 500 lines.</strong> Cursor's agent defaults to reading the first 250 lines. Split large flows into focused files.</li>
+      <li><strong>Start a new conversation after completing a feature.</strong> Old context can pollute new tasks — fresh conversations give cleaner results.</li>
+    </ul>
   </div>
 
   <div class="card">
-    <h4>Scopes</h4>
-    <p>Permissions that control what a Connected App can do. Like giving a house key that only opens certain rooms. "Exchange Viewer" lets it browse assets. "Runtime Manager Write" lets it deploy apps. More scopes = more access.</p>
+    <h4>📋 Rules Files (<code>.cursorrules</code>)</h4>
+    <p>Cursor uses <code>.cursorrules</code> files (similar to CLAUDE.md) to enforce project conventions. For MuleSoft projects, add these rules to prevent the AI from generating non-compliant XML:</p>
+    <ul>
+      <li><strong>Global elements in global.xml only.</strong> All shared HTTP, DB, and security configs must go in <code>global.xml</code>.</li>
+      <li><strong>No hardcoded environment properties.</strong> Always reference via <code>${env}-properties.yaml</code>.</li>
+      <li><strong>YAML strict typing.</strong> Port values must be strings: <code>port: "8081"</code> not <code>port: 8081</code>.</li>
+      <li><strong>Connector version verification.</strong> Tell Cursor to check the MuleSoft Maven repo before suggesting connector versions — prevents hallucinated version numbers.</li>
+      <li><strong>Never commit credentials.</strong> Explicit rule to keep secrets out of tracked files.</li>
+    </ul>
   </div>
 
   <div class="card">
-    <h4>Maven</h4>
-    <p>A build tool that compiles your Mule project and uploads it to CloudHub. Think of it as a shipping service &mdash; it packages your code and delivers it to the cloud. You configure it once in <code>~/.m2/settings.xml</code> and forget about it.</p>
+    <h4>🤖 Agent Mode Boundaries</h4>
+    <ul>
+      <li><strong>One file at a time for complex changes.</strong> Broad commands like "refactor the whole integration" often cause the agent to modify too many files and break builds.</li>
+      <li><strong>Disable "YOLO mode" (auto-run).</strong> Always require human approval for shell commands. Auto-run can execute destructive operations without confirmation.</li>
+      <li><strong>Verify generated Mule XML before deploying.</strong> Cursor excels at tactical code but can miss architectural constraints. Review before any CloudHub deploy.</li>
+      <li><strong>Don't expose all 18 tools by default.</strong> If you only need Exchange search, restrict toolsets in your MCP config to keep the agent's context focused.</li>
+    </ul>
   </div>
 
   <div class="card">
-    <h4>vCores</h4>
-    <p>Computing power in CloudHub, measured in virtual CPU cores. Each deployed app needs some vCores to run &mdash; like renting server space. A Micro worker (0.1 vCores) is enough for development. If you're out of vCores, deployments will fail.</p>
+    <h4>🏢 Enterprise Considerations</h4>
+    <ul>
+      <li><strong>Route Cursor traffic through an AI Gateway.</strong> For team deployments, use a gateway (like Portkey) to centralize API keys, enforce token budgets, and prevent PII leakage in prompts.</li>
+      <li><strong>Multi-repo environments degrade Cursor.</strong> Cursor struggles at scale with 50+ repositories. For large enterprise setups, scope each Cursor session to one integration project.</li>
+      <li><strong>Salesforce governor limits apply.</strong> If using Cursor for Salesforce + MuleSoft work, AI-generated SOQL and DML may work in isolation but fail with 200+ records. Manually review for bulkification.</li>
+    </ul>
+  </div>
+</section>
+
+  </div><!-- end .content -->
+</div><!-- end #pane-cursor -->
+
+<!-- ═══════════════════ SCRIPT → FLOW PANE ═══════════════════ -->
+<div role="tabpanel" id="pane-scriptflow" class="editor-pane" aria-labelledby="etab-scriptflow">
+  <div class="content" style="max-width:960px;margin:0 auto;padding:32px 24px 64px;">
+
+    <!-- Problem Statement -->
+    <div style="background:#fff;border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;box-shadow:var(--shadow);" data-slide="problem">
+      <h2 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">The Script That Ate Your Sprint</h2>
+      <p style="font-size:14px;color:var(--text-body);line-height:1.7;">Most teams inherit it eventually: a monolithic transformation script that maps data between two systems with completely different models. It works — until it doesn't. Schema drift breaks it silently. A failed push leaves records in an unknown state. Debugging means reading thousands of lines of imperative logic with no observability. The fix is always a patch on top of a patch.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+        <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--red,#EA001E);color:var(--red,#EA001E);background:#FFF0F2;">No error recovery</span>
+        <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--red,#EA001E);color:var(--red,#EA001E);background:#FFF0F2;">Hours to comprehend</span>
+        <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--orange);color:#B55000;background:#FFF5EB;">Schema drift breaks silently</span>
+        <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--orange);color:#B55000;background:#FFF5EB;">Zero observability</span>
+        <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid #C0CCE0;color:var(--text-muted);background:#F5F8FF;">2–3 dev team overhead</span>
+      </div>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:28px 20px;margin-bottom:32px;box-shadow:var(--shadow);overflow-x:auto;" data-slide="architecture">
+      <p style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Architecture</p>
+      <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:20px;">What the Flow Looks Like</h2>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <svg viewBox="0 0 860 260" style="min-width:640px;display:block;width:100%;max-width:880px;margin:0 auto;" xmlns="http://www.w3.org/2000/svg" aria-label="MuleSoft integration flow diagram">
+          <g transform="translate(10,60)"><rect width="130" height="80" rx="8" fill="#EAF5FE" stroke="#0B5CAB" stroke-width="1.5"/><text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">External API</text><text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">(AWS / Standard</text><text x="65" y="60" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">REST Endpoint)</text></g>
+          <line x1="141" y1="100" x2="178" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arr1)"/>
+          <g transform="translate(179,50)"><rect width="130" height="100" rx="8" fill="#032D60" stroke="#032D60" stroke-width="1.5"/><text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">MuleSoft</text><text x="65" y="44" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Anypoint Platform</text><text x="65" y="64" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#04E1CB">Scheduler + Watermark</text><text x="65" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#CFE9FE">only new records processed</text></g>
+          <line x1="310" y1="100" x2="347" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arr1)"/>
+          <g transform="translate(348,45)"><rect width="160" height="110" rx="8" fill="#7B0EA0" stroke="#5A0A76" stroke-width="1.5"/><text x="80" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">DataWeave</text><text x="80" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Transformation Layer</text><text x="80" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Schema mapping · Type coercion</text><text x="80" y="82" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Null handling · Enrichment</text><text x="80" y="100" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-style="italic" fill="#C8A0D8">written in Cursor with AI assist</text></g>
+          <line x1="509" y1="100" x2="546" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arr1)"/>
+          <g transform="translate(510,10)"><rect width="120" height="30" rx="6" fill="#FFF5EB" stroke="#FE9339" stroke-width="1.5"/><text x="60" y="14" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#B55000">Self-Heal Loop</text><text x="60" y="26" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#B55000">fail → auto-correct → retry</text></g>
+          <path d="M 570 100 Q 570 50 570 42" stroke="#FE9339" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arr2)"/>
+          <path d="M 570 42 Q 570 100 610 100" stroke="#FE9339" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/>
+          <g transform="translate(547,55)"><rect width="130" height="90" rx="8" fill="#0176D3" stroke="#0B5CAB" stroke-width="1.5"/><text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Salesforce</text><text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Upsert / Bulk API</text><text x="65" y="62" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Error handler scope</text><text x="65" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#CFE9FE">retry on failure</text></g>
+          <line x1="678" y1="100" x2="715" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arr1)"/>
+          <g transform="translate(716,60)"><rect width="130" height="80" rx="8" fill="#EAF5FE" stroke="#0B5CAB" stroke-width="1.5"/><text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">Salesforce</text><text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">Objects</text><text x="65" y="64" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">Clean · Structured</text></g>
+          <g transform="translate(179,155)"><path d="M 0,0 L 0,10 Q 0,14 4,14 L 245,14 Q 249,14 249,10 L 249,0" stroke="#0176D3" stroke-width="1.2" stroke-dasharray="4,3" fill="none"/><polygon points="124,14 120,22 128,22" fill="#0176D3"/><rect x="74" y="22" width="102" height="18" rx="4" fill="#EAF5FE" stroke="#0176D3" stroke-width="1"/><text x="125" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#0176D3">Omni Gateway</text><text x="125" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#5C6A7F">governs this layer → agent-ready</text></g>
+          <text x="44" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Source</text>
+          <text x="243" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Orchestration</text>
+          <text x="428" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Transform</text>
+          <text x="612" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Destination</text>
+          <text x="781" y="245" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Target</text>
+          <defs>
+            <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#0176D3"/></marker>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#FE9339"/></marker>
+          </defs>
+        </svg>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--text-body);"><strong style="display:block;font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Watermark Pattern</strong>Only records newer than the last successful run are fetched. No full-table scans. Runtime drops from hours to minutes.</div>
+        <div style="flex:1;min-width:200px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--text-body);"><strong style="display:block;font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">DataWeave — AI-assisted</strong>Declarative transformation replaces imperative script logic. Written and maintained in Cursor using MuleSoft Vibes. Testable, version-controlled, readable.</div>
+        <div style="flex:1;min-width:200px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--text-body);"><strong style="display:block;font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Error Recovery Pattern</strong>On push failure, the flow catches the fault, logs it, and can re-attempt with corrected values for recoverable errors. Reduces unplanned on-call incidents.</div>
+      </div>
+    </div>
+
+    <!-- Before / After Code -->
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Code Comparison</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;" data-slide="code-compare">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);">
+        <div style="padding:10px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;background:#FFF0F2;color:#EA001E;border-bottom:1px solid #FACCCD;"><span style="width:8px;height:8px;border-radius:50%;background:#EA001E;display:inline-block;"></span>Before — Legacy Script</div>
+        <pre style="padding:16px;font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:12px;line-height:1.65;overflow-x:auto;background:#F8FAFF;color:var(--text-body);"><span style="color:#9BADC0;font-style:italic"># 847 lines. No tests. Last touched 18 months ago.</span>
+
+<span style="color:#0176D3;font-weight:600">def</span> <span style="color:#7B0EA0">transform_record</span>(raw):
+    result = {}
+    <span style="color:#9BADC0;font-style:italic"># field name mismatch</span>
+    <span style="color:#0176D3;font-weight:600">if</span> raw.get(<span style="color:#1A6B38">"member_id"</span>) <span style="color:#0176D3;font-weight:600">is not</span> <span style="color:#0176D3;font-weight:600">None</span>:
+        result[<span style="color:#1A6B38">"MemberId__c"</span>] = str(raw[<span style="color:#1A6B38">"member_id"</span>])
+    <span style="color:#0176D3;font-weight:600">else</span>:
+        result[<span style="color:#1A6B38">"MemberId__c"</span>] = <span style="color:#1A6B38">""</span>
+    <span style="color:#9BADC0;font-style:italic"># date format mismatch</span>
+    <span style="color:#0176D3;font-weight:600">try</span>:
+        d = raw[<span style="color:#1A6B38">"claim_date"</span>]
+        result[<span style="color:#1A6B38">"ClaimDate__c"</span>] = d[:10] + <span style="color:#1A6B38">"T00:00:00Z"</span>
+    <span style="color:#0176D3;font-weight:600">except</span>:
+        result[<span style="color:#1A6B38">"ClaimDate__c"</span>] = <span style="color:#0176D3;font-weight:600">None</span>
+    lines = raw.get(<span style="color:#1A6B38">"claim_lines"</span>, [])
+    result[<span style="color:#1A6B38">"LineCount__c"</span>] = len(lines)
+    result[<span style="color:#1A6B38">"ClaimLines__c"</span>] = <span style="color:#1A6B38">"|"</span>.join(
+        [str(l.get(<span style="color:#1A6B38">"ndc_code"</span>,<span style="color:#1A6B38">""</span>)) <span style="color:#0176D3;font-weight:600">for</span> l <span style="color:#0176D3;font-weight:600">in</span> lines]
+    )
+    <span style="color:#9BADC0;font-style:italic"># FIXME: drug_type enum not mapped</span>
+    <span style="color:#9BADC0;font-style:italic"># FIXME: negative amount crashes downstream</span>
+    <span style="color:#9BADC0;font-style:italic"># no tests, no fallback, brittle on schema change</span>
+    <span style="color:#0176D3;font-weight:600">return</span> result</pre>
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);">
+        <div style="padding:10px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;background:#F0FFF4;color:#1A6B38;border-bottom:1px solid #B3DFBE;"><span style="width:8px;height:8px;border-radius:50%;background:#41B658;display:inline-block;"></span>After — DataWeave (Cursor)</div>
+        <pre style="padding:16px;font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:12px;line-height:1.65;overflow-x:auto;background:#F4FBF6;color:var(--text-body);"><span style="color:#9BADC0;font-style:italic">// Generated with MuleSoft Vibes in Cursor</span>
+
+<span style="color:#032D60;font-weight:600">%dw 2.0</span>
+<span style="color:#032D60;font-weight:600">output</span> <span style="color:#04A29A">application/json</span>
+<span style="color:#0176D3;font-weight:600">var</span> safeLines = (claim) <span style="color:#B55000">-></span>
+  claim.claim_lines <span style="color:#0176D3">default</span> []
+
+<span style="color:#032D60;font-weight:600">---</span>
+payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B55000">-></span> {
+  MemberId__c:   claim.member_id <span style="color:#0176D3">default</span> <span style="color:#1A6B38">""</span>,
+  ClaimDate__c:  <span style="color:#0176D3">try</span>(() <span style="color:#B55000">-></span>
+    claim.claim_date <span style="color:#0176D3">as</span> <span style="color:#04A29A">Date</span>
+      <span style="color:#0176D3">{format: "yyyy-MM-dd"}</span>
+      <span style="color:#0176D3">as</span> <span style="color:#04A29A">DateTime</span>
+  ).result <span style="color:#0176D3">default</span> <span style="color:#0176D3;font-weight:600">null</span>,
+  LineCount__c:  <span style="color:#0176D3">sizeOf</span>(safeLines(claim)),
+  ClaimLines__c: safeLines(claim)
+    <span style="color:#0176D3">map</span> (l) <span style="color:#B55000">-></span> l.ndc_code <span style="color:#0176D3">default</span> <span style="color:#1A6B38">""</span>
+    <span style="color:#0176D3">joinBy</span> <span style="color:#1A6B38">"|"</span>,
+  DrugType__c:   claim.drug_type <span style="color:#0176D3">default</span> <span style="color:#1A6B38">"Unknown"</span> <span style="color:#0176D3">match</span> {
+    <span style="color:#0176D3;font-weight:600">case</span> <span style="color:#1A6B38">"RX"</span>  <span style="color:#B55000">-></span> <span style="color:#1A6B38">"Prescription"</span>
+    <span style="color:#0176D3;font-weight:600">case</span> <span style="color:#1A6B38">"OTC"</span> <span style="color:#B55000">-></span> <span style="color:#1A6B38">"Over-the-Counter"</span>
+    <span style="color:#0176D3;font-weight:600">else</span>       <span style="color:#B55000">-></span> <span style="color:#1A6B38">"Unknown"</span>
+  }
+}</pre>
+      </div>
+    </div>
+
+    <!-- Self-Heal Callout -->
+    <div style="background:var(--bg-subtle);border:1px solid var(--border-strong);border-left:4px solid var(--blue);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;" data-slide="self-heal">
+      <div style="font-size:22px;flex-shrink:0;margin-top:2px;">🔁</div>
+      <div>
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px;">The Error Recovery Pattern — What Replaces the Manual Fix</h3>
+        <p style="font-size:13px;color:var(--text-body);line-height:1.6;">When a Salesforce push fails, Mule's built-in <code style="font-family:var(--font-mono);font-size:12px;background:rgba(1,118,211,0.08);color:var(--blue-dark);padding:1px 5px;border-radius:3px;">Error Handler</code> scope catches the fault, logs it with full context, and can re-attempt with corrected values — all within the same flow. Recoverable errors are retried automatically; unrecoverable records land in a structured error log for human review. Significantly reduces unplanned on-call incidents for recoverable failure classes.</p>
+        <p style="margin-top:8px;font-size:12px;color:var(--text-muted);"><em>Note: error handler scopes and retry logic require explicit flow configuration. Anypoint MQ dead-letter queuing requires an Anypoint MQ subscription.</em></p>
+      </div>
+    </div>
+
+    <!-- Omni Gateway -->
+    <div style="background:#fff;border:1px solid var(--border-strong);border-left:4px solid var(--blue);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px;box-shadow:var(--shadow);" data-slide="omni-gateway">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="flex-shrink:0;margin-top:2px;"><div style="width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="white" stroke-width="1.5"/><path d="M9 5v4l2.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="1.5" fill="white"/></svg></div></div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">What's Next — Omni Gateway</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">Your flow is now an API. Make it agent-ready.</div>
+          <p style="font-size:13px;color:var(--text-body);line-height:1.7;margin-bottom:12px;">Once the script becomes a Mule flow, <a href="https://docs.mulesoft.com/gateway/latest/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border-strong);">MuleSoft Omni Gateway</a>'s MCP Bridge can expose it as a tool any AI agent — Agentforce, Claude, Copilot — can call directly. With configured gateway policies: PHI can be masked before it leaves your network, token spend can be capped per app or team, and no application rebuild is required to add governance.</p>
+          <p style="font-size:12px;margin-bottom:12px;"><a href="https://docs.mulesoft.com/gateway/latest/flex-gateway-getting-started" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;font-weight:600;">→ MCP Bridge: expose any API as an agent tool</a></p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">MCP Bridge</span>
+            <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">LLM Routing</span>
+            <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">PHI Masking</span>
+            <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">Token Cost Control</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:var(--bg-header);border-radius:var(--radius);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;" data-slide="cta">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-on-dark-2);margin-bottom:6px;">Ready to try it in your org?</div>
+        <div style="font-size:16px;font-weight:700;color:var(--text-on-dark);">Connect Cursor to Anypoint in under 30 minutes</div>
+        <div style="font-size:13px;color:var(--text-on-dark-2);margin-top:4px;">Use the MCP server to access Exchange, API Manager, and CloudHub directly from your editor.</div>
+      </div>
+      <a href="#" onclick="document.querySelector('[data-editor=cursor]').click();return false;" style="background:var(--blue);color:#fff;font-size:13px;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;white-space:nowrap;flex-shrink:0;">Set Up Cursor + Anypoint →</a>
+    </div>
+
+  </div><!-- end .content -->
+</div><!-- end #pane-scriptflow -->
+
+<!-- ═══════════════════ SALESFORCE AGENT ARCHITECTURE PANE ═══════════════════ -->
+<div role="tabpanel" id="pane-salesforce" class="editor-pane" aria-labelledby="etab-salesforce">
+
+  <nav role="tablist" aria-label="Salesforce sections" class="section-tabs" id="sfSecTabs">
+    <button role="tab" aria-selected="true"  aria-controls="sf-strategy"  class="section-tab active" data-pane="salesforce" data-section="strategy"  id="sftab-strategy">The Strategy</button>
+    <button role="tab" aria-selected="false" aria-controls="sf-arch"       class="section-tab"        data-pane="salesforce" data-section="arch"      id="sftab-arch">Architecture</button>
+    <button role="tab" aria-selected="false" aria-controls="sf-connect"    class="section-tab"        data-pane="salesforce" data-section="connect"   id="sftab-connect">Connect Salesforce</button>
+    <button role="tab" aria-selected="false" aria-controls="sf-usecases"   class="section-tab"        data-pane="salesforce" data-section="usecases"  id="sftab-usecases">Healthcare Use Cases</button>
+    <button role="tab" aria-selected="false" aria-controls="sf-tryit"      class="section-tab"        data-pane="salesforce" data-section="tryit"     id="sftab-tryit">Try It</button>
+  </nav>
+
+  <div class="content">
+
+<!-- ── SF: Strategy ── -->
+<section id="sf-strategy" class="section-panel" role="tabpanel" aria-labelledby="sftab-strategy" data-slide="sf-strategy" data-slide-title="Salesforce Agent Strategy">
+  <h2>The Salesforce + MuleSoft Agent Strategy</h2>
+  <p class="subtitle">Salesforce owns MuleSoft. Together they form the complete enterprise AI stack — Salesforce as the data and agent layer, MuleSoft as the integration and governance layer, and your AI editor as the development surface.</p>
+
+  <div class="card" style="border-left: 4px solid var(--orange);">
+    <p><strong>"Why should you ever log into Salesforce again?"</strong> — Parker Harris, Salesforce Co-Founder, TrailblazerDX 2026. That question is the product thesis behind Headless 360.</p>
   </div>
 
+  <h3>The Three Eras of Enterprise Software</h3>
+  <table class="resource-table">
+    <thead><tr><th>Era</th><th>Period</th><th>Interface</th><th>Who Does the Work</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Era 1.0: UI-First</strong></td><td>1999–2015</td><td>Browser / Lightning UI</td><td>Humans clicking</td></tr>
+      <tr><td><strong>Era 2.0: API-First</strong></td><td>2015–2024</td><td>REST/SOAP APIs</td><td>Developers writing integration code</td></tr>
+      <tr><td><strong style="color:var(--orange)">Era 3.0: Agent-First</strong></td><td style="color:var(--orange)">2025–Beyond</td><td>MCP tools / CLI / APIs</td><td>Autonomous AI agents</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What Headless 360 Is</h3>
   <div class="card">
-    <h4>CloudHub 2.0</h4>
-    <p>MuleSoft's cloud hosting service where your Mule apps run. When you "deploy to Sandbox," your app gets uploaded to CloudHub servers and starts running there. Sandbox is for testing; Production is for real traffic.</p>
+    <p><strong>Headless 360 is not a product SKU — it's an architectural framework.</strong> It describes the complete decoupling of Salesforce platform capabilities from the Lightning browser UI, exposing everything through APIs, MCP tools, and CLI commands so AI agents can operate Salesforce without a human ever opening a browser.</p>
+    <p>In Era 3.0, the UI becomes an optional "ephemeral artifact" rendered on demand. Salesforce becomes a programmable substrate — a <em>"building with loading docks on every side"</em> — rather than a lobby humans must walk through.</p>
   </div>
 
-  <div class="card">
-    <h4>Exchange</h4>
-    <p>MuleSoft's app store for integration assets &mdash; pre-built connectors, API templates, code libraries, and complete accelerators. Always search Exchange before building something from scratch.</p>
+  <h3>What This Means for Your Customers</h3>
+  <div class="card-grid">
+    <div class="capability-card"><span class="icon">🏥</span><h4>Healthcare Workflows</h4><p>Autonomous agents handle patient onboarding, referrals, prior auth, and care gap closure — without staff logging into Salesforce Health Cloud</p></div>
+    <div class="capability-card"><span class="icon">🔗</span><h4>MuleSoft as the Bridge</h4><p>MuleSoft connects Salesforce agents to EHRs (Epic, Cerner), claims systems, and external data — the integration fabric that makes headless operation real</p></div>
+    <div class="capability-card"><span class="icon">🤖</span><h4>AI Editors as Dev Surface</h4><p>Claude Code and Cursor become the interface for building, testing, and deploying Salesforce + MuleSoft workflows — no Salesforce UI required</p></div>
+    <div class="capability-card"><span class="icon">🛡️</span><h4>Governed by Omni Gateway</h4><p>MuleSoft Omni Gateway sits inline to govern all agent-to-agent and MCP traffic — PII/PHI masking, rate limits, ABAC enforcement</p></div>
   </div>
 
-  <div class="card">
-    <h4>MCP (Model Context Protocol)</h4>
-    <p>A standard that lets AI assistants (like Claude) use tools. The MuleSoft MCP Server gives Claude the ability to search Exchange, deploy apps, and manage APIs &mdash; all through natural language commands.</p>
+  <div class="annotation">
+    <strong>GA Status (April 2026):</strong> Agentforce Vibes 2.0, Salesforce DX MCP Server, Agentforce Experience Layer, and AI Gateway are all Generally Available. Agent Broker reaches full GA June 2026. AgentExchange lists 13,000+ agent components.
+  </div>
+</section>
+
+<!-- ── SF: Architecture ── -->
+<section id="sf-arch" class="section-panel" role="tabpanel" aria-labelledby="sftab-arch" data-slide="sf-arch" data-slide-title="Salesforce Architecture">
+  <h2>The Four-Tier Architecture</h2>
+  <p class="subtitle">Headless 360 opens the Salesforce ecosystem through four operational tiers, with MuleSoft governing the connections between them.</p>
+
+  <div class="card" style="border-left:4px solid var(--orange)">
+    <h4>Tier 1 — System of Engagement</h4>
+    <p>User-facing interfaces and external AI tools: <strong>Claude Code, Cursor</strong>, GitHub Copilot, Slack, ChatGPT, and any custom frontend. This is where your AI editor lives.</p>
   </div>
 
-  <div class="card">
-    <h4>FHIR R4</h4>
-    <p>A healthcare data standard for exchanging medical records between systems. FHIR (Fast Healthcare Interoperability Resources) defines how patient data, conditions, medications, and lab results are structured. R4 is the current version used by most hospitals.</p>
+  <div class="card" style="border-left:4px solid var(--blue)">
+    <h4>Tier 2 — System of Agency</h4>
+    <p>MCP providers and management modules: <code>mcp-provider-core</code>, <code>mcp-provider-lwc-experts</code>, <code>mcp-provider-apex</code>, <code>mcp-provider-testing</code>, <code>mcp-provider-devops</code>. This tier manages what tools are exposed to agents.</p>
   </div>
 
-  <div class="card">
-    <h4>settings.xml</h4>
-    <p>A configuration file that Maven reads to find your credentials. Located at <code>~/.m2/settings.xml</code> on your Mac. It tells Maven "here's the username and password for uploading to CloudHub." You create it once and it works for all projects.</p>
+  <div class="card" style="border-left:4px solid var(--blue-hero)">
+    <h4>Tier 3 — System of Work</h4>
+    <p>Operational actions and database mutations: <code>sobject-mutations</code>, <code>soql_query</code>, <code>invocable_actions</code>, <code>sobject-user-context</code>. This is where agents actually read and write Salesforce records.</p>
   </div>
 
+  <div class="card" style="border-left:4px solid var(--green)">
+    <h4>Tier 4 — System of Context</h4>
+    <p>Foundational metadata and analytics: <code>data-cloud-queries</code>, <code>tableau-next</code>, <code>salesforce-api-context</code>, <code>mcp-provider-metadata</code>. The data layer that grounds agent reasoning.</p>
+  </div>
+
+  <h3>Where MuleSoft Sits</h3>
   <div class="card">
-    <h4>Keychain</h4>
-    <p>macOS's built-in password manager. Instead of putting passwords in plain text files, you store them in Keychain and your programs read them from there. The command <code>security add-generic-password</code> adds a password; <code>security find-generic-password -w</code> reads it back.</p>
+    <p><strong>Salesforce natively owns localized CRM agency</strong> — workflows, sharing rules, per-user OAuth, and reasoning within the Customer 360 stack.</p>
+    <p><strong>MuleSoft owns the enterprise-wide control plane</strong> — multi-agent orchestration, cross-platform routing, and integration governance across the entire hybrid IT landscape.</p>
+    <p><strong>MuleSoft Omni Gateway sits inline</strong> between autonomous agents and MCP servers, governing all Agent-to-Agent (A2A) and MCP traffic: PII/PHI detection and redaction, rate limiting, ABAC enforcement, and schema validation.</p>
+  </div>
+
+  <div class="annotation">
+    <strong>The integration layer as MCP wrapper:</strong> MuleSoft abstracts backend complexity by wrapping existing System APIs and Process APIs directly into MCP tools. Through zero-code configuration, it translates standard REST APIs into MCP wrappers — making legacy databases and external systems dynamically discoverable by Salesforce agents without new custom code.
+  </div>
+</section>
+
+<!-- ── SF: Connect Salesforce ── -->
+<section id="sf-connect" class="section-panel" role="tabpanel" aria-labelledby="sftab-connect" data-slide="sf-connect" data-slide-title="Connect Salesforce">
+  <h2>Connect Your AI Editor to Salesforce</h2>
+  <p class="subtitle">Two paths: a cloud-hosted Salesforce MCP Server (recommended for teams), or a local Salesforce DX MCP Server (recommended for individual developers).</p>
+
+  <div class="card-grid" style="margin-bottom:24px">
+    <div class="capability-card">
+      <span class="icon">☁️</span>
+      <h4>Hosted MCP Server</h4>
+      <p>Configured in Salesforce Setup. Enforces org-level sharing rules. Best for teams and production use.</p>
+    </div>
+    <div class="capability-card">
+      <span class="icon">💻</span>
+      <h4>Salesforce DX MCP Server</h4>
+      <p>Runs locally via npm. Uses your CLI-authenticated org. Best for individual developers and sandbox work.</p>
+    </div>
+  </div>
+
+  <h3>Path A — Hosted MCP Server</h3>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">1</div>
+    <div class="step-content">
+      <h4>Activate the MCP Server in Salesforce Setup</h4>
+      <p>Log into Salesforce → <strong>Setup → MCP Servers</strong>. Select a standard template (e.g., <code>salesforce-api-context</code>) and click <strong>Activate</strong>. For custom servers, go to <strong>Integration → Salesforce MCP Servers</strong>.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">2</div>
+    <div class="step-content">
+      <h4>Create an External Client App</h4>
+      <p>In Setup, create a new <strong>External Client App</strong> (ECA). Legacy Connected Apps are not supported for MCP agentic handshakes.</p>
+      <div class="annotation"><strong>Important:</strong> Use External Client App Manager, not Connected Apps. The modern OAuth security model for agents requires ECA.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">3</div>
+    <div class="step-content">
+      <h4>Configure OAuth</h4>
+      <p>Enable OAuth on the ECA. Set the Callback URL to match your client (Claude, Cursor, or Postman for testing). Assign required scopes: <code>mcp_api</code> and <code>refresh_token</code>. Enforce JWT-based access tokens and PKCE.</p>
+      <div class="warning"><strong>Security:</strong> An over-scoped agent could execute anything a System Administrator could. Restrict scopes to only what the agent needs. Never use <code>full</code> scope for an agent.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">4</div>
+    <div class="step-content">
+      <h4>Add to Cursor or Claude Code</h4>
+      <p>Copy the Consumer Key from the ECA and add it to your editor's MCP config:</p>
+
+      <details>
+        <summary>Cursor — mcp.json configuration</summary>
+        <div class="details-body">
+          <div class="code-block" id="sfCursorConfig">
+            <button class="copy-btn" onclick="copyCode('sfCursorConfig')">Copy</button>
+{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"salesforce"</span>: {
+      <span class="string">"command"</span>: <span class="string">"npx"</span>,
+      <span class="string">"args"</span>: [
+        <span class="string">"-y"</span>,
+        <span class="string">"@salesforce/mcp"</span>,
+        <span class="string">"--orgs"</span>,
+        <span class="string">"your_org_username_or_alias"</span>,
+        <span class="string">"--toolsets"</span>,
+        <span class="string">"core,metadata"</span>
+      ]
+    }
+  }
+}</div>
+          <div class="annotation"><strong>--toolsets:</strong> Don't enable all 60+ tools at once — it overwhelms the agent's context. Use <code>core</code> to start, then add <code>metadata</code>, <code>devops</code>, or <code>lwc-experts</code> as needed.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Claude Code — terminal command</summary>
+        <div class="details-body">
+          <div class="code-block" id="sfClaudeConfig">
+            <button class="copy-btn" onclick="copyCode('sfClaudeConfig')">Copy</button>
+<span class="cmd">claude</span> <span class="flag">mcp add</span> salesforce \
+  <span class="flag">--scope</span> user \
+  <span class="flag">--</span> npx <span class="flag">-y</span> @salesforce/mcp \
+  <span class="flag">--orgs</span> <span class="string">your_org_username_or_alias</span> \
+  <span class="flag">--toolsets</span> <span class="string">core,metadata</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <h3>Path B — Salesforce DX MCP Server (Local)</h3>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">1</div>
+    <div class="step-content">
+      <h4>Prerequisites</h4>
+      <p>Node.js 18+ and the Salesforce CLI must be installed:</p>
+      <div class="code-block" id="sfPrereqs">
+        <button class="copy-btn" onclick="copyCode('sfPrereqs')">Copy</button>
+<span class="cmd">npm</span> install <span class="flag">-g</span> @salesforce/cli
+<span class="cmd">sf</span> --version <span class="comment"># Should print 2.x or higher</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">2</div>
+    <div class="step-content">
+      <h4>Authorize your Salesforce org</h4>
+      <div class="code-block" id="sfAuth">
+        <button class="copy-btn" onclick="copyCode('sfAuth')">Copy</button>
+<span class="cmd">sf</span> org login web <span class="flag">--alias</span> <span class="string">my-sandbox</span>
+<span class="comment"># Browser opens — sign in to your Salesforce org</span>
+<span class="cmd">sf</span> org list <span class="comment"># Verify it appears</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" aria-hidden="true">3</div>
+    <div class="step-content">
+      <h4>Verify the connection in your editor</h4>
+      <p>After adding the config, open <strong>Agent mode</strong> (Cursor: ⌘N) or a Claude Code session and try:</p>
+      <div class="code-block" id="sfVerify">
+        <button class="copy-btn" onclick="copyCode('sfVerify')">Copy</button>List my Salesforce org's accounts where Type = 'Customer' limit 10</div>
+
+      <div class="verify-block">
+        <div class="verify-icon">✅</div>
+        <div>
+          <div class="verify-title">What success looks like</div>
+          <p>The agent returns a list of Account records from your org. If you see Salesforce data, you're fully connected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Troubleshooting</h3>
+  <details>
+    <summary>⚠️ cursor:// OAuth redirect fails (5-minute timeout)</summary>
+    <div class="details-body">This is a known issue with the Salesforce browser-redirect OAuth flow inside Cursor. Use the <strong>Salesforce DX MCP Server (Path B)</strong> instead — it authenticates via CLI without a browser redirect. The DX server uses your locally-authorized org credentials, bypassing the protocol issue entirely.</div>
+  </details>
+  <details>
+    <summary>🚫 "INSUFFICIENT_ACCESS" errors</summary>
+    <div class="details-body">The user account you authorized doesn't have permissions for the object or action. Check profile-level object permissions in Salesforce Setup. For sandbox work, use a System Admin profile. For production, scope permissions to exactly what the agent needs.</div>
+  </details>
+  <details>
+    <summary>⚠️ Too many tools — agent context overloaded</summary>
+    <div class="details-body">Don't use <code>--toolsets all</code>. The Salesforce MCP server exposes 60+ tools and all of them loaded simultaneously overwhelm the agent's context window. Start with <code>--toolsets core</code> and add specific toolsets only when you need them.</div>
+  </details>
+</section>
+
+<!-- ── SF: Healthcare Use Cases ── -->
+<section id="sf-usecases" class="section-panel" role="tabpanel" aria-labelledby="sftab-usecases" data-slide="sf-usecases" data-slide-title="Healthcare Use Cases">
+  <h2>Healthcare Use Cases</h2>
+  <p class="subtitle">Real organizations using Headless 360 and MuleSoft Agent Fabric to automate clinical and administrative workflows.</p>
+
+  <details open>
+    <summary>🏥 MIMIT Health — Administrative Automation (459% ROI)</summary>
+    <div class="details-body">
+      <p><strong>Problem:</strong> Severe administrative burden — manual form processing and clerical paperwork delayed patient treatments and caused staff burnout.</p>
+      <p><strong>Solution:</strong> Autonomous agents handle patient onboarding, intake form processing, and longitudinal record updates using Document AI. Clinicians focus entirely on patients.</p>
+      <p><strong>Data:</strong> Agents read unstructured clinical data from intake forms, write to longitudinal patient records, and trigger follow-up tasks — all without staff logging into Salesforce.</p>
+      <p><strong>Compliance:</strong> Agentforce Trust Layer automatically detects and masks PHI/PII before it reaches the LLM. HIPAA adherence built in.</p>
+      <p><strong>Result:</strong> $1.5 million in savings. 459% ROI.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>🏨 Hospital Operations — Capacity Command Center (UChicago Medicine, RUSH)</summary>
+    <div class="details-body">
+      <p><strong>Problem:</strong> Managing complex clinical capacity bottlenecks and tracking regional disease outbreaks.</p>
+      <p><strong>Solution:</strong> Hospital Operations Agent acts as an autonomous command center — predicts inpatient/outpatient surges, tracks inventory, manages bed and staff allocation. Epidemiology Agent automates lab intake, deduplicates cases, and generates outbreak response plans.</p>
+      <p><strong>Data:</strong> Reads real-time hospital inventory, clinical capacity data, lab intake results, medical imaging (Viz.ai), and wearable metrics (Verily).</p>
+      <p><strong>Compliance:</strong> Zero Copy integration via Data Cloud — agents read massive health data without physically moving it out of secure storage. Strict role-based permissions govern data visibility.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>💊 Healthcare Payers — Claims &amp; Coverage Automation</summary>
+    <div class="details-body">
+      <p><strong>Problem:</strong> High-volume member service operations — deductible questions, prior auth, billing status, out-of-pocket estimates.</p>
+      <p><strong>Solution:</strong> Claims &amp; Coverage Agent provides always-on self-service resolution. Reads benefit plans, provider networks, and claims systems. Writes grievance logs, auth requests, and builds a "Member 360" profile.</p>
+      <p><strong>Compliance:</strong> HL7 FHIR-aligned APIs. Voice interactions use HIPAA-ready Agentforce Voice.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>🔗 EHR Interoperability via MuleSoft (General Care Coordination)</summary>
+    <div class="details-body">
+      <p><strong>Problem:</strong> Care gaps from disconnected referral workflows, manual medication refills, and demographic update lag across EHR systems.</p>
+      <p><strong>Solution:</strong> Referrals &amp; Assessments Agent triages incoming referrals and routes to specialists. EHR Read-Write Agent manages medication refills and demographics via MuleSoft integrations with Epic, athenahealth, and Cerner.</p>
+      <p><strong>MuleSoft's role:</strong> Bidirectional data exchange — reading and writing clinical notes, diagnoses, medications, and demographics into external EHRs. MuleSoft Omni Gateway sits inline to detect/filter PHI in transit and validate schemas.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>🏦 Enterprise Supply Chain &amp; Banking — MuleSoft Agent Fabric</summary>
+    <div class="details-body">
+      <p><strong>Problem:</strong> Orchestrating order fulfillment and banking reconciliation across fragmented, multi-vendor agent ecosystems securely.</p>
+      <p><strong>Solution:</strong> MuleSoft Agent Broker uses an LLM to autonomously decompose tasks and invoke the required MCP and A2A agents. In banking, the agent autonomously reconciles statements while Omni Gateway detects and redacts sensitive financial PII from logs in real time.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ── SF: Try It ── -->
+<section id="sf-tryit" class="section-panel" role="tabpanel" aria-labelledby="sftab-tryit" data-slide="sf-tryit" data-slide-title="Salesforce Try It">
+  <h2>Try It — Salesforce via AI Editor</h2>
+  <p class="subtitle">Paste these prompts into Claude Code or Cursor Agent mode after connecting your Salesforce org.</p>
+
+  <div class="try-card"><div class="try-num">1</div><div><div class="prompt-text">List my open Opportunities closing this quarter, grouped by Account <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Returns a table of active deals from your Salesforce org with account names, amounts, and close dates.</p></div></div>
+  <div class="try-card"><div class="try-num">2</div><div><div class="prompt-text">Show me all Contacts at [Account Name] with their email and last activity date <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Queries the Salesforce Contact object using SOQL via the MCP soql_query tool.</p></div></div>
+  <div class="try-card"><div class="try-num">3</div><div><div class="prompt-text">Create a new Task for [Contact Name] with subject "Follow-up on proposal" due in 3 days <span class="difficulty diff-easy">Easy</span></div><p class="expect-text">Uses sobject-mutations to create a Task record linked to the contact in your Salesforce org.</p></div></div>
+  <div class="try-card"><div class="try-num">4</div><div><div class="prompt-text">Analyze my Health Cloud patient accounts — which ones have had no activity in 90+ days? <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Queries Health Cloud patient accounts and activity history to identify care gaps.</p></div></div>
+  <div class="try-card"><div class="try-num">5</div><div><div class="prompt-text">Using MuleSoft, create an API that reads patient data from Salesforce Health Cloud and maps it to FHIR R4 Patient format <span class="difficulty diff-adv">Advanced</span></div><p class="expect-text">Combines the Salesforce MCP (data read) with the MuleSoft MCP (flow generation + Exchange search) to scaffold a complete FHIR integration.</p></div></div>
+  <div class="try-card"><div class="try-num">6</div><div><div class="prompt-text">Search my Salesforce org metadata for all custom objects related to "Patient" or "Member" <span class="difficulty diff-med">Medium</span></div><p class="expect-text">Uses mcp-provider-metadata to inspect your org's schema — useful for understanding what Health Cloud data structures exist before building integrations.</p></div></div>
+
+  <div class="annotation" style="margin-top:24px">
+    <strong>The MuleSoft + Salesforce combo:</strong> The most powerful prompts chain both MCP servers in a single agent session. The Salesforce MCP reads your org data; the MuleSoft MCP builds the integration that connects it to external systems. One agent, two platforms, zero custom code to start.
+  </div>
+</section>
+
+  </div><!-- end .content -->
+</div><!-- end #pane-salesforce -->
+
+<!-- ═══════════════════ RESOURCES PANE (top-level, shared) ═══════════════════ -->
+<div role="tabpanel" id="pane-resources" class="editor-pane" aria-labelledby="etab-resources">
+  <div class="content">
+
+<section data-slide="resources" data-slide-title="Resources and Tools">
+  <h2>Resources &amp; Tools</h2>
+  <p class="subtitle">Everything you need — docs, demos, tools, and accelerators. Shared across Claude Code and Cursor.</p>
+
+  <h3>Documentation</h3>
+  <table class="resource-table">
+    <thead><tr><th>Type</th><th>Resource</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/mulesoft-mcp-server/getting-started" target="_blank" rel="noopener" data-cta data-cta-text="MuleSoft MCP Server Docs">MuleSoft MCP Server — Getting Started</a></td><td>Official setup guide for the MuleSoft MCP Server across all supported IDEs</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/general/" target="_blank" rel="noopener">MuleSoft Documentation Home</a></td><td>Official docs for Anypoint Platform, Mule runtime, connectors, and APIs</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/mcp-connector/latest/" target="_blank" rel="noopener">MCP Connector Documentation</a></td><td>How to expose Mule apps as tools for AI agents via MCP</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/cloudhub-2/" target="_blank" rel="noopener">CloudHub 2.0 Documentation</a></td><td>Deployment target for Mule applications — scaling, monitoring, troubleshooting</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://docs.mulesoft.com/gateway/latest/" target="_blank" rel="noopener">Anypoint Flex Gateway</a></td><td>Unified API gateway for managing MCP and REST traffic — AI agent governance</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://www.mulesoft.com/lp/ebook/mulesoft-agent-fabric-technical-overview" target="_blank" rel="noopener">Agent Fabric Technical Overview</a></td><td>Architecture and capabilities of MuleSoft Agent Fabric</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://docs.mulesoft.com/release-notes/connector/mcp-connector-release-notes-mule-4" target="_blank" rel="noopener">MCP Connector Release Notes</a></td><td>Latest version, changelog, and compatibility for the Anypoint MCP Connector</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://www.npmjs.com/package/@mulesoft/mcp-server" target="_blank" rel="noopener">@mulesoft/mcp-server (npm)</a></td><td>The MCP server package powering both Claude Code and Cursor integrations</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Cursor-Specific</h3>
+  <table class="resource-table">
+    <thead><tr><th>Type</th><th>Resource</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://cursor.com/docs/mcp" target="_blank" rel="noopener">Cursor MCP Documentation</a></td><td>Official Cursor docs for configuring MCP servers and Agent mode</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://cursor.com/docs/agent" target="_blank" rel="noopener">Cursor Agent Mode</a></td><td>How Cursor's AI agent uses tools, context, and MCP servers</td></tr>
+      <tr><td><span class="tag tag-learn">Learn</span></td><td><a href="https://cursor.com/docs/rules" target="_blank" rel="noopener">Cursor Rules (.cursorrules)</a></td><td>Enforce project conventions — the Cursor equivalent of CLAUDE.md</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Live Demos &amp; Tools</h3>
+  <table class="resource-table">
+    <thead><tr><th>Type</th><th>Resource</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tag-try">Try</span></td><td><a href="https://mule-hls-sandbox-v1.netlify.app/" target="_blank" rel="noopener">Healthcare Sandbox</a></td><td>Live interactive MuleSoft demo — no setup required</td></tr>
+      <tr><td><span class="tag tag-try">Try</span></td><td><a href="https://www.mulesoft.com/ai/agent-fabric/demo" target="_blank" rel="noopener">Agent Fabric Demo</a></td><td>Request a guided demo of Agent Fabric capabilities</td></tr>
+      <tr><td><span class="tag tag-build">Tool</span></td><td><a href="https://anypoint-entitlement-guide.vercel.app/" target="_blank" rel="noopener" data-cta data-cta-text="Anypoint Entitlement Guide">Anypoint Entitlement Guide ↗</a></td><td>Check your Anypoint Platform vCore usage, flow counts, and subscription limits</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://www.mulesoft.com/exchange/org.mule.examples/mulesoft-accelerator-for-healthcare/" target="_blank" rel="noopener">Healthcare Accelerator</a></td><td>50+ pre-built assets: FHIR R4 APIs, US Core Profiles, EHR templates</td></tr>
+      <tr><td><span class="tag tag-build">Build</span></td><td><a href="https://anypoint.mulesoft.com/exchange/" target="_blank" rel="noopener">Anypoint Exchange</a></td><td>Search for connectors, templates, APIs, and accelerators</td></tr>
+    </tbody>
+  </table>
+</section>
+
   </div>
 </div>
 
-</div><!-- end .content -->
-
-<div class="footer">
-  MuleSoft, a Salesforce company &mdash; Built with Claude Code
+<!-- ═══════════════════ SAMPLE USE CASES PANE (hidden, placeholder) ═══════════════════ -->
+<div role="tabpanel" id="pane-usecases" class="editor-pane" aria-labelledby="etab-usecases" style="display:none">
+  <div class="content">
+    <h2>Sample Use Cases</h2>
+    <p class="subtitle">Coming soon — real-world patterns for Headless Salesforce, Anypoint Omni Gateway, and more.</p>
+  </div>
 </div>
+
+<footer class="footer">
+  MuleSoft, a Salesforce company &mdash; AI Editor Onboarding Guide
+</footer>
 
 <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
 <script>
 (function() {
-  // ── Engagement Tracking (proposal_engagement via track-event) ──
-  const TRACK_URL = 'https://cms-api-hub.vercel.app/api/track-event';
-  const PROPOSAL_ID = 'mulesoft-claude-onboarding';
+  'use strict';
 
-  // Session ID — persists within a single viewing session
-  let sessionId = sessionStorage.getItem('st_onboard_sid');
-  if (!sessionId) {
-    sessionId = Math.random().toString(36).substring(2,10) + Date.now().toString(36);
-    sessionStorage.setItem('st_onboard_sid', sessionId);
-  }
+  // ── Editor tab switching ──
+  var editorTabs = document.querySelectorAll('.editor-tab');
+  var editorPanes = document.querySelectorAll('.editor-pane');
 
-  // Read ?ref= param for contact attribution
-  const urlParams = new URLSearchParams(window.location.search);
-  const refParam = urlParams.get('ref') || 'direct';
-
-  function trackEvent(slideNum, slideTitle, eventType, duration) {
-    try {
-      fetch(TRACK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          proposal_id: PROPOSAL_ID,
-          session_id: sessionId,
-          slide_number: slideNum || 0,
-          slide_title: slideTitle || '',
-          event_type: eventType,
-          duration_seconds: duration || null,
-          referrer: refParam
-        }),
-        keepalive: true
-      }).catch(function(){});
-    } catch(e) {}
-  }
-
-  // Fire page open event
-  trackEvent(0, 'welcome', 'onboarding_opened');
-
-  // Tab time tracking
-  let currentTab = 'welcome';
-  let tabEnterTime = Date.now();
-  const tabIndex = { welcome: 0, setup: 1, try: 2, resources: 3, practices: 4, tracker: 5, glossary: 6 };
-
-  function flushTabTime() {
-    const seconds = Math.round((Date.now() - tabEnterTime) / 1000);
-    if (seconds >= 2) {
-      trackEvent(tabIndex[currentTab] || 0, currentTab, 'time_on_tab', seconds);
-    }
-  }
-
-  // Flush time on page unload
-  window.addEventListener('beforeunload', flushTabTime);
-
-  // ── Tab switching ──
-  const tabs = document.querySelectorAll('.tab');
-  const panels = document.querySelectorAll('.panel');
-
-  function switchTab(tabName) {
-    // Flush time on previous tab
-    flushTabTime();
-
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabName));
-    window.location.hash = tabName;
+  function switchEditor(editorName) {
+    editorTabs.forEach(function(t) {
+      var isActive = t.dataset.editor === editorName;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    editorPanes.forEach(function(p) {
+      if (p.id === 'pane-usecases') return; // always hidden via inline style
+      var isActive = p.id === 'pane-' + editorName;
+      if (isActive) {
+        p.classList.add('active');
+        p.style.display = '';
+      } else {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      }
+    });
+    var params = new URLSearchParams(window.location.search);
+    params.set('editor', editorName);
+    params.delete('section');
+    history.replaceState(null, '', '?' + params.toString());
     window.scrollTo(0, 0);
-
-    // Track tab view
-    currentTab = tabName;
-    tabEnterTime = Date.now();
-    trackEvent(tabIndex[tabName] || 0, tabName, 'tab_viewed');
-  }
-
-  tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
-
-  // Hash routing
-  function handleHash() {
-    const hash = window.location.hash.replace('#', '');
-    if (hash && document.getElementById('panel-' + hash)) {
-      switchTab(hash);
+    trackEvent('editor_tab_viewed', editorName, editorName);
+    // Fire slide_viewed for the first active section in this pane
+    // (IntersectionObserver may not re-fire for elements shown via display:block)
+    var pane = document.getElementById('pane-' + editorName);
+    if (pane) {
+      var firstSection = pane.querySelector('section[data-slide].active');
+      if (firstSection) {
+        var title = firstSection.getAttribute('data-slide-title') || firstSection.id;
+        if (!viewed[title]) {
+          viewed[title] = true;
+          send('slide_viewed', title, {context: 'tab-switch'});
+        }
+      }
     }
   }
-  handleHash();
-  window.addEventListener('hashchange', handleHash);
+
+  // Initialize: hide all panes except claude
+  editorPanes.forEach(function(p) {
+    if (p.id === 'pane-claude') { p.classList.add('active'); p.style.display = ''; }
+    else if (p.id !== 'pane-usecases') { p.classList.remove('active'); p.style.display = 'none'; }
+  });
+
+  editorTabs.forEach(function(t) {
+    t.addEventListener('click', function() { switchEditor(t.dataset.editor); });
+  });
+
+  // ── Section tab switching ──
+  var sectionTabs = document.querySelectorAll('.section-tab');
+
+  function switchSection(pane, sectionName) {
+    var paneTabs = document.querySelectorAll('[data-pane="' + pane + '"]');
+    var targetPanelId = null;
+    paneTabs.forEach(function(t) {
+      var isActive = t.dataset.section === sectionName;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      if (isActive) targetPanelId = t.getAttribute('aria-controls');
+    });
+    var paneEl = document.getElementById('pane-' + pane);
+    if (paneEl) {
+      paneEl.querySelectorAll('.section-panel').forEach(function(p) {
+        p.classList.toggle('active', p.id === targetPanelId);
+      });
+    }
+    var params = new URLSearchParams(window.location.search);
+    params.set('section', sectionName);
+    history.replaceState(null, '', '?' + params.toString());
+    window.scrollTo(0, 0);
+    trackEvent('section_tab_viewed', pane + '-' + sectionName, pane + '/' + sectionName);
+    updateProgress();
+  }
+
+  sectionTabs.forEach(function(t) {
+    t.addEventListener('click', function() { switchSection(t.dataset.pane, t.dataset.section); });
+  });
+
+  // ── Restore state from URL ──
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var VALID_EDITORS = ['claude', 'cursor', 'resources', 'salesforce'];
+    var editor = params.get('editor');
+    if (!editor || !VALID_EDITORS.includes(editor)) editor = 'claude';
+    var section = params.get('section');
+    switchEditor(editor);
+    // Default section per pane
+    var defaultSections = { claude: 'welcome', cursor: 'welcome', salesforce: 'strategy', resources: null };
+    var resolvedSection = section || defaultSections[editor];
+    if (resolvedSection) {
+      var tab = document.querySelector('[data-pane="' + editor + '"][data-section="' + resolvedSection + '"]');
+      if (tab) switchSection(editor, resolvedSection);
+    }
+  })();
 
   // ── Copy to clipboard ──
   window.copyCode = function(id) {
-    const block = document.getElementById(id);
-    const text = block.innerText.replace('Copy', '').trim();
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = block.querySelector('.copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 2000);
-    });
-  };
-
-  // ── Accordion ──
-  window.toggleAccordion = function(header) {
-    header.parentElement.classList.toggle('open');
+    var block = document.getElementById(id);
+    var text = block.innerText.replace('Copy', '').replace('Copied!', '').trim();
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = block.querySelector('.copy-btn');
+      if (btn) {
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      }
+    }).catch(function() {});
   };
 
   // ── Tracker with localStorage ──
-  const STORAGE_KEY = 'mulesoft-claude-onboarding-tracker';
+  var STORAGE_KEY = 'mulesoft-anypoint-onboarding-tracker';
 
   function getState() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-    catch { return {}; }
+    catch(e) { return {}; }
   }
 
   function saveState(state) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
   }
 
   function updateProgress() {
-    const state = getState();
-    const items = document.querySelectorAll('.check-item');
-    let total = items.length;
-    let done = 0;
+    var state = getState();
+    var items = document.querySelectorAll('.check-item');
+    var total = items.length;
+    var done = 0;
 
-    items.forEach(item => {
-      const key = item.dataset.key;
-      const cb = item.querySelector('input[type="checkbox"]');
+    items.forEach(function(item) {
+      var key = item.dataset.key;
+      var cb = item.querySelector('input[type="checkbox"]');
+      if (!cb) return;
       if (state[key]) {
         cb.checked = true;
         item.classList.add('done');
@@ -1828,55 +2244,141 @@ EOF
       }
     });
 
-    const pct = Math.round((done / total) * 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressText').textContent = pct + '%';
+    var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    var fill = document.getElementById('progressFill');
+    var text = document.getElementById('progressText');
+    if (fill) { fill.style.width = pct + '%'; fill.parentElement.setAttribute('aria-valuenow', pct); }
+    if (text) text.textContent = pct + '%';
 
-    // Section counts
-    const sections = [
+    var sections = [
       { prefix: 'setup-', el: 'setupCount', total: 4 },
       { prefix: 'first-', el: 'firstCount', total: 5 },
       { prefix: 'adv-', el: 'advCount', total: 3 }
     ];
-    sections.forEach(s => {
-      let c = 0;
-      for (let i = 1; i <= s.total; i++) { if (state[s.prefix + i]) c++; }
-      document.getElementById(s.el).textContent = c + '/' + s.total;
+    sections.forEach(function(s) {
+      var c = 0;
+      for (var i = 1; i <= s.total; i++) { if (state[s.prefix + i]) c++; }
+      var el = document.getElementById(s.el);
+      if (el) el.textContent = c + '/' + s.total;
     });
   }
 
-  document.querySelectorAll('.check-item').forEach(item => {
-    const cb = item.querySelector('input[type="checkbox"]');
-    const key = item.dataset.key;
+  document.querySelectorAll('.check-item').forEach(function(item) {
+    var cb = item.querySelector('input[type="checkbox"]');
+    if (!cb) return;
+    var key = item.dataset.key;
 
-    item.addEventListener('click', (e) => {
-      if (e.target.tagName === 'INPUT') return; // let native handle
+    item.addEventListener('click', function(e) {
+      if (e.target.tagName === 'INPUT') return;
       cb.checked = !cb.checked;
       cb.dispatchEvent(new Event('change'));
     });
 
-    cb.addEventListener('change', () => {
-      const state = getState();
+    cb.addEventListener('change', function() {
+      var state = getState();
       state[key] = cb.checked;
       saveState(state);
       updateProgress();
-      // Track checklist completion
-      if (cb.checked) {
-        trackEvent(tabIndex['tracker'] || 5, 'checklist:' + key, 'checklist_completed');
-      }
+      if (cb.checked) trackEvent('checklist_completed', 'checklist:' + key, key);
     });
   });
 
   window.resetTracker = function() {
     if (confirm('Reset all progress? This cannot be undone.')) {
-      localStorage.removeItem(STORAGE_KEY);
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
       updateProgress();
     }
   };
 
   updateProgress();
+
+  // ── Engagement Tracking ──
+  var BEACON = 'https://smokin-territory.vercel.app/api/beacon';
+  var PID = 'mulesoft-anypoint-onboarding';
+  var sid = sessionStorage.getItem('st_obd_sid');
+  if (!sid) {
+    sid = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+    sessionStorage.setItem('st_obd_sid', sid);
+  }
+  var ref = new URLSearchParams(window.location.search).get('ref') || document.referrer || '';
+
+  function send(eventType, slideTitle, meta) {
+    var payload = JSON.stringify({
+      proposal_id: PID,
+      session_id: sid,
+      event_type: eventType,
+      slide_number: 0,
+      slide_title: slideTitle || '',
+      duration_seconds: null,
+      referrer: ref,
+      metadata: meta || {}
+    });
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(BEACON, new Blob([payload], {type: 'text/plain;charset=UTF-8'}));
+      } else {
+        fetch(BEACON, {method:'POST', body:payload, headers:{'Content-Type':'text/plain;charset=UTF-8'}, keepalive:true}).catch(function(){});
+      }
+    } catch(e) {}
+  }
+
+  function trackEvent(eventType, slideTitle, context) {
+    send(eventType, slideTitle, {context: context || ''});
+  }
+
+  // Page open
+  send('proposal_opened', 'page-load', {viewport_width: window.innerWidth});
+
+  // Section view tracking via IntersectionObserver
+  var viewed = {};
+  var sections = document.querySelectorAll('section[data-slide]');
+  if (sections.length && window.IntersectionObserver) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var title = entry.target.getAttribute('data-slide-title') || entry.target.id;
+        if (!viewed[title]) {
+          viewed[title] = true;
+          send('slide_viewed', title, {});
+        }
+      });
+    }, {threshold: 0.4});
+    sections.forEach(function(s) { obs.observe(s); });
+  }
+
+  // CTA click tracking
+  document.addEventListener('click', function(e) {
+    var cta = e.target.closest('[data-cta]');
+    if (cta) {
+      var text = cta.getAttribute('data-cta-text') || cta.textContent.trim().slice(0, 100);
+      send('cta_clicked', text, {cta_text: text});
+    }
+  });
+
+  // Session summary on unload
+  var sessionStart = Date.now();
+  var summarySent = false;
+  function sendSummary() {
+    if (summarySent) return;
+    summarySent = true;
+    send('session_summary', 'exit', {duration_seconds: Math.round((Date.now() - sessionStart) / 1000)});
+  }
+  window.addEventListener('pagehide', sendSummary);
+  window.addEventListener('beforeunload', sendSummary);
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') sendSummary();
+  });
+
+  // Vercel Analytics bootstrap
+  window.va = window.va || function() { (window.vaq = window.vaq || []).push(arguments); };
+
 })();
 </script>
+
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+<!-- Vercel Speed Insights -->
+<script defer src="/_vercel/speed-insights/script.js"></script>
 
 </body>
 </html>
