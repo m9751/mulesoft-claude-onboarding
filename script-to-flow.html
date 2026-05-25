@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Script to Flow — MuleSoft DataWeave Pattern</title>
+<style>
+  :root {
+    --bg-page:      #EEF4FF;
+    --bg-content:   #FFFFFF;
+    --bg-subtle:    #EAF5FE;
+    --bg-header:    #032D60;
+    --text-primary:   #032D60;
+    --text-body:      #1B3A5C;
+    --text-muted:     #5C6A7F;
+    --text-on-dark:   #FFFFFF;
+    --text-on-dark-2: #CFE9FE;
+    --blue:      #0176D3;
+    --blue-dark: #032D60;
+    --blue-hero: #0D9DDA;
+    --teal:      #04E1CB;
+    --orange:    #FE9339;
+    --green:     #41B658;
+    --red:       #EA001E;
+    --border:    #CFE9FE;
+    --border-strong: #0B5CAB;
+    --font-sans: 'Salesforce Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+    --radius: 8px;
+    --shadow: 0 1px 4px rgba(3,45,96,0.10);
+    --shadow-lg: 0 4px 16px rgba(3,45,96,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-page);
+    color: var(--text-body);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--bg-header);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-badge {
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .header-title {
+    color: var(--text-on-dark);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .header-sub {
+    color: var(--text-on-dark-2);
+    font-size: 13px;
+    margin-left: auto;
+  }
+
+  /* ── Layout ── */
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Problem Statement ── */
+  .problem-block {
+    background: var(--bg-content);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--orange);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    box-shadow: var(--shadow);
+  }
+  .problem-block h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+  .problem-block p {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.7;
+  }
+  .problem-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .tag {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .tag-red   { color: var(--red);   border-color: var(--red);   background: #FFF0F2; }
+  .tag-orange{ color: #B55000; border-color: var(--orange); background: #FFF5EB; }
+  .tag-muted { color: var(--text-muted); border-color: #C0CCE0; background: #F5F8FF; }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  /* ── Flow Diagram ── */
+  .diagram-wrap {
+    background: var(--bg-content);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    margin-bottom: 36px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .diagram-wrap h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  /* SVG Flow */
+  .flow-svg {
+    display: block;
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  /* ── Annotation callout ── */
+  .annotation-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .annotation {
+    flex: 1;
+    min-width: 200px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--text-body);
+  }
+  .annotation strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  /* ── Code Comparison ── */
+  .code-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 640px) {
+    .code-compare { grid-template-columns: 1fr; }
+    .page { padding: 24px 16px 60px; }
+    .problem-block { padding: 18px 16px; }
+    .diagram-wrap { padding: 20px 12px; }
+    .annotation-row { flex-direction: column; }
+    .callout { flex-direction: column; gap: 10px; padding: 16px; }
+    .header { padding: 12px 16px; flex-wrap: wrap; gap: 6px; }
+    .header-sub { display: none; }
+  }
+  .code-panel {
+    background: var(--bg-content);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .code-panel-header {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .code-panel-header.before {
+    background: #FFF0F2;
+    color: var(--red);
+    border-bottom: 1px solid #FACCCD;
+  }
+  .code-panel-header.after {
+    background: #F0FFF4;
+    color: #1A6B38;
+    border-bottom: 1px solid #B3DFBE;
+  }
+  .code-panel-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-red   { background: var(--red); }
+  .dot-green { background: var(--green); }
+
+  pre {
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+    overflow-x: auto;
+    background: #F8FAFF;
+    color: var(--text-body);
+  }
+  .code-panel.after pre { background: #F4FBF6; }
+
+  .kw  { color: #0176D3; font-weight: 600; }   /* keyword */
+  .fn  { color: #7B0EA0; }                       /* function */
+  .str { color: #1A6B38; }                       /* string */
+  .cm  { color: #9BADC0; font-style: italic; }   /* comment */
+  .op  { color: #B55000; }                       /* operator */
+  .num { color: #EA001E; }                       /* number/bad */
+  .dw  { color: #032D60; font-weight: 600; }     /* dataweave keyword */
+  .dwf { color: #0176D3; }                       /* dataweave function */
+  .dwt { color: #04A29A; }                       /* dataweave type */
+
+  /* ── Self-heal callout ── */
+  .callout {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-strong);
+    border-left: 4px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .callout-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .callout h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .callout p {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .callout code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: rgba(1,118,211,0.08);
+    color: var(--blue-dark);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .footer a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Beacon tracking -->
+<script>
+  const TRACK_URL = 'https://cms-api-hub.vercel.app/api/track-event';
+  const PROPOSAL_ID = 'script-to-flow-rxbenefits';
+
+  function track(event, data) {
+    try {
+      const payload = JSON.stringify({
+        proposal_id: PROPOSAL_ID,
+        event,
+        ...data,
+        ts: Date.now(),
+        url: location.href
+      });
+      navigator.sendBeacon(TRACK_URL, new Blob([payload], { type: 'application/json' }));
+    } catch(e) {}
+  }
+
+  // Page load
+  window.addEventListener('DOMContentLoaded', () => {
+    track('page_view', { referrer: document.referrer });
+
+    // Track CTA clicks
+    document.querySelectorAll('[data-cta]').forEach(el => {
+      el.addEventListener('click', () => {
+        track('cta_click', { cta: el.dataset.cta });
+      });
+    });
+
+    // Track section impressions via IntersectionObserver
+    const seen = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const slide = entry.target.dataset.slide;
+          if (slide && !seen.has(slide)) {
+            seen.add(slide);
+            track('section_view', { slide });
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('[data-slide]').forEach(el => observer.observe(el));
+  });
+
+  // Scroll depth
+  let maxScroll = 0;
+  window.addEventListener('scroll', () => {
+    const pct = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+    if (pct > maxScroll + 25) {
+      maxScroll = pct;
+      track('scroll_depth', { pct });
+    }
+  });
+</script>
+
+<header class="header">
+  <span class="header-badge">MuleSoft</span>
+  <span class="header-title">From Script to Flow</span>
+  <span class="header-sub">DataWeave Pattern — Legacy Integration Modernization</span>
+</header>
+
+<main class="page">
+
+  <!-- ── 1. Problem Statement ── -->
+  <div class="problem-block" data-slide="problem">
+    <h2>The Script That Ate Your Sprint</h2>
+    <p>
+      Most teams inherit it eventually: a monolithic transformation script that maps data between two systems with completely different models. It works — until it doesn't. Schema drift breaks it silently. A failed push leaves records in an unknown state. Debugging means reading thousands of lines of imperative logic with no observability. The fix is always a patch on top of a patch.
+    </p>
+    <div class="problem-tags">
+      <span class="tag tag-red">No error recovery</span>
+      <span class="tag tag-red">Hours to comprehend</span>
+      <span class="tag tag-orange">Schema drift breaks silently</span>
+      <span class="tag tag-orange">Zero observability</span>
+      <span class="tag tag-muted">Blocks every sprint</span>
+      <span class="tag tag-muted">2–3 dev team overhead</span>
+    </div>
+  </div>
+
+  <!-- ── 2. Architecture Diagram ── -->
+  <div class="diagram-wrap" data-slide="architecture">
+    <p class="section-label">Architecture</p>
+    <h2>What the Flow Looks Like</h2>
+
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <svg class="flow-svg" viewBox="0 0 860 260" style="min-width:640px;" xmlns="http://www.w3.org/2000/svg" aria-label="MuleSoft integration flow diagram">
+
+      <!-- Node: External API -->
+      <g transform="translate(10,60)">
+        <rect width="130" height="80" rx="8" fill="#EAF5FE" stroke="#0B5CAB" stroke-width="1.5"/>
+        <text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">External API</text>
+        <text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">(AWS / Standard</text>
+        <text x="65" y="60" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">REST Endpoint)</text>
+      </g>
+
+      <!-- Arrow 1 -->
+      <line x1="141" y1="100" x2="178" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="158" y="92" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#5C6A7F">HTTP</text>
+
+      <!-- Node: MuleSoft SAPI -->
+      <g transform="translate(179,50)">
+        <rect width="130" height="100" rx="8" fill="#032D60" stroke="#032D60" stroke-width="1.5"/>
+        <text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">MuleSoft</text>
+        <text x="65" y="44" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Anypoint Platform</text>
+        <text x="65" y="64" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#04E1CB">Scheduler + Watermark</text>
+        <text x="65" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#CFE9FE">only new records processed</text>
+      </g>
+
+      <!-- Arrow 2 -->
+      <line x1="310" y1="100" x2="347" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Node: DataWeave -->
+      <g transform="translate(348,45)">
+        <rect width="160" height="110" rx="8" fill="#7B0EA0" stroke="#5A0A76" stroke-width="1.5"/>
+        <text x="80" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">DataWeave</text>
+        <text x="80" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Transformation Layer</text>
+        <text x="80" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Schema mapping · Type coercion</text>
+        <text x="80" y="82" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#EDD9F5">Null handling · Enrichment</text>
+        <text x="80" y="100" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-style="italic" fill="#C8A0D8">written in Cursor with AI assist</text>
+      </g>
+
+      <!-- Arrow 3 -->
+      <line x1="509" y1="100" x2="546" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Node: Self-Heal Loop (above arrow) -->
+      <g transform="translate(510,10)">
+        <rect width="120" height="30" rx="6" fill="#FFF5EB" stroke="#FE9339" stroke-width="1.5"/>
+        <text x="60" y="14" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#B55000">Self-Heal Loop</text>
+        <text x="60" y="26" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#B55000">fail → auto-correct → retry</text>
+      </g>
+      <!-- Dotted loop line -->
+      <path d="M 570 100 Q 570 50 570 42" stroke="#FE9339" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arrow-orange)"/>
+      <path d="M 570 42 Q 570 100 610 100" stroke="#FE9339" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/>
+
+      <!-- Node: Salesforce -->
+      <g transform="translate(547,55)">
+        <rect width="130" height="90" rx="8" fill="#0176D3" stroke="#0B5CAB" stroke-width="1.5"/>
+        <text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Salesforce</text>
+        <text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Upsert / Bulk API</text>
+        <text x="65" y="62" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#CFE9FE">Error handler scope</text>
+        <text x="65" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#CFE9FE">retry on failure</text>
+      </g>
+
+      <!-- Arrow 4 -->
+      <line x1="678" y1="100" x2="715" y2="100" stroke="#0176D3" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Node: Salesforce Objects -->
+      <g transform="translate(716,60)">
+        <rect width="130" height="80" rx="8" fill="#EAF5FE" stroke="#0B5CAB" stroke-width="1.5"/>
+        <text x="65" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">Salesforce</text>
+        <text x="65" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#032D60">Objects</text>
+        <text x="65" y="64" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#5C6A7F">Clean · Structured</text>
+      </g>
+
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#0176D3"/>
+        </marker>
+        <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#FE9339"/>
+        </marker>
+      </defs>
+
+      <!-- Bottom labels -->
+      <text x="44" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Source</text>
+      <text x="243" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Orchestration</text>
+      <text x="428" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Transform</text>
+      <text x="612" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Destination</text>
+      <text x="781" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#9BADC0">Target</text>
+
+      <!-- Omni Gateway governance annotation -->
+      <g transform="translate(179,155)">
+        <!-- Brace spanning MuleSoft + DataWeave + Salesforce nodes -->
+        <path d="M 0,0 L 0,10 Q 0,14 4,14 L 245,14 Q 249,14 249,10 L 249,0"
+              stroke="#0176D3" stroke-width="1.2" stroke-dasharray="4,3" fill="none"/>
+        <polygon points="124,14 120,22 128,22" fill="#0176D3"/>
+        <!-- Label -->
+        <rect x="74" y="22" width="102" height="18" rx="4" fill="#EAF5FE" stroke="#0176D3" stroke-width="1"/>
+        <text x="125" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#0176D3">Omni Gateway</text>
+        <text x="125" y="50" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#5C6A7F">governs this layer →  agent-ready</text>
+      </g>
+    </svg>
+    </div>
+
+    <div class="annotation-row">
+      <div class="annotation">
+        <strong>Watermark Pattern</strong>
+        Only records newer than the last successful run are fetched. No more full-table scans. Runtime drops from hours to minutes.
+      </div>
+      <div class="annotation">
+        <strong>DataWeave — AI-assisted</strong>
+        Declarative transformation replaces imperative script logic. Written and maintained in Cursor using MuleSoft Vibes. Testable, version-controlled, readable.
+      </div>
+      <div class="annotation">
+        <strong>Error Recovery Pattern</strong>
+        On push failure, the flow catches the fault, logs it, and can re-attempt with corrected values for recoverable errors. Reduces unplanned on-call incidents — non-recoverable failures still require human review.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. Before / After Code ── -->
+  <p class="section-label">Code Comparison</p>
+  <div class="code-compare" data-slide="code-compare">
+
+    <!-- BEFORE -->
+    <div class="code-panel">
+      <div class="code-panel-header before">
+        <span class="dot dot-red"></span>
+        Before — Legacy Script (Python / JS)
+      </div>
+<pre><span class="cm"># 847 lines. No tests. Last touched 18 months ago.</span>
+
+<span class="kw">def</span> <span class="fn">transform_record</span>(raw):
+    result = {}
+
+    <span class="cm"># field name mismatch — AWS uses snake_case</span>
+    <span class="cm"># Salesforce wants PascalCase</span>
+    <span class="kw">if</span> raw.get(<span class="str">"member_id"</span>) <span class="kw">is not</span> <span class="kw">None</span>:
+        result[<span class="str">"MemberId__c"</span>] = str(raw[<span class="str">"member_id"</span>])
+    <span class="kw">else</span>:
+        result[<span class="str">"MemberId__c"</span>] = <span class="str">""</span>  <span class="cm"># hope this is ok</span>
+
+    <span class="cm"># date format is different between systems</span>
+    <span class="kw">try</span>:
+        d = raw[<span class="str">"claim_date"</span>]
+        result[<span class="str">"ClaimDate__c"</span>] = d[:10] + <span class="str">"T00:00:00Z"</span>
+    <span class="kw">except</span>:
+        result[<span class="str">"ClaimDate__c"</span>] = <span class="kw">None</span>  <span class="cm"># swallows all errors</span>
+
+    <span class="cm"># nested claim lines — 40 more lines of this</span>
+    lines = raw.get(<span class="str">"claim_lines"</span>, [])
+    result[<span class="str">"LineCount__c"</span>] = len(lines)
+    result[<span class="str">"ClaimLines__c"</span>] = <span class="str">"|"</span>.join(
+        [str(l.get(<span class="str">"ndc_code"</span>,<span class="str">""</span>)) <span class="kw">for</span> l <span class="kw">in</span> lines]
+    )
+
+    <span class="cm"># FIXME: drug_type enum not mapped — 4 open values</span>
+    <span class="cm"># FIXME: negative amount crashes downstream</span>
+    <span class="cm"># no tests, no fallback, brittle on schema change</span>
+    <span class="kw">return</span> result</pre>
+    </div>
+
+    <!-- AFTER -->
+    <div class="code-panel after">
+      <div class="code-panel-header after">
+        <span class="dot dot-green"></span>
+        After — DataWeave (written in Cursor)
+      </div>
+<pre><span class="cm">// Generated with MuleSoft Vibes in Cursor</span>
+<span class="cm">// Prompt: "map AWS claim payload to SF object"</span>
+
+<span class="dw">%dw 2.0</span>
+<span class="dw">output</span> <span class="dwt">application/json</span>
+<span class="kw">var</span> safeLines = (claim) <span class="op">-></span> claim.claim_lines <span class="dwf">default</span> []
+
+<span class="dw">---</span>
+payload <span class="dwf">map</span> (claim) <span class="op">-></span> {
+  MemberId__c:   claim.member_id <span class="dwf">default</span> <span class="str">""</span>,
+  ClaimDate__c:  <span class="dwf">try</span>(() <span class="op">-></span>
+                   claim.claim_date <span class="dwf">as</span> <span class="dwt">Date</span> <span class="dwf">{format: "yyyy-MM-dd"}</span>
+                     <span class="dwf">as</span> <span class="dwt">DateTime</span>
+                 ).result <span class="dwf">default</span> <span class="kw">null</span>,
+  LineCount__c:  <span class="dwf">sizeOf</span>(safeLines(claim)),
+  ClaimLines__c: safeLines(claim)
+                   <span class="dwf">map</span> (l) <span class="op">-></span> l.ndc_code <span class="dwf">default</span> <span class="str">""</span>
+                   <span class="dwf">joinBy</span> <span class="str">"|"</span>,
+  DrugType__c:   claim.drug_type <span class="dwf">default</span> <span class="str">"Unknown"</span> <span class="dwf">match</span> {
+    <span class="kw">case</span> <span class="str">"RX"</span>  <span class="op">-></span> <span class="str">"Prescription"</span>
+    <span class="kw">case</span> <span class="str">"OTC"</span> <span class="op">-></span> <span class="str">"Over-the-Counter"</span>
+    <span class="kw">else</span>       <span class="op">-></span> <span class="str">"Unknown"</span>
+  }
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── 4. Self-Heal Callout ── -->
+  <div class="callout" data-slide="self-heal">
+    <div class="callout-icon">🔁</div>
+    <div>
+      <h3>The Error Recovery Pattern — What Replaces the Manual Fix</h3>
+      <p>
+        When a Salesforce push fails (validation error, field mismatch, duplicate rule), Mule's built-in <code>Error Handler</code> scope catches the fault, logs it with full context, and can re-attempt with corrected values — all within the same flow. The retry and correction logic is custom-built in DataWeave, but the scaffolding is already there: you're writing rules, not plumbing. Recoverable errors are retried automatically; unrecoverable records land in a structured error log (or an <code>Anypoint MQ</code> queue if that's in your subscription) for human review. Significantly reduces unplanned on-call incidents for recoverable failure classes.
+      </p>
+      <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">
+        <em>Note: error handler scopes and retry logic require explicit flow configuration. Anypoint MQ dead-letter queuing requires an Anypoint MQ subscription. Non-recoverable failures (network partitions, Salesforce org outages) still require human intervention.</em>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── 4b. Omni Gateway Horizon ── -->
+  <div style="background:var(--bg-content);border:1px solid var(--border-strong);border-left:4px solid var(--blue);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px;box-shadow:var(--shadow);" data-slide="omni-gateway">
+    <div style="display:flex;align-items:flex-start;gap:16px;">
+      <div style="flex-shrink:0;margin-top:2px;">
+        <div style="width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="9" r="7.5" stroke="white" stroke-width="1.5"/>
+            <path d="M9 5v4l2.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="1.5" fill="white"/>
+          </svg>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">What's Next — Omni Gateway</div>
+        <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">Your flow is now an API. Make it agent-ready.</div>
+        <p style="font-size:13px;color:var(--text-body);line-height:1.7;margin-bottom:12px;">
+          Once the script becomes a Mule flow, <a href="https://docs.mulesoft.com/gateway/latest/" data-cta="omni-gateway-docs" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;text-decoration:none;border-bottom:1px solid var(--border-strong);">MuleSoft Omni Gateway</a>'s MCP Bridge can expose it as a tool any AI agent — Agentforce, Claude, Copilot — can call directly. With configured gateway policies: PHI can be masked before it leaves your network, token spend can be capped per app or team, and no application rebuild is required to add governance.
+        </p>
+        <p style="font-size:12px;margin-bottom:12px;">
+          <a href="https://docs.mulesoft.com/gateway/latest/flex-gateway-getting-started" data-cta="omni-gateway-mcp-bridge" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;font-weight:600;">→ MCP Bridge: expose any API as an agent tool</a>
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">MCP Bridge</span>
+          <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">LLM Routing</span>
+          <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">PHI Masking</span>
+          <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">Token Cost Control</span>
+          <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);color:var(--blue);background:var(--bg-subtle);">No Rip-and-Replace</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. CTA ── -->
+  <div style="background:var(--bg-header);border-radius:var(--radius);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;" data-slide="cta">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-on-dark-2);margin-bottom:6px;">Ready to try it in your org?</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text-on-dark);">Connect Cursor to Anypoint in under 30 minutes</div>
+      <div style="font-size:13px;color:var(--text-on-dark-2);margin-top:4px;">Use the MCP server to access Exchange, API Manager, and CloudHub directly from your editor.</div>
+    </div>
+    <a href="index-v2.html?editor=cursor&section=setup"
+       data-cta="cursor-setup-link"
+       style="background:var(--blue);color:#fff;font-size:13px;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;white-space:nowrap;flex-shrink:0;">
+      Set Up Cursor + Anypoint →
+    </a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>MuleSoft from Salesforce · <a href="https://anypoint.mulesoft.com/exchange/" data-cta="exchange-link" target="_blank" rel="noopener">Anypoint Exchange</a> · <a href="https://docs.mulesoft.com/dataweave/latest/" data-cta="dataweave-docs" target="_blank" rel="noopener">DataWeave Docs</a></p>
+</footer>
+
+</body>
+</html>
