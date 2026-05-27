@@ -2322,7 +2322,9 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
     } catch(e) {}
   }
 
+  var editorTabSwitches = 0;
   function trackEvent(eventType, slideTitle, context) {
+    if (eventType === 'editor_tab_viewed') editorTabSwitches++;
     send(eventType, slideTitle, {context: context || ''});
   }
 
@@ -2331,15 +2333,26 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
 
   // Section view tracking via IntersectionObserver
   var viewed = {};
+  var dwellStart = {};   // title → timestamp when section entered viewport
+  var dwellTotal = {};   // title → accumulated ms
+  var ctaClickCount = 0;
+
   var sections = document.querySelectorAll('section[data-slide]');
   if (sections.length && window.IntersectionObserver) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
         var title = entry.target.getAttribute('data-slide-title') || entry.target.id;
-        if (!viewed[title]) {
-          viewed[title] = true;
-          send('slide_viewed', title, {});
+        if (entry.isIntersecting) {
+          if (!viewed[title]) {
+            viewed[title] = true;
+            send('slide_viewed', title, {});
+          }
+          dwellStart[title] = Date.now();
+        } else {
+          if (dwellStart[title]) {
+            dwellTotal[title] = (dwellTotal[title] || 0) + (Date.now() - dwellStart[title]);
+            delete dwellStart[title];
+          }
         }
       });
     }, {threshold: 0.4});
@@ -2350,10 +2363,36 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   document.addEventListener('click', function(e) {
     var cta = e.target.closest('[data-cta]');
     if (cta) {
+      ctaClickCount++;
       var text = cta.getAttribute('data-cta-text') || cta.textContent.trim().slice(0, 100);
       send('cta_clicked', text, {cta_text: text});
     }
   });
+
+  // Compute top_section from accumulated dwell + in-progress dwell
+  function getTopSection() {
+    var totals = {};
+    Object.keys(dwellTotal).forEach(function(t) { totals[t] = dwellTotal[t]; });
+    // add any currently-visible sections
+    Object.keys(dwellStart).forEach(function(t) {
+      totals[t] = (totals[t] || 0) + (Date.now() - dwellStart[t]);
+    });
+    var best = null, bestMs = 0;
+    Object.keys(totals).forEach(function(t) {
+      if (totals[t] > bestMs) { bestMs = totals[t]; best = t; }
+    });
+    return best;
+  }
+
+  // Compute engagement_score 0–100
+  // Components: time on page (40pts), sections viewed (30pts), cta clicks (20pts), tab switches (10pts)
+  function computeScore(durationSec) {
+    var timeScore  = Math.min(40, Math.round((durationSec / 300) * 40));   // 5min = full 40
+    var viewScore  = Math.min(30, Math.round((Object.keys(viewed).length / 6) * 30)); // 6 sections = full 30
+    var ctaScore   = Math.min(20, ctaClickCount * 10);
+    var tabScore   = Math.min(10, editorTabSwitches * 5);
+    return timeScore + viewScore + ctaScore + tabScore;
+  }
 
   // Session summary on unload
   var sessionStart = Date.now();
@@ -2361,7 +2400,14 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   function sendSummary() {
     if (summarySent) return;
     summarySent = true;
-    send('session_summary', 'exit', {duration_seconds: Math.round((Date.now() - sessionStart) / 1000)});
+    var dur = Math.round((Date.now() - sessionStart) / 1000);
+    send('session_summary', 'exit', {
+      duration_seconds: dur,
+      engagement_score: computeScore(dur),
+      top_section:      getTopSection() || '',
+      cta_clicked_count: ctaClickCount,
+      is_return_visit:  false
+    });
   }
   window.addEventListener('pagehide', sendSummary);
   window.addEventListener('beforeunload', sendSummary);
