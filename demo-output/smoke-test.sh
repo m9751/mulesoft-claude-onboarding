@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+BASE="${1:-https://mulesoft-claude-cursor-onboarding.vercel.app}"
+BEACON="https://smokin-territory.vercel.app/api/beacon"
+PID="mulesoft-anypoint-onboarding"
+SID="smoke_$(date +%s)"
+fail=0
+check() { code=$(curl -s -o /dev/null -w "%{http_code}" "$1"); echo "$([ "$code" = 200 ] && echo OK || echo FAIL) $code $1"; [ "$code" = 200 ] || fail=1; }
+echo "=== Assets ==="
+check "$BASE/demo-output/output.mp4"
+check "$BASE/demo-output/output-hero-silent.mp4"
+html=$(curl -s "$BASE/?editor=cursor")
+for n in output-hero-silent.mp4 output.mp4 onboarding-welcome-hero onboarding-welcome-full; do
+  echo "$html" | grep -q "$n" && echo "OK $n" || { echo "FAIL $n"; fail=1; }
+done
+echo "=== Beacons ==="
+for ev in video_hero_started video_started video_completed video_unmuted; do
+  r=$(curl -s -X POST "$BEACON" -H "Content-Type: text/plain" -d "{\"proposal_id\":\"$PID\",\"session_id\":\"$SID\",\"event_type\":\"$ev\",\"slide_number\":0,\"slide_title\":\"smoke\",\"metadata\":{}}")
+  echo "$r" | grep -q '"ok":true' && echo "OK $ev" || { echo "FAIL $ev"; fail=1; }
+done
+[ $fail -eq 0 ] && echo "SMOKE PASS" || { echo "SMOKE FAIL"; exit 1; }
