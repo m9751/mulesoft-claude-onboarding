@@ -293,6 +293,64 @@
   .capability-card h4 { margin: 0 0 4px; font-size: 14px; color: var(--text-primary); }
   .capability-card p { font-size: 13px; color: var(--text-muted); margin: 0; }
 
+  /* ── Welcome demo videos ── */
+  .onboarding-video-block {
+    margin: 20px 0 28px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-card);
+  }
+  .onboarding-video-block .video-label {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+  }
+  .onboarding-hero-video,
+  .onboarding-full-video {
+    display: block;
+    width: 100%;
+    max-height: 420px;
+    background: #032D60;
+    object-fit: contain;
+  }
+  .onboarding-full-video { display: none; }
+  .onboarding-full-video.is-active { display: block; }
+  .onboarding-hero-video.is-hidden { display: none; }
+  .video-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-subtle);
+    border-top: 1px solid var(--border);
+  }
+  .video-actions button {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--blue);
+    background: var(--blue);
+    color: #fff;
+    cursor: pointer;
+  }
+  .video-actions button:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+  .video-actions button.secondary {
+    background: #fff;
+    color: var(--blue);
+  }
+  .video-actions button.secondary:hover { background: var(--bg-subtle); }
+  .video-hint { font-size: 13px; color: var(--text-muted); margin: 0; }
+
   /* ── CTAs ── */
   .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
 
@@ -829,6 +887,15 @@
   <h2>Welcome</h2>
   <p class="subtitle">Connect Claude Code to MuleSoft Anypoint Platform and run your first Exchange search in under 30 minutes. <span style="color:var(--text-muted);font-weight:400">(Maven deployment setup is optional — skip it until you're ready to deploy.)</span></p>
 
+  <div class="onboarding-video-block" data-video-context="claude-welcome">
+    <div class="video-label">60-second overview (with narration)</div>
+    <video class="onboarding-full-video is-active onboarding-welcome-video" controls playsinline preload="metadata"
+      aria-label="Onboarding walkthrough with narration">
+      <source src="/demo-output/output.mp4" type="video/mp4">
+    </video>
+    <p class="video-hint" style="padding:12px 16px;margin:0">Turn on sound for the full story: pain → Salesforce → outcomes → proof → setup.</p>
+  </div>
+
   <div class="card">
     <p>This guide walks you through everything: creating credentials, connecting Claude Code to Anypoint, and running your first commands. By the end, you'll be able to search Exchange, create Mule projects, generate flows, deploy to CloudHub, and manage APIs — all from your terminal.</p>
   </div>
@@ -1287,6 +1354,15 @@ EOF</div>
 <section id="cursor-welcome" class="section-panel active" role="tabpanel" aria-labelledby="crtab-welcome" data-slide="cursor-welcome" data-slide-title="Cursor Welcome">
   <h2>Cursor + Anypoint</h2>
   <p class="subtitle">Already using Cursor? Connect it to MuleSoft Anypoint Platform and control your integration platform without leaving your editor.</p>
+
+  <div class="onboarding-video-block" data-video-context="cursor-welcome">
+    <div class="video-label">60-second overview (with narration)</div>
+    <video class="onboarding-full-video is-active onboarding-welcome-video" controls playsinline preload="metadata"
+      aria-label="Onboarding walkthrough with narration">
+      <source src="/demo-output/output.mp4" type="video/mp4">
+    </video>
+    <p class="video-hint" style="padding:12px 16px;margin:0">Turn on sound for the full story: pain → Salesforce → outcomes → proof → setup.</p>
+  </div>
 
   <div class="card">
     <p>Cursor supports the Model Context Protocol (MCP) natively. By adding a single configuration file, you can give Cursor's AI agent access to Anypoint Exchange, API Manager, CloudHub, and more — the same 18 tools available in Claude Code, from inside your existing workflow.</p>
@@ -2414,6 +2490,47 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'hidden') sendSummary();
   });
+
+  // ── Welcome video tracking (Claude + Cursor Welcome) ──
+  (function initWelcomeVideos() {
+    document.querySelectorAll('.onboarding-welcome-video').forEach(function(full) {
+      var block = full.closest('[data-video-context]');
+      var context = block ? block.getAttribute('data-video-context') : 'welcome';
+      var fullStarted = false;
+      var fullProgressSent = {};
+
+      function videoSend(kind, meta) {
+        send(kind, context + '-video', Object.assign({video: context}, meta || {}));
+      }
+
+      function trackFullProgress() {
+        if (!full.duration || full.duration <= 0) return;
+        var pct = Math.floor((full.currentTime / full.duration) * 100);
+        [25, 50, 75, 100].forEach(function(mark) {
+          if (pct >= mark && !fullProgressSent[mark]) {
+            fullProgressSent[mark] = true;
+            videoSend('video_progress', {percent: mark, duration_seconds: Math.round(full.currentTime)});
+          }
+        });
+      }
+
+      full.addEventListener('play', function() {
+        if (!fullStarted) {
+          fullStarted = true;
+          videoSend('video_started', {src: 'output.mp4'});
+        }
+      });
+      full.addEventListener('timeupdate', trackFullProgress);
+      full.addEventListener('ended', function() {
+        videoSend('video_completed', {duration_seconds: Math.round(full.duration || 0)});
+      });
+      full.addEventListener('volumechange', function() {
+        if (!full.muted && full.volume > 0) {
+          videoSend('video_unmuted', {});
+        }
+      });
+    });
+  })();
 
   // Vercel Analytics bootstrap
   window.va = window.va || function() { (window.vaq = window.vaq || []).push(arguments); };

@@ -1,0 +1,126 @@
+{
+  "title": "Edition 2 \u2014 sell-first (restored)",
+  "edition": 2,
+  "voice": "en-US-AndrewNeural",
+  "hero_silent": {
+    "duration_per_beat": 5,
+    "beats": [
+      {
+        "id": "h1-outcomes",
+        "image": "captures/capture-cursor-welcome.png",
+        "ken_burns": true
+      },
+      {
+        "id": "h2-exchange",
+        "image": "../screenshots/cursor-agent-exchange-result.png",
+        "ken_burns": true
+      },
+      {
+        "id": "h3-scriptflow",
+        "image": "captures/capture-scriptflow-arch.png",
+        "ken_burns": true
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "01-hook",
+      "layout": "kinetic_pain",
+      "duration": 8,
+      "kind": "title",
+      "narration": "That script everyone is afraid to touch? No tests. Breaks when the schema moves. Stop living across five portals."
+    },
+    {
+      "id": "02-salesforce",
+      "layout": "split_imagine",
+      "duration": 10,
+      "kind": "content",
+      "title": "Your Salesforce developer",
+      "subtitle": "Connect the org to everything around it",
+      "image": "captures/capture-salesforce-strategy.png",
+      "narration": "Your Salesforce dev knows the org. The hard part is everything around it. Connect EHRs, claims, and legacy APIs from the editor they already use."
+    },
+    {
+      "id": "03-outcomes",
+      "layout": "kinetic_outcomes",
+      "duration": 8,
+      "kind": "content",
+      "image": "captures/capture-cursor-welcome.png",
+      "narration": "One MCP hookup. Search Exchange. Scaffold. Deploy. Real work from your editor\u2014not another portal."
+    },
+    {
+      "id": "04-proof-mcp",
+      "layout": "proof_highlight",
+      "duration": 8,
+      "kind": "content",
+      "title": "You will know it works",
+      "subtitle": "Green dot. Eighteen tools.",
+      "image": "../screenshots/cursor-tools-mcps-verified.png",
+      "ken_burns": true,
+      "badges": [
+        {
+          "text": "\u2713 Connected",
+          "style": "background:#CDEFC4;color:#1A6B38;border:1px solid #41B658;"
+        },
+        {
+          "text": "18 tools enabled",
+          "style": "background:#EAF5FE;color:#032D60;border:1px solid #0176D3;"
+        }
+      ],
+      "narration": "Green dot. Eighteen tools. You are live."
+    },
+    {
+      "id": "05-proof-exchange",
+      "layout": "proof_highlight",
+      "duration": 10,
+      "kind": "content",
+      "title": "Live org data in Agent mode",
+      "subtitle": "List Exchange APIs, approve once",
+      "image": "../screenshots/cursor-agent-exchange-result.png",
+      "ken_burns": true,
+      "badges": [
+        {
+          "text": "Live org data",
+          "style": "background:#EAF5FE;color:#032D60;border:1px solid #0176D3;"
+        },
+        {
+          "text": "Approve once",
+          "style": "background:#FFF5EB;color:#B55000;border:1px solid #FE9339;"
+        }
+      ],
+      "narration": "List Exchange APIs in Agent mode. Approve once. Live org data."
+    },
+    {
+      "id": "06-pick-editor",
+      "layout": "editor_tabs",
+      "duration": 8,
+      "kind": "content",
+      "image": "captures/capture-tab-bar.png",
+      "narration": "Pick your lane: Claude Code in the terminal, or Cursor in Agent mode. Same eighteen tools. Different wiring."
+    },
+    {
+      "id": "07-scriptflow",
+      "layout": "image",
+      "duration": 8,
+      "kind": "content",
+      "image": "captures/capture-scriptflow-arch.png",
+      "narration": "Script to Flow: watermarks, DataWeave, error handlers that recover\u2014not midnight pages."
+    },
+    {
+      "id": "08-salesforce",
+      "layout": "image",
+      "duration": 8,
+      "kind": "content",
+      "image": "captures/capture-salesforce-strategy.png",
+      "narration": "Headless 360. MuleSoft control plane. Omni Gateway so agents stay governed."
+    },
+    {
+      "id": "09-cta-inguide",
+      "layout": "cta_inguide",
+      "duration": 6,
+      "kind": "title",
+      "image": "captures/capture-tab-bar.png",
+      "narration": "You are in the guide. Pick a tab. Run setup. Prove it with Exchange. Then build."
+    }
+  ]
+}

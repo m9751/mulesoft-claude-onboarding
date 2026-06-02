@@ -1,0 +1,9 @@
+clips/
+frames/
+audio/
+narration/
+concat*.txt
+output-v3-broken.mp4
+output-glitchy-concat.mp4
+output-mulesoft-brand.mp4
+scenes.v3-broken.json
