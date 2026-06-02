@@ -3,20 +3,24 @@
   "edition": 2,
   "voice": "en-US-AndrewNeural",
   "hero_silent": {
+    "title": "Script-first teaser — developer hook",
     "duration_per_beat": 5,
     "beats": [
       {
-        "id": "h1-outcomes",
-        "image": "captures/capture-cursor-welcome.png",
+        "id": "h1-before-after",
+        "duration": 6,
+        "image": "captures/capture-script-before-after.png",
         "ken_burns": true
       },
       {
-        "id": "h2-exchange",
-        "image": "../screenshots/cursor-agent-exchange-result.png",
+        "id": "h2-legacy-pane",
+        "duration": 5,
+        "image": "captures/capture-script-legacy-panel.png",
         "ken_burns": true
       },
       {
-        "id": "h3-scriptflow",
+        "id": "h3-script-arch",
+        "duration": 5,
         "image": "captures/capture-scriptflow-arch.png",
         "ken_burns": true
       }

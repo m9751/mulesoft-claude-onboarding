@@ -200,7 +200,20 @@ async def capture_live():
         await shot("capture-cursor-welcome.png", 500)
         await page.goto(BASE_URL, wait_until="networkidle")
         await page.click("#etab-scriptflow")
-        await page.wait_for_timeout(400)
+        await page.wait_for_timeout(500)
+        # Developer hook: legacy script pane (Before — Legacy Script)
+        legacy = page.locator('[data-slide="code-compare"] > div').first
+        await legacy.scroll_into_view_if_needed()
+        await page.wait_for_timeout(300)
+        await legacy.screenshot(path=str(CAPTURES / "capture-script-legacy-panel.png"))
+        print("capture:", CAPTURES / "capture-script-legacy-panel.png")
+        compare = page.locator('[data-slide="code-compare"]')
+        await compare.scroll_into_view_if_needed()
+        await shot("capture-script-before-after.png", 500)
+        await page.evaluate("""() => {
+          document.querySelector('#etab-scriptflow').scrollIntoView({block: 'nearest'});
+        }""")
+        await shot("capture-scriptflow-tab.png", 400)
         await page.evaluate("""() => {
           const el = document.querySelector('[data-slide="architecture"]');
           if (el) el.scrollIntoView({block: 'start'});
@@ -299,11 +312,12 @@ def build_full():
     print("Done full:", OUTPUT_FULL, round(probe_duration(OUTPUT_FULL), 1), "s,", words, "words")
 
 def build_hero_silent():
-    dur = float(HERO.get("duration_per_beat", 5))
+    default_dur = float(HERO.get("duration_per_beat", 5))
     clips = []
     for beat in HERO["beats"]:
         raw = beat["image"]
         img = (REPO / raw[3:]) if raw.startswith("../") else (ROOT / raw)
+        dur = float(beat.get("duration", default_dur))
         out = CLIPS_DIR / f"hero-{beat['id']}.mp4"
         make_clip(img, None, out, dur, ken_burns=beat.get("ken_burns", True))
         clips.append(out)
@@ -331,4 +345,13 @@ def main():
     build_hero_silent()
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "hero":
+        CAPTURES.mkdir(parents=True, exist_ok=True)
+        CLIPS_DIR.mkdir(parents=True, exist_ok=True)
+        print("=== Captures (script-first hero) ===")
+        asyncio.run(capture_live())
+        print("=== Hero silent (script-first) ===")
+        build_hero_silent()
+    else:
+        main()
