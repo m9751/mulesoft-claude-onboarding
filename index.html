@@ -293,6 +293,40 @@
   .capability-card h4 { margin: 0 0 4px; font-size: 14px; color: var(--text-primary); }
   .capability-card p { font-size: 13px; color: var(--text-muted); margin: 0; }
 
+  /* ── Welcome demo videos ── */
+  .onboarding-video-block {
+    margin: 20px 0 28px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-card);
+  }
+  .onboarding-video-block .video-label {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+  }
+  .onboarding-hero-video,
+  .onboarding-full-video {
+    display: block;
+    width: 100%;
+    background: #032D60;
+    object-fit: contain;
+  }
+  .onboarding-hero-video { max-height: 320px; }
+  .onboarding-full-video { max-height: 400px; }
+  @media (max-width: 640px) {
+    .onboarding-hero-video { max-height: 220px; }
+    .onboarding-full-video { max-height: 280px; }
+  }
+  .video-hint { font-size: 13px; color: var(--text-muted); margin: 0; padding: 10px 16px 14px; }
+
   /* ── CTAs ── */
   .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
 
@@ -829,6 +863,20 @@
   <h2>Welcome</h2>
   <p class="subtitle">Connect Claude Code to MuleSoft Anypoint Platform and run your first Exchange search in under 30 minutes. <span style="color:var(--text-muted);font-weight:400">(Maven deployment setup is optional — skip it until you're ready to deploy.)</span></p>
 
+  <div class="onboarding-video-block" data-video-context="claude-welcome">
+    <div class="video-label">Script → Flow preview (silent loop)</div>
+    <video class="onboarding-hero-video onboarding-welcome-hero" autoplay muted loop playsinline preload="metadata"
+      aria-label="Silent preview: legacy script, before and after, flow diagram">
+      <source src="/demo-output/output-hero-silent.mp4" type="video/mp4">
+    </video>
+    <div class="video-label" style="border-top:1px solid var(--border)">Full walkthrough (~1 min, with narration)</div>
+    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="none"
+      aria-label="Onboarding walkthrough with narration">
+      <source src="/demo-output/output.mp4" type="video/mp4">
+    </video>
+    <p class="video-hint">Top loops without sound. Press play below and turn volume on for the full story.</p>
+  </div>
+
   <div class="card">
     <p>This guide walks you through everything: creating credentials, connecting Claude Code to Anypoint, and running your first commands. By the end, you'll be able to search Exchange, create Mule projects, generate flows, deploy to CloudHub, and manage APIs — all from your terminal.</p>
   </div>
@@ -1288,6 +1336,20 @@ EOF</div>
   <h2>Cursor + Anypoint</h2>
   <p class="subtitle">Already using Cursor? Connect it to MuleSoft Anypoint Platform and control your integration platform without leaving your editor.</p>
 
+  <div class="onboarding-video-block" data-video-context="cursor-welcome">
+    <div class="video-label">Script → Flow preview (silent loop)</div>
+    <video class="onboarding-hero-video onboarding-welcome-hero" autoplay muted loop playsinline preload="metadata"
+      aria-label="Silent preview: legacy script, before and after, flow diagram">
+      <source src="/demo-output/output-hero-silent.mp4" type="video/mp4">
+    </video>
+    <div class="video-label" style="border-top:1px solid var(--border)">Full walkthrough (~1 min, with narration)</div>
+    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="none"
+      aria-label="Onboarding walkthrough with narration">
+      <source src="/demo-output/output.mp4" type="video/mp4">
+    </video>
+    <p class="video-hint">Top loops without sound. Press play below and turn volume on for the full story.</p>
+  </div>
+
   <div class="card">
     <p>Cursor supports the Model Context Protocol (MCP) natively. By adding a single configuration file, you can give Cursor's AI agent access to Anypoint Exchange, API Manager, CloudHub, and more — the same 18 tools available in Claude Code, from inside your existing workflow.</p>
   </div>
@@ -1737,7 +1799,7 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   <div class="content">
 
 <!-- ── SF: Strategy ── -->
-<section id="sf-strategy" class="section-panel active" role="tabpanel" aria-labelledby="sftab-strategy" data-slide="sf-strategy" data-slide-title="Salesforce Agent Strategy">
+<section id="sf-strategy" class="section-panel" role="tabpanel" aria-labelledby="sftab-strategy" data-slide="sf-strategy" data-slide-title="Salesforce Agent Strategy">
   <h2>The Salesforce + MuleSoft Agent Strategy</h2>
   <p class="subtitle">Salesforce owns MuleSoft. Together they form the complete enterprise AI stack — Salesforce as the data and agent layer, MuleSoft as the integration and governance layer, and your AI editor as the development surface.</p>
 
@@ -2322,7 +2384,9 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
     } catch(e) {}
   }
 
+  var editorTabSwitches = 0;
   function trackEvent(eventType, slideTitle, context) {
+    if (eventType === 'editor_tab_viewed') editorTabSwitches++;
     send(eventType, slideTitle, {context: context || ''});
   }
 
@@ -2331,15 +2395,26 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
 
   // Section view tracking via IntersectionObserver
   var viewed = {};
+  var dwellStart = {};   // title → timestamp when section entered viewport
+  var dwellTotal = {};   // title → accumulated ms
+  var ctaClickCount = 0;
+
   var sections = document.querySelectorAll('section[data-slide]');
   if (sections.length && window.IntersectionObserver) {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
         var title = entry.target.getAttribute('data-slide-title') || entry.target.id;
-        if (!viewed[title]) {
-          viewed[title] = true;
-          send('slide_viewed', title, {});
+        if (entry.isIntersecting) {
+          if (!viewed[title]) {
+            viewed[title] = true;
+            send('slide_viewed', title, {});
+          }
+          dwellStart[title] = Date.now();
+        } else {
+          if (dwellStart[title]) {
+            dwellTotal[title] = (dwellTotal[title] || 0) + (Date.now() - dwellStart[title]);
+            delete dwellStart[title];
+          }
         }
       });
     }, {threshold: 0.4});
@@ -2350,10 +2425,36 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   document.addEventListener('click', function(e) {
     var cta = e.target.closest('[data-cta]');
     if (cta) {
+      ctaClickCount++;
       var text = cta.getAttribute('data-cta-text') || cta.textContent.trim().slice(0, 100);
       send('cta_clicked', text, {cta_text: text});
     }
   });
+
+  // Compute top_section from accumulated dwell + in-progress dwell
+  function getTopSection() {
+    var totals = {};
+    Object.keys(dwellTotal).forEach(function(t) { totals[t] = dwellTotal[t]; });
+    // add any currently-visible sections
+    Object.keys(dwellStart).forEach(function(t) {
+      totals[t] = (totals[t] || 0) + (Date.now() - dwellStart[t]);
+    });
+    var best = null, bestMs = 0;
+    Object.keys(totals).forEach(function(t) {
+      if (totals[t] > bestMs) { bestMs = totals[t]; best = t; }
+    });
+    return best;
+  }
+
+  // Compute engagement_score 0–100
+  // Components: time on page (40pts), sections viewed (30pts), cta clicks (20pts), tab switches (10pts)
+  function computeScore(durationSec) {
+    var timeScore  = Math.min(40, Math.round((durationSec / 300) * 40));   // 5min = full 40
+    var viewScore  = Math.min(30, Math.round((Object.keys(viewed).length / 6) * 30)); // 6 sections = full 30
+    var ctaScore   = Math.min(20, ctaClickCount * 10);
+    var tabScore   = Math.min(10, editorTabSwitches * 5);
+    return timeScore + viewScore + ctaScore + tabScore;
+  }
 
   // Session summary on unload
   var sessionStart = Date.now();
@@ -2361,13 +2462,82 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
   function sendSummary() {
     if (summarySent) return;
     summarySent = true;
-    send('session_summary', 'exit', {duration_seconds: Math.round((Date.now() - sessionStart) / 1000)});
+    var dur = Math.round((Date.now() - sessionStart) / 1000);
+    send('session_summary', 'exit', {
+      duration_seconds: dur,
+      engagement_score: computeScore(dur),
+      top_section:      getTopSection() || '',
+      cta_clicked_count: ctaClickCount,
+      is_return_visit:  false
+    });
   }
   window.addEventListener('pagehide', sendSummary);
   window.addEventListener('beforeunload', sendSummary);
   document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'hidden') sendSummary();
   });
+
+  // ── Welcome video beacons (minimal: hero loop + full play/complete/unmute) ──
+  (function initWelcomeVideos() {
+    document.querySelectorAll('[data-video-context]').forEach(function(block) {
+      var context = block.getAttribute('data-video-context') || 'welcome';
+      var hero = block.querySelector('.onboarding-welcome-hero');
+      var full = block.querySelector('.onboarding-welcome-full');
+      var heroSent = false;
+      var fullStarted = false;
+      var unmuteSent = false;
+
+      function videoSend(kind, meta) {
+        send(kind, context + '-video', Object.assign({video: context}, meta || {}));
+      }
+
+      if (hero) {
+        hero.addEventListener('play', function() {
+          if (!heroSent) {
+            heroSent = true;
+            videoSend('video_hero_started', {src: 'output-hero-silent.mp4'});
+          }
+        });
+      }
+
+      if (full) {
+        full.addEventListener('play', function() {
+          if (hero) hero.pause();
+          if (!fullStarted) {
+            fullStarted = true;
+            videoSend('video_started', {src: 'output.mp4'});
+          }
+        });
+        full.addEventListener('pause', function() {
+          if (hero && !full.ended) hero.play().catch(function() {});
+        });
+        full.addEventListener('ended', function() {
+          videoSend('video_completed', {duration_seconds: Math.round(full.duration || 0)});
+          if (hero) hero.play().catch(function() {});
+        });
+        full.addEventListener('volumechange', function() {
+          if (!unmuteSent && !full.muted && full.volume > 0) {
+            unmuteSent = true;
+            videoSend('video_unmuted', {src: 'output.mp4'});
+          }
+        });
+        // Lazy-load full video when block scrolls near viewport (saves mobile bandwidth)
+        if ('IntersectionObserver' in window) {
+          var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting && full.preload === 'none') {
+                full.preload = 'metadata';
+                obs.disconnect();
+              }
+            });
+          }, {rootMargin: '120px'});
+          obs.observe(block);
+        } else {
+          full.preload = 'metadata';
+        }
+      }
+    });
+  })();
 
   // Vercel Analytics bootstrap
   window.va = window.va || function() { (window.vaq = window.vaq || []).push(arguments); };

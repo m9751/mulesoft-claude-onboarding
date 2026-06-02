@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index-v2.html" }
+    {
+      "source": "/((?!demo-output/|screenshots/|mulesoft-logo\\.png|script-to-flow\\.html).*)",
+      "destination": "/index-v2.html"
+    }
   ]
 }
