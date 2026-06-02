@@ -312,17 +312,14 @@
     background: var(--bg-subtle);
     border-bottom: 1px solid var(--border);
   }
-  .onboarding-hero-video,
   .onboarding-full-video {
     display: block;
     width: 100%;
+    max-height: 400px;
     background: #032D60;
     object-fit: contain;
   }
-  .onboarding-hero-video { max-height: 320px; }
-  .onboarding-full-video { max-height: 400px; }
   @media (max-width: 640px) {
-    .onboarding-hero-video { max-height: 220px; }
     .onboarding-full-video { max-height: 280px; }
   }
   .video-hint { font-size: 13px; color: var(--text-muted); margin: 0; padding: 10px 16px 14px; }
@@ -864,17 +861,12 @@
   <p class="subtitle">Connect Claude Code to MuleSoft Anypoint Platform and run your first Exchange search in under 30 minutes. <span style="color:var(--text-muted);font-weight:400">(Maven deployment setup is optional — skip it until you're ready to deploy.)</span></p>
 
   <div class="onboarding-video-block" data-video-context="claude-welcome">
-    <div class="video-label">Script → Flow preview (silent loop)</div>
-    <video class="onboarding-hero-video onboarding-welcome-hero" autoplay muted loop playsinline preload="metadata"
-      aria-label="Silent preview: legacy script, before and after, flow diagram">
-      <source src="/demo-output/output-hero-silent.mp4" type="video/mp4">
-    </video>
-    <div class="video-label" style="border-top:1px solid var(--border)">Full walkthrough (~1 min, with narration)</div>
-    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="none"
+    <div class="video-label">Overview (~1 min)</div>
+    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="metadata"
       aria-label="Onboarding walkthrough with narration">
       <source src="/demo-output/output.mp4" type="video/mp4">
     </video>
-    <p class="video-hint">Top loops without sound. Press play below and turn volume on for the full story.</p>
+    <p class="video-hint">Press play and turn sound on.</p>
   </div>
 
   <div class="card">
@@ -1337,17 +1329,12 @@ EOF</div>
   <p class="subtitle">Already using Cursor? Connect it to MuleSoft Anypoint Platform and control your integration platform without leaving your editor.</p>
 
   <div class="onboarding-video-block" data-video-context="cursor-welcome">
-    <div class="video-label">Script → Flow preview (silent loop)</div>
-    <video class="onboarding-hero-video onboarding-welcome-hero" autoplay muted loop playsinline preload="metadata"
-      aria-label="Silent preview: legacy script, before and after, flow diagram">
-      <source src="/demo-output/output-hero-silent.mp4" type="video/mp4">
-    </video>
-    <div class="video-label" style="border-top:1px solid var(--border)">Full walkthrough (~1 min, with narration)</div>
-    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="none"
+    <div class="video-label">Overview (~1 min)</div>
+    <video class="onboarding-full-video onboarding-welcome-full" controls playsinline preload="metadata"
       aria-label="Onboarding walkthrough with narration">
       <source src="/demo-output/output.mp4" type="video/mp4">
     </video>
-    <p class="video-hint">Top loops without sound. Press play below and turn volume on for the full story.</p>
+    <p class="video-hint">Press play and turn sound on.</p>
   </div>
 
   <div class="card">
@@ -2477,13 +2464,11 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
     if (document.visibilityState === 'hidden') sendSummary();
   });
 
-  // ── Welcome video beacons (minimal: hero loop + full play/complete/unmute) ──
+  // ── Welcome video beacons (play / complete / unmute) ──
   (function initWelcomeVideos() {
-    document.querySelectorAll('[data-video-context]').forEach(function(block) {
-      var context = block.getAttribute('data-video-context') || 'welcome';
-      var hero = block.querySelector('.onboarding-welcome-hero');
-      var full = block.querySelector('.onboarding-welcome-full');
-      var heroSent = false;
+    document.querySelectorAll('.onboarding-welcome-full').forEach(function(full) {
+      var block = full.closest('[data-video-context]');
+      var context = block ? block.getAttribute('data-video-context') : 'welcome';
       var fullStarted = false;
       var unmuteSent = false;
 
@@ -2491,51 +2476,21 @@ payload <span style="color:#0176D3">map</span> (claim) <span style="color:#B5500
         send(kind, context + '-video', Object.assign({video: context}, meta || {}));
       }
 
-      if (hero) {
-        hero.addEventListener('play', function() {
-          if (!heroSent) {
-            heroSent = true;
-            videoSend('video_hero_started', {src: 'output-hero-silent.mp4'});
-          }
-        });
-      }
-
-      if (full) {
-        full.addEventListener('play', function() {
-          if (hero) hero.pause();
-          if (!fullStarted) {
-            fullStarted = true;
-            videoSend('video_started', {src: 'output.mp4'});
-          }
-        });
-        full.addEventListener('pause', function() {
-          if (hero && !full.ended) hero.play().catch(function() {});
-        });
-        full.addEventListener('ended', function() {
-          videoSend('video_completed', {duration_seconds: Math.round(full.duration || 0)});
-          if (hero) hero.play().catch(function() {});
-        });
-        full.addEventListener('volumechange', function() {
-          if (!unmuteSent && !full.muted && full.volume > 0) {
-            unmuteSent = true;
-            videoSend('video_unmuted', {src: 'output.mp4'});
-          }
-        });
-        // Lazy-load full video when block scrolls near viewport (saves mobile bandwidth)
-        if ('IntersectionObserver' in window) {
-          var obs = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-              if (entry.isIntersecting && full.preload === 'none') {
-                full.preload = 'metadata';
-                obs.disconnect();
-              }
-            });
-          }, {rootMargin: '120px'});
-          obs.observe(block);
-        } else {
-          full.preload = 'metadata';
+      full.addEventListener('play', function() {
+        if (!fullStarted) {
+          fullStarted = true;
+          videoSend('video_started', {src: 'output.mp4'});
         }
-      }
+      });
+      full.addEventListener('ended', function() {
+        videoSend('video_completed', {duration_seconds: Math.round(full.duration || 0)});
+      });
+      full.addEventListener('volumechange', function() {
+        if (!unmuteSent && !full.muted && full.volume > 0) {
+          unmuteSent = true;
+          videoSend('video_unmuted', {src: 'output.mp4'});
+        }
+      });
     });
   })();
 
