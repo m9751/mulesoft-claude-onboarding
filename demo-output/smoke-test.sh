@@ -10,11 +10,12 @@ echo "=== Assets ==="
 check "$BASE/demo-output/output.mp4"
 check "$BASE/demo-output/output-hero-silent.mp4"
 html=$(curl -s "$BASE/?editor=cursor")
-for n in output-hero-silent.mp4 output.mp4 onboarding-welcome-hero onboarding-welcome-full; do
-  echo "$html" | grep -q "$n" && echo "OK $n" || { echo "FAIL $n"; fail=1; }
+for n in output.mp4 onboarding-welcome-full; do
+  echo "$html" | grep -q "$n" && echo "OK page has $n" || { echo "FAIL missing $n"; fail=1; }
 done
+echo "$html" | grep -q "output-hero-silent" && { echo "FAIL silent loop still embedded"; fail=1; } || echo "OK no silent loop in HTML"
 echo "=== Beacons ==="
-for ev in video_hero_started video_started video_completed video_unmuted; do
+for ev in video_started video_completed video_unmuted; do
   r=$(curl -s -X POST "$BEACON" -H "Content-Type: text/plain" -d "{\"proposal_id\":\"$PID\",\"session_id\":\"$SID\",\"event_type\":\"$ev\",\"slide_number\":0,\"slide_title\":\"smoke\",\"metadata\":{}}")
   echo "$r" | grep -q '"ok":true' && echo "OK $ev" || { echo "FAIL $ev"; fail=1; }
 done
