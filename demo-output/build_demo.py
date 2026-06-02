@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Sell-first Edition 2 — storyboard-driven build."""
+"""Sell-first Edition 2 — storyboard-driven build.
+See PROMPT_LOG.md for lessons learned, master prompt, deploy checklist.
+Full: python3 build_demo.py | Hero only: python3 build_demo.py hero
+"""
 from __future__ import annotations
 import asyncio, json, subprocess, shutil
 from pathlib import Path
