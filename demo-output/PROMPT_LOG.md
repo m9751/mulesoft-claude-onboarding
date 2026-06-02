@@ -3,6 +3,7 @@
 **Last updated:** 2026-06-02 (post-deploy cleanup)  
 **Repo:** https://github.com/m9751/mulesoft-claude-onboarding  
 **Live:** https://mulesoft-claude-cursor-onboarding.vercel.app/  
+**Registry (generic agent prompt):** PRM-PDLV-006 — https://github.com/m9751/prompt-registry/blob/feat/prm-pdlv-006-overview-video/prompts/product-delivery/PRM-PDLV-006_static-guide-overview-video.md (merges via PR #9)
 **Next:** submission / handoff (after redeploy confirms single video on Welcome)
 
 ---
