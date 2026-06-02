@@ -1,234 +1,194 @@
 # Onboarding Guide Video — Prompt Log & Master Prompt
 
-**Last updated:** 2026-06-02 (pre-deployment review)  
-**Repo:** `mulesoft-claude-onboarding`  
-**Live site:** `index-v2.html` via `vercel.json` → https://mulesoft-claude-cursor-onboarding.vercel.app/
+**Last updated:** 2026-06-02 (post-deploy cleanup)  
+**Repo:** https://github.com/m9751/mulesoft-claude-onboarding  
+**Live:** https://mulesoft-claude-cursor-onboarding.vercel.app/  
+**Next:** submission / handoff (after redeploy confirms single video on Welcome)
 
 ---
 
-## Current production state
+## FINAL LIVE STATE (what shipped)
 
-| Asset | File | On live guide? |
-|-------|------|----------------|
-| **Primary** | `demo-output/output.mp4` (~60s, narrated, Edition 2) | **Yes** — Claude + Cursor Welcome |
-| **Optional teaser** | `demo-output/output-hero-silent.mp4` (~16s, silent, script-first) | **No** — preview only until deploy decision |
-| **Spec** | `demo-output/scenes.json` (edition 2 + hero_silent block) | — |
-| **Pipeline** | `demo-output/build_demo.py` | — |
-| **Preview** | `demo-output/preview-hero.html` | Optional local/Vercel |
-
-**Embed (shipped):** One `<video controls>` per Welcome tab → `/demo-output/output.mp4`. No muted autoplay.
-
-**Tracking (shipped in HTML, not validated in Supabase):** `video_started`, `video_progress`, `video_completed`, `video_unmuted` per `data-video-context` (`claude-welcome` / `cursor-welcome`).
+| What | Where |
+|------|--------|
+| **One video on Welcome** | Claude + Cursor tabs → `/demo-output/output.mp4` (~60s, narration) |
+| **Label** | “Overview (~1 min)” — press play, turn sound on |
+| **Silent loop** | **REMOVED from page** — file may remain in `demo-output/output-hero-silent.mp4` for archive only |
+| **Beacons** | `video_started`, `video_completed`, `video_unmuted` → `smokin-territory.vercel.app/api/beacon` |
+| **Hosting** | Push to GitHub `main` → Vercel auto-redeploys |
 
 ---
 
-## Lessons learned (read before any rebuild)
+## Tips & tricks (operational)
 
-### Creative / story
+### Vercel / GitHub (critical)
 
-1. **Edition 2 is canonical.** Nine beats, sell-first, ~180–220 words VO. Do not replace with an 8-beat “Notion” cut.
-2. **No arbitrary VO word caps.** A 150-word cap gutted Salesforce, depth, and proof — unusable.
-3. **Developer hook = Script→Flow pane.** Lead with legacy script pain (`Before — Legacy Script`, 847 lines, FIXME). Captures: `capture-script-before-after.png`, `capture-script-legacy-panel.png`, then `capture-scriptflow-arch.png`.
-4. **Outcomes before mechanics.** Exchange/IDE wins, then MCP proof — not an MCP lecture.
-5. **In-guide CTA only.** Viewer is already on the guide; never “visit this URL.”
+1. **Two HTML files exist:** `index-v2.html` (source of truth) and `index.html`. Vercel often serves **`index.html` by default**, ignoring your mental model of “v2.”
+2. **After every Welcome/embed change:** copy v2 → index, then push:
+   ```bash
+   cp index-v2.html index.html
+   git add index-v2.html index.html
+   git commit -m "..."
+   git push origin main
+   ```
+3. **Wait 2–5 min**, then **Shift+Reload** the live URL (cache lies).
+4. **Smoke test:**
+   ```bash
+   ./demo-output/smoke-test.sh
+   ```
+   (Update script if it still checks for hero markup.)
 
-### Technical / pipeline
+### Video pipeline
 
-6. **Never `ffmpeg -c copy` on final concat.** Causes non-monotonic DTS → hiccups/dropouts. Always re-encode: `libx264`, `aac`, `fps=25`, `aresample=async=1:first_pts=0`, `-movflags +faststart`.
-7. **Screenshot paths from `demo-output/scenes/`:** repo screenshots = `../../screenshots/…`; captures = `../captures/…`.
-8. **Scene `duration` ≥ TTS length + 0.35s.** Proof beats need real holds (6–10s target).
-9. **Ken Burns on proof + hero only.** Static layouts for tab/outcomes; avoid over-animation.
-10. **Hero-only rebuild:** `cd demo-output && python3 build_demo.py hero` (captures + silent mux, does not rebuild full narrated cut).
+5. **Full rebuild:** `cd demo-output && python3 build_demo.py`
+6. **Hero file only (archive):** `python3 build_demo.py hero` — does not affect live page unless embedded.
+7. **Never `ffmpeg -c copy`** on final concat → hiccups. Re-encode in `build_demo.py` (already fixed).
+8. **Proof screenshots path** from scene HTML: `../../screenshots/…` not `../screenshots/`.
+9. **Edition 2 narrated** = 9 scenes in `scenes.json`. Do not ship Edition 3 (150-word cap).
 
-### UX / embed mistakes
+### Beacons (keep simple)
 
-11. **Do not autoplay silent video on Welcome.** Users thought the product was broken (no story, no sound).
-12. **“Hero” ≠ tiny file** — it’s a **layout slot** (banner above content). Opening the raw MP4 full-screen looks huge; on-page it should be a constrained strip (~300–400px tall) if we enable it.
-13. **Corporate networks may block `*.vercel.app`.** For review, copy to Desktop or open files locally (`Desktop/mulesoft-video-preview/`).
+10. **Only three events** on Welcome video — no progress %, no hero events (hero removed).
+11. **Beacon accepts custom `event_type`** (tested 200 OK) — still don’t add a dozen variants.
+12. **`proposal_id`:** `mulesoft-anypoint-onboarding`
 
-### Process
+### Working with the stakeholder (Michael)
 
-14. **Log prompt changes in this file** before deploy conversations.
-15. **Keep bad exports** renamed (`output-v3-broken.mp4`, `output-glitchy-concat.mp4`) so they are not shipped again.
+13. **No jargon:** don’t say main, feat, commit, hero, mux. Say “folder on GitHub,” “save,” “top/bottom video.”
+14. **Don’t offer A/B/C lists** when they’re frustrated — pick the obvious fix, ship, confirm once.
+15. **Silent loop looked good but added no value** on Welcome — lesson: **polish ≠ value**. Ask “what does this do for someone on the page?” before embedding.
+16. **“Expert HTML Designer”** direction = doc-like guide, not marketing demo polish. Don’t over-style embed blocks.
+17. **Corporate VPN** may block vercel.app — local copy to Desktop if they can’t open links.
 
----
+### Files to know
 
-## What worked (keep)
-
-| Practice | Detail |
-|----------|--------|
-| Edition 2 arc | Hook → Salesforce → outcomes → MCP proof → Exchange proof → editor pick → Script→Flow → SF arch → in-guide CTA |
-| `scenes.json` | Single source of truth for layouts, VO, durations, hero beats |
-| MuleSoft brand | `#032D60`, `#EEF4FF`, Salesforce Sans, logo top-right |
-| Proof screenshots | Green MCP + Exchange agent with badges; always on screen |
-| Playwright captures | Live Vercel + element shot for legacy script panel |
-| Re-encoded mux | Stable playback (~60s narrated, ~16s hero) |
-| Dual Welcome embed | Same `output.mp4` on Claude + Cursor Welcome |
-
-## What failed (do not repeat)
-
-| Mistake | Result |
-|---------|--------|
-| Edition 3 / 150-word cap | No audio story, collapsed arc |
-| `ffmpeg -c copy` concat | Video hiccups at joins |
-| Silent hero as default on Welcome | “Broken” silent experience |
-| Hero v1 order (outcomes → Exchange → arch) | Missed developer script hook |
-| Wrong `../screenshots/` in scene HTML | Blank proof frames |
-
----
-
-## Two outputs explained
-
-### 1. `output.mp4` (primary — deploy this on Welcome)
-
-- ~60 seconds, **full narration** (`en-US-AndrewNeural`)
-- Edition 2 story (9 scenes)
-- **This is what Claude + Cursor Welcome use today**
-
-### 2. `output-hero-silent.mp4` (optional teaser — deploy only if intentional)
-
-- ~16 seconds, **no audio**
-- **Script-first** order (2026-06-02):
-  1. **6s** — Before/After code (`capture-script-before-after.png`)
-  2. **5s** — Legacy script pane zoom (`capture-script-legacy-panel.png`)
-  3. **5s** — Script→Flow architecture diagram
-- **Purpose:** Muted loop in a **small banner** above the narrated player to stop scrollers — “that’s my script → there’s an escape → here’s the flow”
-- **Not** a replacement for `output.mp4`
-- **Not** on Welcome until we explicitly design layout (muted loop + “Watch with sound” below)
+| Path | Purpose |
+|------|---------|
+| `demo-output/output.mp4` | **Ship this** on Welcome |
+| `demo-output/output-hero-silent.mp4` | Archive / optional; **not on page** |
+| `demo-output/scenes.json` | Story + hero beat spec |
+| `demo-output/build_demo.py` | Build script |
+| `demo-output/PROMPT_LOG.md` | This file |
+| `index-v2.html` | Edit here first |
+| `index.html` | **Must match v2 before push** |
+| `vercel.json` | Rewrites (backup routing) |
 
 ---
 
-## Hard constraints (all future builds)
+## Lessons learned (full session)
 
-1. Viewer on guide — in-guide CTA only  
-2. Edition 2 arc unless Michael approves a new edition  
-3. Script pane visible for dev audience (captures or Script→Flow tab)  
-4. Proof = screenshots + badges, not empty frames  
-5. Final mux = re-encode (see `build_demo.py`)  
-6. Primary embed = narrated `output.mp4` with controls  
-7. Hero silent = optional, muted, constrained layout, never autoplay-only UX  
+### Creative
+
+- Sell-first **9-beat** narrated arc is the product. (~60s, full VO.)
+- Script→Flow content matters for **Script→Flow tab** and for **hero file** — not required as a second video on Welcome.
+- In-guide CTA only (no “go to this URL”).
+- Notion benchmark = **pacing/style reference only**, not a shorter word count.
+
+### Failed experiments
+
+| What | Why it failed |
+|------|----------------|
+| Edition 3 (8 beats, ~150 words) | Unusable — gutted story |
+| `ffmpeg -c copy` | Playback hiccups |
+| Silent loop as default / on Welcome | No value on page; confused users; felt like AI polish for polish’s sake |
+| Two-video Welcome (loop + full) | Removed — one video only |
+| Serving only `index-v2` without syncing `index.html` | Live site showed **no videos** until synced |
+
+### What worked
+
+- Edition 2 re-encoded `output.mp4`
+- Real MCP + Exchange screenshots with badges
+- Playwright captures from live guide URL
+- Single overview video on Claude + Cursor Welcome
+- Minimal beacons (3 events)
+- `index.html` synced from `index-v2.html` for Vercel
 
 ---
 
-## Benchmark (style only)
-
-[Notion “What is Notion?”](https://www.youtube.com/watch?v=Vicx5Kz6hs4) — borrow mute test, kinetic type, UI choreography. **Do not** borrow 150-word limit or beat collapse.
-
----
-
-## MASTER PROMPT (copy for next session)
+## MASTER PROMPT (next session)
 
 ```
-You are a Video Director + Motion Designer for the MuleSoft AI Editor Onboarding Guide.
+Build/maintain MuleSoft AI Editor Onboarding guide video.
 
-DELIVERABLES:
-A) output.mp4 — ~60s narrated sell-first (PRIMARY, goes on Claude + Cursor Welcome)
-B) output-hero-silent.mp4 — ~15–16s silent script-first teaser (OPTIONAL banner only)
+PRIMARY DELIVERABLE (only embed unless told otherwise):
+- demo-output/output.mp4 — ~60s narrated, Edition 2, nine beats, sell-first
+- Claude Welcome + Cursor Welcome: ONE <video controls> — no silent autoplay loop
 
-VIEWER is already on the guide. CTA = pick tab → setup → prove Exchange → build. NO external URL.
+OPTIONAL ARCHIVE (do NOT embed on Welcome without explicit approval):
+- demo-output/output-hero-silent.mp4 — script-first silent ~16s (repo only)
 
-AUDIENCE: Integration developer first. Hook = legacy script pain (847 lines, FIXME, schema drift).
-Then escape (Script→Flow, DataWeave), then proof (MCP + Exchange), then editor choice.
+AUDIENCE: integration developer; Script→Flow tab carries script pain; Welcome video = full story only.
 
-BRAND: MuleSoft #032D60 / #EEF4FF, Salesforce Sans, logo top-right.
+BRAND: MuleSoft #032D60 / #EEF4FF, Salesforce Sans.
 
-NARRATED STORYBOARD (9 beats — do not merge):
-1. kinetic_pain — hook
-2. split_imagine — Salesforce + EHRs/claims/legacy
-3. kinetic_outcomes — Exchange, scaffold, deploy from IDE
-4. proof_highlight — MCP green dot screenshot + badges
-5. proof_highlight — Exchange agent screenshot + badges
-6. editor_tabs — Claude vs Cursor
-7. image — Script→Flow architecture capture
-8. image — Salesforce strategy tab
-9. cta_inguide — in-guide CTA
-
-HERO SILENT (3 beats — script-first, no VO):
-1. capture-script-before-after.png (6s)
-2. capture-script-legacy-panel.png (5s)
-3. capture-scriptflow-arch.png (5s)
-
-RULES: Mute test; show don’t tell; conversational VO; NO word cap; proof screenshots mandatory.
+NARRATED BEATS (do not merge): hook → Salesforce → outcomes → MCP proof → Exchange proof → editor pick → Script→Flow image → SF arch → in-guide CTA.
 
 TECH:
-- scenes.json drives build_demo.py
-- Playwright: capture script pane element + Script→Flow tab from live URL
-- edge-tts per scene; duration >= audio + 0.35s
-- Per-scene clips → concat → RE-ENCODE (never -c copy): libx264, aac, fps=25, aresample=async=1, faststart
-- Full build: python3 build_demo.py
-- Hero only: python3 build_demo.py hero
+- scenes.json + build_demo.py
+- Final mux: RE-ENCODE (never -c copy)
+- After HTML edits: cp index-v2.html index.html && git push main
+- Beacons: video_started, video_completed, video_unmuted only
 
-OUTPUT: Two-column storyboard + updated scenes.json
+DO NOT: word caps, hero loop on Welcome, marketing-polish embed, progress beacon spam, jargon with stakeholder.
 ```
 
 ---
 
 ## Edition history
 
-| Ed | Status | Notes |
-|----|--------|-------|
-| v0–v1 | archive | Early cuts |
-| **v2** | **canonical narrated** | 9 scenes, ~60s |
-| v2-reencode | **current output.mp4** | Glitch-free mux |
-| v3 | **rejected** | 150-word Notion cut |
-| hero v1 | retired | outcomes → Exchange → arch (wrong hook) |
-| **hero v2 script-first** | **current output-hero-silent.mp4** | before/after → legacy pane → arch |
-
----
-
-## Commands
-
-```bash
-cd demo-output
-python3 build_demo.py        # full: captures + frames + output.mp4 + hero
-python3 build_demo.py hero   # hero silent only (after capture script)
-```
-
----
-
-## Files to commit for deploy (not build artifacts)
-
-- `demo-output/output.mp4`
-- `demo-output/output-hero-silent.mp4` (if serving teaser)
-- `demo-output/scenes.json`, `build_demo.py`, `PROMPT_LOG.md`
-- `demo-output/captures/*.png` (source frames for rebuilds)
-- `screenshots/*.png` (proof)
-- `index-v2.html`
-
-**Gitignore in demo-output:** `clips/`, `frames/`, `audio/`, `narration/`, `concat*.txt`, broken exports
-
----
-
-## Deployment checklist (next conversation)
-
-### Done
-- [x] Edition 2 narrated `output.mp4` re-encoded (no hiccups)
-- [x] Embed on Claude + Cursor Welcome (`output.mp4`, controls)
-- [x] Pushed to GitHub / Vercel (`demo-output/output.mp4` returns 200)
-- [x] Script-first hero rebuilt + `preview-hero.html`
-- [x] Prompt log + master prompt updated
-
-### Decide before / during deploy
-- [ ] Put **hero silent** on Welcome? If yes: small muted loop + narrated player below (never silent-only)
-- [ ] Poster image / lazy-load for mobile
-- [ ] Validate `video_*` beacon events in Supabase / smokin-territory API
-- [ ] Confirm `*.vercel.app` reachable for customer networks (or alternate host)
-- [ ] File size budget (~8MB narrated + ~4MB hero) — acceptable for Vercel static?
-
-### After deploy
-- [ ] Smoke-test Claude + Cursor Welcome on desktop + mobile
-- [ ] Customer-safe copy sign-off
-- [ ] Optional: link from Welcome callout “See Script → Flow” to tab + scroll
+| Ed | Narrated | Hero silent | On Welcome |
+|----|----------|-------------|------------|
+| v2 | canonical | — | narrated only (final) |
+| v3 | rejected | — | — |
+| hero v2 script-first | — | built, archived | **removed** |
 
 ---
 
 ## User feedback log
 
-| Date | Feedback | Action taken |
-|------|----------|--------------|
-| 2026-06-02 | Notion v3 unusable — no story | Reverted to Edition 2 |
-| 2026-06-02 | Video hiccups | Re-encode mux; ban `-c copy` |
-| 2026-06-02 | Silent default confusing | Narrated-only embed on Welcome |
-| 2026-06-02 | Hero must show script pane | Script-first hero v2 + captures |
-| 2026-06-02 | Can’t open Vercel links | Desktop copy `mulesoft-video-preview/` |
-| 2026-06-02 | Ready for deployment discussion | This doc updated |
+| Date | Feedback | Action |
+|------|----------|--------|
+| 2026-06-02 | v3 unusable | Restored v2 |
+| 2026-06-02 | Video hiccups | Re-encode mux |
+| 2026-06-02 | Silent loop on Welcome confusing | Removed loop |
+| 2026-06-02 | Hero looks great but no value | Removed from page |
+| 2026-06-02 | Don’t like over-polished AI look | Simpler embed copy; no second video |
+| 2026-06-02 | Live site showed nothing | Synced index.html from index-v2 |
+| 2026-06-02 | Stop rabbit holes — clean up | Single video; pushed 572c310 |
+| 2026-06-02 | Update prompt doc; then submission | This update |
+
+---
+
+## Submission checklist (NEXT — after redeploy)
+
+Use this when Michael is ready to “get it submitted.”
+
+- [ ] **Verify live:** Welcome shows **one** video only (no silent loop). Shift+Reload both:
+  - `?editor=claude` Welcome
+  - `?editor=cursor` Welcome
+- [ ] **Playback:** Play overview — sound on, no stutter mid-video
+- [ ] **Customer-safe:** copy sign-off on narrated script
+- [ ] **What “submitted” means** (fill in with Michael):
+  - Internal link shared? (team/customer URL)
+  - Linked from another page / deck / email?
+  - Salesforce/MuleSoft publishing process?
+  - Git tag / release note?
+- [ ] **Record where it lives** in deliverables DB / email / ticket
+- [ ] **Optional:** remove or gitignore unused `output-hero-silent.mp4` if repo size matters
+
+---
+
+## Commands cheat sheet
+
+```bash
+# Edit page
+# 1) edit index-v2.html
+# 2) sync + push
+cp index-v2.html index.html && git add index-v2.html index.html && git commit -m "..." && git push origin main
+
+# Rebuild narrated video only
+cd demo-output && python3 build_demo.py
+
+# Rebuild archived silent file (not on Welcome)
+cd demo-output && python3 build_demo.py hero
+```
