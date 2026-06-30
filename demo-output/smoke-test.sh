@@ -2,7 +2,7 @@
 set -e
 BASE="${1:-https://mulesoft-claude-cursor-onboarding.vercel.app}"
 BEACON="https://smokin-territory.vercel.app/api/beacon"
-PID="mulesoft-anypoint-onboarding"
+PID="mulesoft-claude-cursor-onboarding"
 SID="smoke_$(date +%s)"
 fail=0
 check() { code=$(curl -s -o /dev/null -w "%{http_code}" "$1"); echo "$([ "$code" = 200 ] && echo OK || echo FAIL) $code $1"; [ "$code" = 200 ] || fail=1; }
